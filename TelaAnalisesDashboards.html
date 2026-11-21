@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANEPAR — Análises e Dashboards Estratégicos (Rede Estadual)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="analises.css" />
+</head>
+<body>
+  <div class="exec-shell">
+    <!-- CABEÇALHO CORPORATIVO CLEAN (MESMA IDENTIDADE VISUAL DE TelaCidadao.html) -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR • Inteligência Estratégica &amp; Dashboards</h1>
+          <p class="brand-subtitle">
+            Painel Corporativo Unificado • <strong>382 Centrais de Relacionamento</strong> • <strong>22 Coordenações Comerciais</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="realtime-ticker" aria-live="polite">
+        <span class="pulse-dot"></span>
+        <span>Relógio: <strong id="live-clock-display">11:32:56</strong></span>
+        <span>• Última atualização dos indicadores: <strong id="last-kpi-update-time">11:32:56</strong> (<span id="kpi-countdown-sec">30</span>s)</span>
+        <button type="button" id="btn-force-kpi-tick" class="btn-tick-now" title="Simular ciclo de 30s agora">
+          🔄 Simular Ciclo 30s
+        </button>
+        <span class="lgpd-pill" title="Conformidade estrita com a Lei nº 13.709/2018 (LGPD)">
+          🔒 LGPD (Lei 13.709/18)
+        </span>
+      </div>
+
+      <div class="topbar-links">
+        <button type="button" id="btn-falar-aqualino-top" class="btn-icon btn-ask-trigger">
+          💬 Perguntar ao Aqualino
+        </button>
+        <a href="TelaCidadao.html" class="btn-icon">📱 Cidadão</a>
+        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Recepção</a>
+        <a href="TelaAtendimento.html" class="btn-icon">🎧 Guichê</a>
+        <a href="TelaSupervisorLocal.html" class="btn-icon">📊 Supervisor Local</a>
+        <button type="button" id="btn-reset-exec" class="btn-icon">↺ Restaurar Visão Macro</button>
+      </div>
+    </header>
+
+    <!-- ESTRUTURA DE FILTROS HIERÁRQUICOS E DRILL-DOWN (5 NÍVEIS ORGANIZACIONAIS E GEOGRÁFICOS) -->
+    <section class="hierarchy-bar" aria-label="Filtros Hierárquicos e Navegação Drill-Down">
+      <div class="hierarchy-header">
+        <div class="breadcrumb-trail" id="drill-breadcrumb">
+          <span class="crumb active">🌐 Rede Estadual PR (382 Centrais / 22 Coord.)</span>
+        </div>
+        <span class="hierarchy-hint">Selecione qualquer nível abaixo ou clique nas linhas da tabela para realizar Drill-Down:</span>
+      </div>
+
+      <div class="filters-grid-5">
+        <div class="filter-box">
+          <label for="filter-regiao">1. Região do Estado:</label>
+          <select id="filter-regiao">
+            <option value="ALL">Todas as Regiões (4 Macro-Regiões)</option>
+            <option value="REG_METRO">Região Metropolitana e Litoral (98 Centrais)</option>
+            <option value="REG_NORTE">Região Norte e Noroeste (112 Centrais)</option>
+            <option value="REG_OESTE">Região Oeste e Sudoeste (96 Centrais)</option>
+            <option value="REG_CAMPOS">Região Campos Gerais e Centro-Sul (76 Centrais)</option>
+          </select>
+        </div>
+
+        <div class="filter-box">
+          <label for="filter-coordenacao">2. Coordenação Comercial (22):</label>
+          <select id="filter-coordenacao"></select>
+        </div>
+
+        <div class="filter-box">
+          <label for="filter-municipio">3. Município:</label>
+          <select id="filter-municipio"></select>
+        </div>
+
+        <div class="filter-box">
+          <label for="filter-central">4. Central de Relacionamento / Agência:</label>
+          <select id="filter-central"></select>
+        </div>
+
+        <div class="filter-box">
+          <label for="filter-atendente">5. Atendente Individual (Guichê):</label>
+          <select id="filter-atendente"></select>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAINEL DO MASCOTE AQUALINO (MONITORAMENTO MACRO, ALERTAS CRÍTICOS E RESPOSTA DIRETA A DÚVIDAS DE USO) -->
+    <section class="dashboard-strip" aria-label="Assistente Aqualino e KPIs Estratégicos">
+      <div class="mascot-exec-card" id="aqualino-exec-panel">
+        <div class="mascot-avatar-wrap">
+          <img src="MascoteHQ.png" alt="Mascote Aqualino SANEPAR" class="mascot-img" />
+          <span class="mascot-status-pill">💧 Aqualino • Gestão Estratégica</span>
+        </div>
+
+        <div class="mascot-exec-content">
+          <div class="mascot-head-row">
+            <div>
+              <span class="tag tag-red" id="exec-alert-badge">Monitoramento Estadual Ativo • 4 Desvios Regionais</span>
+              <h2 class="mascot-title">Síntese Executiva &amp; Assistente de Utilização da Tela</h2>
+            </div>
+            <button type="button" id="btn-aplicar-remanejamento-global" class="btn btn-primary btn-sm">
+              ⚡ Aplicar Remanejamento Preditivo Recomendado (SGC × Escalas)
+            </button>
+          </div>
+
+          <!-- Balão Dinâmico do Aqualino (Exibe Diagnóstico Estratégico OU Responde Dúvidas de Utilização da Tela) -->
+          <div id="aqualino-exec-bubble" class="mascot-bubble" aria-live="polite"></div>
+
+          <!-- Alertas Críticos da Rede Estadual -->
+          <div id="exec-critical-alerts" class="alerts-grid-3"></div>
+
+          <!-- Campo Conversacional Direto para Tirar Dúvidas de Utilização da Tela com o Aqualino -->
+          <div class="aqualino-ask-box">
+            <form id="form-ask-aqualino-exec" class="aqualino-ask-form">
+              <input
+                id="input-ask-aqualino-exec"
+                type="text"
+                placeholder="Pergunte ao Aqualino como usar qualquer recurso desta tela estratégica (texto ou voz)..."
+              />
+              <button type="button" id="btn-voice-aqualino-exec" class="btn-mic-sup" title="Perguntar por voz">
+                🎤 Voz
+              </button>
+              <button type="submit" class="btn btn-teal btn-sm">
+                Perguntar ao Aqualino
+              </button>
+            </form>
+            <div class="chips-wrap">
+              <span class="ask-hint-label">Experimente perguntar:</span>
+              <button type="button" class="chip chip-ask-exec" data-q="Como funciona o drill-down pelos 5 níveis (Região, Coordenação, Município, Central e Atendente)?">
+                Como fazer Drill-Down nos 5 níveis?
+              </button>
+              <button type="button" class="chip chip-ask-exec" data-q="Como a inteligência preditiva cruza dados do SGC para recomendar remanejamento de escalas?">
+                Cruzamento SGC e remanejamento de escalas
+              </button>
+              <button type="button" class="chip chip-ask-exec" data-q="Como funcionam os relatórios automáticos desacoplados via Microsoft Reporting Services?">
+                Relatórios desacoplados (Reporting Services)
+              </button>
+              <button type="button" class="chip chip-ask-exec" data-q="Como correlacionar a série histórica com eventos comerciais do SGC e da TI?">
+                Correlação histórica com eventos SGC/TI
+              </button>
+              <button type="button" class="chip chip-ask-exec" data-q="Como é garantida a auditoria imutável e a proteção de dados LGPD nesta tela?">
+                Auditoria imutável e LGPD
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 INDICADORES-CHAVE DE DESEMPENHO (APURADOS SEGUNDO A SEGUNDO) -->
+      <div class="kpi-grid-5">
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">TME (Tempo Médio de Espera)</span>
+            <span id="exec-tme-tag" class="tag tag-amber">Meta Corporativa ≤ 10m</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="exec-tme-val" class="kpi-big">08m 42s</strong>
+            <span class="kpi-target" id="exec-tme-sub">Emissão → Balcão</span>
+          </div>
+          <p class="kpi-sub">Apuração contínua e inalterável segundo a segundo no escopo selecionado</p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">TMA (Tempo Médio Atendimento)</span>
+            <span id="exec-tma-tag" class="tag tag-blue">Meta ≤ 08m 00s</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="exec-tma-val" class="kpi-big">07m 18s</strong>
+            <span class="kpi-target" id="exec-tma-sub">Produtividade Guichê</span>
+          </div>
+          <p class="kpi-sub">Cronometragem consolidada por guichê, agência e coordenação comercial</p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Qualidade (NPS) &amp; Resolução</span>
+            <span id="exec-nps-tag" class="tag tag-green">Meta NPS ≥ 85</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="exec-nps-val" class="kpi-big text-green">86</strong>
+            <span class="kpi-target">Resolutividade: <strong id="exec-fcr-val">91,4%</strong></span>
+          </div>
+          <p class="kpi-sub"><span id="exec-eval-total">14.280</span> avaliações pós-atendimento imediato capturadas</p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Cobertura da Rede &amp; Efetivo</span>
+            <span id="exec-net-tag" class="tag tag-teal">22 Coordenações</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="exec-centrais-val" class="kpi-big">382</strong>
+            <span class="kpi-target">Efetivo: <strong id="exec-staff-val">1.140</strong> atend.</span>
+          </div>
+          <p class="kpi-sub" id="exec-scope-caption">Visão Macro: 382 Centrais ativas no Estado do Paraná</p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Fluxo Diário &amp; Retenção Digital</span>
+            <span class="tag tag-green">+34% Evitados</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="exec-volume-val" class="kpi-big text-teal">18.640</strong>
+            <span class="kpi-target"><strong id="exec-avoided-val">6.330</strong> retidos s/ guichê</span>
+          </div>
+          <p class="kpi-sub">Atendimentos resolvidos no celular/recepção antes de gerar fila de balcão</p>
+        </div>
+      </div>
+    </section>
+
+    <main class="workspace">
+      <!-- =================================================================
+           BLOCO 1: NAVEGAÇÃO DRILL-DOWN MULTINÍVEL (REGIÃO → COORDENAÇÃO → MUNICÍPIO → CENTRAL → ATENDENTE)
+           ================================================================= -->
+      <section class="card">
+        <div class="card-head-row">
+          <div>
+            <span class="tag tag-blue" id="table-drill-level-tag">Visão Hierárquica Interativa • Nível 1: Macro-Regiões e Coordenações</span>
+            <h2 id="table-drill-title">Desempenho Comparativo por Nível Organizacional (Clique para Drill-Down)</h2>
+            <p class="text-muted">
+              Clique em qualquer linha para descer ao nível seguinte (Região → Coordenação Comercial → Município → Central de Relacionamento → Atendente Individual) ou use o botão de subir nível.
+            </p>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="btn-drill-up" class="btn btn-secondary btn-sm" disabled>
+              ↑ Subir Nível (Roll-Up)
+            </button>
+          </div>
+        </div>
+
+        <!-- Painel de Detalhamento Individual do Atendente Selecionado (Nível 5) -->
+        <div id="attendant-detail-panel" class="attendant-detail-panel hidden" aria-live="polite"></div>
+
+        <div class="table-responsive" id="hierarchy-table-wrap">
+          <table class="clean-table">
+            <thead id="hierarchy-drill-thead">
+              <tr>
+                <th>Unidade Organizacional / Geográfica</th>
+                <th>Escopo / Centrais</th>
+                <th>Volume Hoje</th>
+                <th>TME (Espera)</th>
+                <th>TMA (Atend.)</th>
+                <th>NPS (Qualidade)</th>
+                <th>Resolutividade</th>
+                <th>Status Operacional</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="hierarchy-drill-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           BLOCO 2: INTELIGÊNCIA PREDITIVA (SGC × DEMANDA) E REMANEJAMENTO PROATIVO DE ESCALAS
+           ================================================================= -->
+      <section class="two-col-grid">
+        <!-- Coluna Esquerda: Antecipação de Picos (Cruzamento com Eventos do SGC) -->
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-blue">Inteligência Preditiva • SGC × Operação Física</span>
+            <h2>Antecipação de Picos de Demanda e Dimensionamento de Pessoal</h2>
+            <p class="text-muted">
+              Simule o cruzamento de séries históricas com eventos comerciais do SGC para planejar e remanejar escalas antes que as filas se formem.
+            </p>
+          </div>
+
+          <div class="predictive-controls">
+            <div class="field">
+              <label for="select-sgc-event"><strong>1. Evento Comercial do SGC (Fator Gerador de Fluxo Presencial):</strong></label>
+              <select id="select-sgc-event">
+                <option value="vencimento_lote" selected>
+                  📅 Lote de Faturamento SGC (Dias 01 a 05) — Pico histórico de +42% em 2ª via e negociação
+                </option>
+                <option value="avisos_corte">
+                  ⚠️ Emissão em Lote de Avisos de Suspensão/Corte no SGC (+35% procura por parcelamento/religação)
+                </option>
+                <option value="feirao_negociacao">
+                  🤝 Campanha Estadual de Recuperação de Crédito / Feirão SANEPAR (+50% demanda de guichê)
+                </option>
+                <option value="normal_suavizado">
+                  ✓ Operação com Suavização Ativa de Agendamentos e Retenção Digital (-28% pressão física)
+                </option>
+              </select>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field">
+                <label for="range-pred-horizon"><strong>2. Horizonte de Previsão:</strong> <span id="pred-horizon-lbl" class="text-primary">Próximos 7 dias</span></label>
+                <input id="range-pred-horizon" type="range" min="3" max="15" step="1" value="7" />
+              </div>
+              <div class="field">
+                <label for="range-pred-target-tme"><strong>3. TME Máximo Corporativo:</strong> <span id="pred-target-tme-lbl" class="text-primary">10 min</span></label>
+                <input id="range-pred-target-tme" type="range" min="5" max="15" step="1" value="10" />
+              </div>
+            </div>
+          </div>
+
+          <div class="predictive-summary-banner" id="predictive-summary-banner">
+            <div>
+              <small>Pico Físico Previsto (SGC + Histórico)</small>
+              <strong id="pred-peak-volume" class="text-red">+42% acima da média</strong>
+            </div>
+            <div>
+              <small>Déficit Projetado sem Remanejamento</small>
+              <strong id="pred-staff-deficit" class="text-amber">-38 atendentes na rede</strong>
+            </div>
+            <div>
+              <small>Impacto do Remanejamento Recomendado</small>
+              <strong id="pred-tme-saved" class="text-green">Reduz TME de 16m p/ 07m 50s</strong>
+            </div>
+          </div>
+
+          <!-- Lista de Recomendações Proativas de Remanejamento de Escalas -->
+          <div class="reallocation-box">
+            <div class="box-title-row">
+              <strong>📋 Recomendações Proativas de Remanejamento de Escalas (Pré-Gargalo)</strong>
+              <span class="tag tag-teal">Algoritmo Preditivo SGC</span>
+            </div>
+            <div id="reallocation-list" class="reallocation-list"></div>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Análise Histórica, Séries Temporais e Correlação com Eventos SGC / TI -->
+        <div class="card">
+          <div class="card-head-row">
+            <div>
+              <span class="tag tag-teal">Séries Temporais &amp; Correlação SGC / TI</span>
+              <h2>Evolução Histórica e Cruzamento com Eventos Comerciais</h2>
+              <p class="text-muted">
+                Visualize o comportamento temporal das métricas e sua correlação direta com eventos do SGC e implantações da TI.
+              </p>
+            </div>
+            <div class="chips-wrap" id="timeseries-metric-tabs">
+              <button type="button" class="chip active" data-ts-metric="tme_tma">TME &amp; TMA (min)</button>
+              <button type="button" class="chip" data-ts-metric="volume_sgc">Volume Físico × Retenção Digital</button>
+              <button type="button" class="chip" data-ts-metric="nps_fcr">Evolução NPS &amp; Resolutividade</button>
+            </div>
+          </div>
+
+          <!-- Gráfico de Série Temporal Histórica (Últimos 6 Meses) com Marcadores de Eventos SGC/TI -->
+          <div class="chart-box">
+            <div class="chart-header">
+              <strong id="timeseries-chart-title">Série Temporal (Jun/2026 a Nov/2026) — Impacto de Eventos SGC e TI sobre TME e TMA</strong>
+              <span class="chart-legend">
+                <span><i class="dot dot-blue"></i> Indicador Principal</span>
+                <span><i class="dot dot-teal"></i> Indicador Secundário</span>
+                <span><i class="dot dot-amber"></i> Marco de Evento SGC / TI</span>
+              </span>
+            </div>
+            <div id="historical-timeseries-chart" class="timeseries-bars-grid"></div>
+          </div>
+
+          <!-- Linha do Tempo de Correlação com Eventos do SGC e Bancos de Dados da TI -->
+          <div class="correlation-box">
+            <strong>🔗 Correlação Auditada com Eventos do Sistema Comercial (SGC) e TI:</strong>
+            <div id="sgc-correlation-cards" class="correlation-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           BLOCO 3: RELATÓRIOS CONSOLIDADOS AUTOMÁTICOS (DESACOPLADOS VIA MICROSOFT REPORTING SERVICES)
+           & AUDITORIA IMUTÁVEL / LGPD
+           ================================================================= -->
+      <section class="two-col-grid">
+        <!-- Coluna Esquerda: Motor de Relatórios Automatizados (Microsoft Reporting Services - SSRS) -->
+        <div class="card">
+          <div class="card-head">
+            <div class="chart-badges-row">
+              <span class="tag tag-blue">Emissão Periódica e Automatizada</span>
+              <span class="tag tag-green">⚡ Processamento Desacoplado: Microsoft Reporting Services (SSRS)</span>
+            </div>
+            <h2>Central de Relatórios Consolidados &amp; Fiscalização</h2>
+            <p class="text-muted">
+              Geração, formatação e envio automático de relatórios sobre base analítica replicada (Read-Replica / SSRS), garantindo <strong>zero sobrecarga nas aplicações transacionais de backend (SGC)</strong>.
+            </p>
+          </div>
+
+          <form id="form-agendar-relatorio" class="report-config-box">
+            <div class="form-row-2">
+              <div class="field">
+                <label for="select-report-template">Modelo de Relatório Corporativo:</label>
+                <select id="select-report-template">
+                  <option value="Relatório Executivo Estadual (22 Coordenações e 382 Centrais)">
+                    Relatório Executivo Estadual (22 Coordenações e 382 Centrais)
+                  </option>
+                  <option value="Relatório Regulatório de SLA e Tempos de Fila (Fiscalização / AGEPAR)">
+                    Relatório Regulatório de SLA e Tempos de Fila (Fiscalização / AGEPAR)
+                  </option>
+                  <option value="Análise de Satisfação (NPS), Resolutividade e Atendimentos Evitados">
+                    Análise de Satisfação (NPS), Resolutividade e Atendimentos Evitados
+                  </option>
+                  <option value="Dimensionamento de Pessoal e Correlação de Demanda SGC">
+                    Dimensionamento de Pessoal e Correlação de Demanda SGC
+                  </option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="select-report-dest">Destinatários Automáticos:</label>
+                <select id="select-report-dest">
+                  <option value="Diretoria Comercial, Superintendências e 22 Coordenações">
+                    Diretoria Comercial, Superintendências e 22 Coordenações
+                  </option>
+                  <option value="Órgãos Fiscalizadores, Auditoria Interna e Ouvidoria">
+                    Órgãos Fiscalizadores, Auditoria Interna e Ouvidoria
+                  </option>
+                  <option value="Gerência de RH e Planejamento Operacional de Agências">
+                    Gerência de RH e Planejamento Operacional de Agências
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-3">
+              <div class="field">
+                <label for="select-report-freq">Periodicidade de Envio:</label>
+                <select id="select-report-freq">
+                  <option value="Diário (07:00 — Fechamento D-1)">Diário (07:00 — Fechamento D-1)</option>
+                  <option value="Semanal (Segundas-feiras 06:30)">Semanal (Segundas-feiras 06:30)</option>
+                  <option value="Mensal (1º Dia Útil — Consolidado)">Mensal (1º Dia Útil — Consolidado)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="select-report-format">Formato SSRS (Anonimizado LGPD):</label>
+                <select id="select-report-format">
+                  <option value="PDF Executivo + Planilha XLSX">PDF Executivo + Planilha XLSX</option>
+                  <option value="Pacote Auditável CSV / Parquet (Data Lake)">Pacote Auditável CSV / Parquet</option>
+                  <option value="Dashboard Interativo SSRS / Power BI">Dashboard SSRS / Power BI</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <button type="submit" class="btn btn-primary btn-sm btn-block">
+                  + Programar Envio SSRS
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div class="btn-row">
+            <button type="button" id="btn-emitir-relatorio-agora" class="btn btn-teal btn-sm flex-1">
+              📄 Emitir Relatório Consolidado Agora (Via SSRS Desacoplado)
+            </button>
+          </div>
+
+          <div id="report-emission-feedback" class="sim-feedback-ok hidden" aria-live="polite"></div>
+
+          <!-- Lista de Agendamentos Ativos no Microsoft Reporting Services -->
+          <div id="ssrs-schedules-list" class="ssrs-list"></div>
+        </div>
+
+        <!-- Coluna Direita: Auditoria Imutável, Rastreabilidade e Conformidade LGPD (Lei 13.709/2018) -->
+        <div class="card">
+          <div class="card-head-row">
+            <div>
+              <span class="tag tag-blue">Segurança, Conformidade LGPD &amp; Trilha Imutável</span>
+              <h2>Registro Auditável de Eventos da Rede Estadual</h2>
+              <p class="text-muted">
+                Trilha de auditoria protegida por hash criptográfico (SHA-256) e 100% anonimizada conforme a <strong>Lei nº 13.709/2018 (LGPD)</strong>.
+              </p>
+            </div>
+            <button type="button" id="btn-verificar-integridade" class="btn btn-secondary btn-sm">
+              🛡️ Verificar Integridade dos Logs
+            </button>
+          </div>
+
+          <div id="integrity-check-banner" class="sim-feedback-ok hidden" aria-live="polite"></div>
+
+          <div class="table-responsive">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Hash Auditoria</th>
+                  <th>Coordenação / Central</th>
+                  <th>Código Senha (LGPD)</th>
+                  <th>Serviço Triado</th>
+                  <th>TME / TMA</th>
+                  <th>NPS</th>
+                  <th>Evento Imutável</th>
+                </tr>
+              </thead>
+              <tbody id="immutable-audit-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Botão Flutuante do Mascote Aqualino -->
+    <button type="button" id="btn-floating-aqualino-exec" class="floating-faq-btn" title="Tirar dúvidas de utilização da tela com o Aqualino">
+      <img src="MascoteHQ.png" alt="Aqualino" />
+      <span>💬 Perguntar ao Aqualino</span>
+    </button>
+
+    <footer class="footer">
+      SANEPAR • Painel Estratégico de Análises e Dashboards • 382 Centrais de Relacionamento • 22 Coordenações Comerciais • SSRS Desacoplado &amp; Conformidade LGPD
+    </footer>
+  </div>
+
+  <script src="analises.js"></script>
+</body>
+</html>

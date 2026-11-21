@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SANEPAR Curitiba — Autoatendimento e Fila Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="phone-shell">
+    <!-- CABEÇALHO CLEAN -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR Curitiba</h1>
+          <p class="brand-subtitle">Atendimento Digital ao Cidadão</p>
+        </div>
+      </div>
+      <button type="button" id="btn-reset" class="btn-icon" title="Reiniciar atendimento">
+        ↺ Reiniciar
+      </button>
+    </header>
+
+    <!-- NAVEGAÇÃO DE ETAPAS (CLICÁVEL) -->
+    <nav class="stepper" aria-label="Etapas do atendimento">
+      <button type="button" class="step-item active" data-step="1">
+        <span class="step-num">1</span>
+        <span class="step-label">Triagem</span>
+      </button>
+      <button type="button" class="step-item" data-step="2">
+        <span class="step-num">2</span>
+        <span class="step-label">Presencial</span>
+      </button>
+      <button type="button" class="step-item" data-step="3">
+        <span class="step-num">3</span>
+        <span class="step-label">Senha &amp; Fila</span>
+      </button>
+      <button type="button" class="step-item" data-step="4">
+        <span class="step-num">4</span>
+        <span class="step-label">Check-in</span>
+      </button>
+      <button type="button" class="step-item" data-step="5">
+        <span class="step-num">5</span>
+        <span class="step-label">Avaliação</span>
+      </button>
+    </nav>
+
+    <main class="main-content">
+      <!-- =================================================================
+           ETAPA 1: IDENTIFICAÇÃO INSTANTÂNEA + DÚVIDA POR TEXTO OU VOZ
+           ================================================================= -->
+      <section id="step-1" class="step-pane">
+        <!-- Card 1A: Identificação e Consulta em Milissegundos -->
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-blue">1. Identificação do Cliente</span>
+            <h2>Informe seu CPF, CNPJ ou Matrícula</h2>
+          </div>
+
+          <div class="preset-group">
+            <span class="preset-caption">Toque para simular perfis de clientes:</span>
+            <div class="chips-wrap">
+              <button type="button" class="chip chip-preset" data-doc="123.456.789-00" data-matricula="104892-3">
+                Fatura vence hoje (Maria)
+              </button>
+              <button type="button" class="chip chip-preset" data-doc="45.678.912/0001-34" data-matricula="339014-7">
+                CNPJ Comercial (Padaria)
+              </button>
+              <button type="button" class="chip chip-preset" data-doc="987.654.321-11" data-matricula="882310-5">
+                Contas em dia (João)
+              </button>
+            </div>
+          </div>
+
+          <form id="form-identificacao" class="form-grid">
+            <div class="form-row-2">
+              <div class="field">
+                <label for="input-doc">CPF ou CNPJ</label>
+                <input id="input-doc" type="text" inputmode="numeric" placeholder="000.000.000-00" maxlength="18" />
+              </div>
+              <div class="field">
+                <label for="input-matricula">Matrícula</label>
+                <input id="input-matricula" type="text" placeholder="Ex: 104892-3" maxlength="14" />
+              </div>
+            </div>
+            <button type="submit" id="btn-consultar-sgc" class="btn btn-primary btn-block">
+              Consultar Cadastro
+            </button>
+          </form>
+
+          <!-- Resposta Instantânea em Milissegundos -->
+          <div id="sgc-result-box" class="instant-response hidden" aria-live="polite">
+            <div class="instant-meta">
+              <span class="status-dot"></span>
+              <span id="sgc-latency">Consulta realizada em 118 ms</span>
+            </div>
+            <p id="sgc-message" class="instant-text"></p>
+            <div id="sgc-shortcuts" class="instant-actions"></div>
+          </div>
+
+          <!-- Emissão Expressa de 2ª Via (Inline) -->
+          <div id="fatura-express-card" class="invoice-inline hidden">
+            <div class="invoice-top">
+              <div>
+                <span class="tag tag-amber">Vencimento Hoje</span>
+                <h4>2ª Via de Fatura — Pagamento Rápido</h4>
+              </div>
+              <button type="button" id="btn-close-fatura" class="btn-close" aria-label="Fechar">✕</button>
+            </div>
+            <div class="invoice-grid">
+              <div><small>Matrícula</small><strong id="inv-matricula">104892-3</strong></div>
+              <div><small>Referência</small><strong>11/2026</strong></div>
+              <div><small>Valor</small><strong class="text-amber">R$ 148,90</strong></div>
+            </div>
+            <div class="pix-box">
+              <small>Código de Barras / PIX Copia e Cola</small>
+              <code id="inv-code">82690000001-5 48900091202-4 61116104892-1 30000000001-8</code>
+              <div class="btn-row">
+                <button type="button" id="btn-copy-code" class="btn btn-secondary btn-sm flex-1">Copiar Código</button>
+                <button type="button" id="btn-confirm-fatura-resolvida" class="btn btn-success btn-sm flex-1">Já emiti / Avaliar</button>
+              </div>
+              <p id="copy-feedback" class="copy-ok hidden">✓ Código copiado para a área de transferência!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 1B: O que precisa resolver por Texto ou por Voz -->
+        <div class="card" id="card-triagem">
+          <div class="card-head">
+            <span class="tag tag-blue">2. Triagem por Texto ou Voz</span>
+            <h2>O que você precisa resolver junto à SANEPAR?</h2>
+            <p class="text-muted">Escreva ou fale pelo microfone. Esclarecemos sua dúvida na hora ou indicamos os documentos para atendimento.</p>
+          </div>
+
+          <div class="field">
+            <div class="label-bar">
+              <label for="input-problema">Descreva sua solicitação</label>
+              <button type="button" id="btn-voice" class="btn-mic" aria-pressed="false">
+                <span aria-hidden="true">🎤</span>
+                <span id="voice-label">Falar por voz</span>
+              </button>
+            </div>
+
+            <!-- Barra de gravação de voz ativa -->
+            <div id="voice-status" class="voice-bar hidden">
+              <div class="wave-bars" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <span id="voice-status-text">Ouvindo em português... fale agora</span>
+              <button type="button" id="btn-voice-sim-stop" class="btn-voice-done">Concluir fala</button>
+            </div>
+
+            <textarea id="input-problema" rows="3" placeholder="Ex: Quero passar a conta de água para o meu nome, parcelar faturas, bueiro entupido na rua, falta de luz..."></textarea>
+          </div>
+
+          <div class="preset-group">
+            <span class="preset-caption">Exemplos rápidos para testar o esclarecimento:</span>
+            <div class="chips-wrap">
+              <button type="button" class="chip chip-topic" data-text="Preciso fazer a troca de titularidade da conta de água para o meu nome">Troca de titularidade</button>
+              <button type="button" class="chip chip-topic" data-text="Quero negociar e parcelar faturas atrasadas da minha matrícula">Parcelamento de débitos</button>
+              <button type="button" class="chip chip-topic" data-text="Tem um bueiro de água da chuva entupido e buraco no asfalto na minha rua">Bueiro / Asfalto (Outra instituição)</button>
+              <button type="button" class="chip chip-topic" data-text="Estou com problema na conta de energia elétrica e poste de luz da Copel">Conta de luz / Poste (Outra instituição)</button>
+              <button type="button" class="chip chip-topic" data-text="Quero solicitar inclusão na Tarifa Social Água Solidária">Tarifa Social</button>
+              <button type="button" class="chip chip-topic" data-text="Preciso pedir religação de água após pagamento">Religação de água</button>
+            </div>
+          </div>
+
+          <button type="button" id="btn-analisar-problema" class="btn btn-primary btn-block">
+            Esclarecer Dúvida
+          </button>
+
+          <!-- Resultado da Triagem + Pergunta se ainda deseja atendimento presencial -->
+          <div id="triage-result-card" class="triage-answer hidden" aria-live="polite">
+            <span id="triage-status-pill" class="tag"></span>
+            <h3 id="triage-title"></h3>
+            <div id="triage-body" class="triage-text"></div>
+
+            <!-- Alerta de redirecionamento quando NÃO é SANEPAR -->
+            <div id="triage-external-box" class="redirect-box hidden"></div>
+
+            <div class="presencial-question">
+              <h4>Mesmo com esse esclarecimento, você ainda deseja ter o atendimento presencial na SANEPAR?</h4>
+              <p class="text-muted">Se ainda preferir conversar presencialmente em uma unidade de Curitiba, preparamos a lista de documentos e sua senha.</p>
+              <div class="btn-row">
+                <button type="button" id="btn-nao-presencial" class="btn btn-secondary flex-1">
+                  Não, já esclareci
+                </button>
+                <button type="button" id="btn-sim-presencial" class="btn btn-primary flex-1">
+                  Sim, quero ir à SANEPAR
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirmação quando o cidadão não precisa mais ir presencialmente -->
+          <div id="resolved-card" class="resolved-box hidden">
+            <div class="icon-badge-ok">✓</div>
+            <h3>Atendimento concluído pelo celular!</h3>
+            <p id="resolved-message" class="text-muted">Sua dúvida foi esclarecida sem precisar se deslocar até uma agência.</p>
+            <button type="button" id="btn-avaliar-digital" class="btn btn-primary btn-block">
+              Avaliar Atendimento (NPS 0–10)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           ETAPA 2: DOCUMENTOS + IR HOJE (PRIORIDADE) OU AGENDAR (SUAVIZAÇÃO)
+           ================================================================= -->
+      <section id="step-2" class="step-pane hidden">
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-blue">Atendimento Presencial</span>
+            <h2>Documentos e Data do Atendimento</h2>
+            <p class="text-muted">Confira o que levar para o seu caso e escolha entre ir hoje ou agendar.</p>
+          </div>
+
+          <!-- Lista de Documentos Necessários -->
+          <div class="docs-panel">
+            <div class="docs-panel-top">
+              <strong>📄 Documentos necessários para o seu caso</strong>
+              <span id="docs-case-tag" class="tag tag-teal">Troca de Titularidade</span>
+            </div>
+            <p class="text-muted small-note">Marque os itens abaixo para conferir antes de sair de casa:</p>
+            <ul id="docs-list" class="doc-checklist"></ul>
+          </div>
+
+          <!-- Escolha da Unidade em Curitiba -->
+          <div class="field">
+            <label for="select-unidade">Unidade SANEPAR em Curitiba</label>
+            <select id="select-unidade">
+              <option value="Central Rebouças — R. Engenheiros Rebouças, 1376">Central Rebouças — R. Engenheiros Rebouças, 1376 (Centro)</option>
+              <option value="Rua da Cidadania Pinheirinho — Av. Winston Churchill, 2033">Rua da Cidadania Pinheirinho — Av. Winston Churchill, 2033</option>
+              <option value="Rua da Cidadania Boa Vista — Av. Paraná, 3600">Rua da Cidadania Boa Vista — Av. Paraná, 3600</option>
+              <option value="Rua da Cidadania Fazendinha — R. Carlos Klemtz, 1700">Rua da Cidadania Fazendinha — R. Carlos Klemtz, 1700</option>
+            </select>
+          </div>
+
+          <!-- Pergunta: Ir lá hoje ou Agendar para outro dia -->
+          <div class="when-selector">
+            <label class="section-label">Você quer ir até lá hoje ou prefere agendar para outro dia?</label>
+            <div class="choice-cards">
+              <button type="button" id="btn-ir-hoje" class="choice-btn">
+                <span class="choice-icon">⚡</span>
+                <strong>Quero ir lá HOJE</strong>
+                <small>Retirar senha agora e acompanhar a fila digital</small>
+              </button>
+              <button type="button" id="btn-agendar-outro-dia" class="choice-btn">
+                <span class="choice-icon">📅</span>
+                <strong>Agendar outro dia</strong>
+                <small>Ver dias disponíveis com suavização de demanda</small>
+              </button>
+            </div>
+          </div>
+
+          <!-- SUBFLUXO A: IR LÁ HOJE (Questões para decidir o tipo de senha) -->
+          <div id="subflow-hoje" class="sub-panel hidden">
+            <h3>Definição do Tipo de Senha (Hoje)</h3>
+            <p class="text-muted">Responda para gerarmos a senha adequada ao seu atendimento:</p>
+
+            <div class="radio-stack">
+              <label class="radio-card">
+                <input type="radio" name="priority-type" value="normal" checked />
+                <div>
+                  <strong>Senha Normal (Atendimento Convencional)</strong>
+                  <small>Não me enquadro nas prioridades legais abaixo</small>
+                </div>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="priority-type" value="idosa" />
+                <div>
+                  <strong>Senha Prioritária — Pessoa Idosa (60 anos ou mais)</strong>
+                  <small>Atendimento prioritário conforme Estatuto da Pessoa Idosa</small>
+                </div>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="priority-type" value="pcd" />
+                <div>
+                  <strong>Senha Prioritária — Pessoa com Deficiência (PcD) ou TEA</strong>
+                  <small>Atendimento prioritário e guichê acessível</small>
+                </div>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="priority-type" value="gestante" />
+                <div>
+                  <strong>Senha Prioritária — Gestante, Lactante ou Criança de Colo</strong>
+                  <small>Atendimento preferencial imediato</small>
+                </div>
+              </label>
+            </div>
+
+            <button type="button" id="btn-gerar-senha-hoje" class="btn btn-primary btn-block">
+              Gerar Senha Digital para Hoje
+            </button>
+          </div>
+
+          <!-- SUBFLUXO B: AGENDAR OUTRO DIA (Com suavização dos picos de demanda) -->
+          <div id="subflow-agendar" class="sub-panel hidden">
+            <h3>Agendamento com Suavização de Demanda</h3>
+            <div class="smoothing-banner">
+              <strong>Equilíbrio de filas:</strong> Historicamente, os <strong>primeiros dias do mês (dias 1 a 5)</strong> concentram maior procura de cidadãos sem agendamento. Por isso, o sistema bloqueia novos agendamentos nesses dias de pico e sugere datas de baixa procura.
+            </div>
+
+            <div class="demand-legend">
+              <span><i class="dot dot-low"></i> Baixa demanda (Disponível)</span>
+              <span><i class="dot dot-med"></i> Demanda moderada</span>
+              <span><i class="dot dot-high"></i> Pico início do mês (Evitado)</span>
+            </div>
+
+            <div id="calendar-days" class="calendar-grid"></div>
+
+            <div id="time-slots-container" class="slots-panel hidden">
+              <label class="section-label">Escolha o horário para <span id="selected-date-label"></span>:</label>
+              <div id="time-slots" class="slots-grid"></div>
+            </div>
+
+            <button type="button" id="btn-confirmar-agendamento" class="btn btn-primary btn-block" disabled>
+              Confirmar Agendamento e Gerar Senha
+            </button>
+          </div>
+
+          <div class="step-footer-nav">
+            <button type="button" class="btn-link" data-goto="1">← Voltar para a triagem</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           ETAPA 3: SENHA GERADA & FILA DIGITAL EM TEMPO REAL
+           ================================================================= -->
+      <section id="step-3" class="step-pane hidden">
+        <!-- Bilhete da Senha Digital -->
+        <div class="card ticket-card">
+          <div class="ticket-top-bar">
+            <span id="ticket-mode-badge" class="tag tag-blue">Senha Digital • Hoje</span>
+            <span id="ticket-status-pill" class="tag tag-amber">Aguardando chegada</span>
+          </div>
+
+          <div class="ticket-Display">
+            <span class="ticket-caption">Sua Senha</span>
+            <div id="ticket-code" class="ticket-big-code">N-127</div>
+            <span id="ticket-category-label" class="ticket-type-text">Senha Normal (Convencional)</span>
+          </div>
+
+          <div class="ticket-info-list">
+            <div class="info-line">
+              <span>Unidade</span>
+              <strong id="ticket-unit">Central Rebouças</strong>
+            </div>
+            <div class="info-line">
+              <span>Quando</span>
+              <strong id="ticket-datetime">Hoje • Fila Digital</strong>
+            </div>
+            <div class="info-line">
+              <span>Serviço</span>
+              <strong id="ticket-subject">Troca de Titularidade</strong>
+            </div>
+          </div>
+
+          <!-- Recomendação para o cidadão se organizar antes de sair de casa -->
+          <div id="leave-home-box" class="smart-leave-alert">
+            <div class="leave-emoji" aria-hidden="true">🏠➡️🏢</div>
+            <div>
+              <strong id="leave-home-title">Organize sua saída de casa</strong>
+              <p id="leave-home-desc">Há 4 pessoas na sua frente (~16 min). Acompanhe abaixo para sair no momento ideal e não esperar na fila física.</p>
+            </div>
+          </div>
+
+          <div class="ticket-qr-row">
+            <div id="ticket-qr-svg" class="qr-mini" aria-label="QR Code da senha"></div>
+            <div>
+              <strong>Validação rápida na chegada</strong>
+              <p class="text-muted">Ao chegar na unidade SANEPAR, faça o check-in lendo o QR Code na entrada.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Painel de Senhas Sendo Atendidas no Momento -->
+        <div class="card">
+          <div class="live-head">
+            <div>
+              <span class="tag tag-teal">Tempo Real</span>
+              <h3>Senhas sendo atendidas agora</h3>
+            </div>
+            <button type="button" id="btn-simular-avanco" class="btn btn-secondary btn-xs">
+              ▶ Avançar fila
+            </button>
+          </div>
+
+          <div id="live-counters" class="guiches-grid"></div>
+
+          <div class="history-bar">
+            <small>Últimas senhas chamadas:</small>
+            <div id="recent-calls-list" class="history-pills"></div>
+          </div>
+
+          <button type="button" id="btn-ir-checkin" class="btn btn-primary btn-block mt-14">
+            Cheguei ao local → Fazer Check-in via QR Code
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           ETAPA 4: CHECK-IN VIA QR CODE NA ENTRADA
+           ================================================================= -->
+      <section id="step-4" class="step-pane hidden">
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-blue">Check-in Presencial</span>
+            <h2>Confirme sua chegada na entrada</h2>
+            <p class="text-muted">Escaneie o QR Code disponível na entrada da SANEPAR, para liberar a chamada da sua senha no painel.</p>
+          </div>
+
+          <div id="scanner-box" class="scanner-container">
+            <div class="camera-viewport">
+              <div class="scan-laser"></div>
+              <div id="totem-qr-preview" class="totem-qr-box"></div>
+              <span class="camera-caption">Aponte a câmera para o QR Code na entrada</span>
+            </div>
+            <p id="scanner-unit-label" class="text-muted center-text">Totem Entrada • Central Rebouças</p>
+            <button type="button" id="btn-scan-qr" class="btn btn-primary btn-block">
+              📷 Ler QR Code da Entrada (Check-in)
+            </button>
+          </div>
+
+          <!-- Confirmação pós Check-in -->
+          <div id="checkin-done-box" class="checkin-success hidden" aria-live="polite">
+            <div class="icon-badge-ok">✓</div>
+            <h3>Check-in realizado com sucesso!</h3>
+            <p class="text-muted">Chegada registrada às <strong id="checkin-time"></strong>. Você já está visível para o atendente.</p>
+
+            <div id="guiche-call-status" class="call-banner">
+              <span class="status-dot"></span>
+              <span id="guiche-call-text">Aguardando chamada da sua senha no painel...</span>
+            </div>
+
+            <div class="btn-row mt-14">
+              <button type="button" id="btn-simular-chamada-guiche" class="btn btn-secondary flex-1">
+                Simular Chamada no Guichê
+              </button>
+              <button type="button" id="btn-concluir-para-avaliar" class="btn btn-primary flex-1">
+                Finalizar e Avaliar →
+              </button>
+            </div>
+          </div>
+
+          <div class="step-footer-nav">
+            <button type="button" class="btn-link" data-goto="3">← Voltar para a senha e fila ao vivo</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           ETAPA 5: AVALIAÇÃO DO ATENDIMENTO + NPS (0 A 10)
+           ================================================================= -->
+      <section id="step-5" class="step-pane hidden">
+        <div id="rating-form-card" class="card">
+          <div class="card-head">
+            <span class="tag tag-blue">Conclusão</span>
+            <h2>Avalie seu atendimento na SANEPAR</h2>
+            <p class="text-muted">Sua nota ajuda a aprimorar nossos serviços presenciais e digitais em Curitiba.</p>
+          </div>
+
+          <!-- Pergunta Específica de NPS (0-10) -->
+          <div class="rating-section">
+            <label class="section-label">
+              1. Em uma escala de <strong>0 a 10</strong>, o quanto você recomendaria o atendimento da SANEPAR a um amigo ou familiar? <span class="tag tag-teal">NPS</span>
+            </label>
+            <div id="nps-scale" class="nps-row" role="radiogroup" aria-label="Escala NPS de 0 a 10"></div>
+            <div class="nps-legend">
+              <span>0 • Nada provável</span>
+              <strong id="nps-selected-label"></strong>
+              <span>10 • Extremamente provável</span>
+            </div>
+          </div>
+
+          <!-- Avaliação Geral do Atendimento (Estrelas) -->
+          <div class="rating-section">
+            <label class="section-label">2. Avaliação geral do atendimento recebido:</label>
+            <div id="star-rating" class="stars-bar" role="radiogroup" aria-label="Avaliação geral de 1 a 5 estrelas">
+              <button type="button" class="star" data-star="1" aria-label="1 estrela">★</button>
+              <button type="button" class="star" data-star="2" aria-label="2 estrelas">★</button>
+              <button type="button" class="star" data-star="3" aria-label="3 estrelas">★</button>
+              <button type="button" class="star" data-star="4" aria-label="4 estrelas">★</button>
+              <button type="button" class="star" data-star="5" aria-label="5 estrelas">★</button>
+            </div>
+            <small id="star-label" class="text-muted">Selecione de 1 a 5 estrelas</small>
+          </div>
+
+          <!-- Destaques opcionais -->
+          <div class="rating-section">
+            <label class="section-label">3. O que você mais gostou? <span class="text-muted">(opcional)</span></label>
+            <div class="chips-wrap" id="rating-tags">
+              <button type="button" class="chip chip-tag">Pouco tempo de espera</button>
+              <button type="button" class="chip chip-tag">Triagem clara</button>
+              <button type="button" class="chip chip-tag">Fila digital pelo celular</button>
+              <button type="button" class="chip chip-tag">Cordialidade do atendente</button>
+              <button type="button" class="chip chip-tag">Problema resolvido</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="input-comentario">Comentário adicional <span class="text-muted">(opcional)</span></label>
+            <textarea id="input-comentario" rows="2" placeholder="Deixe uma sugestão ou elogio..."></textarea>
+          </div>
+
+          <button type="button" id="btn-enviar-avaliacao" class="btn btn-primary btn-block" disabled>
+            Enviar Avaliação
+          </button>
+        </div>
+
+        <!-- Agradecimento final -->
+        <div id="rating-thanks-card" class="card resolved-box hidden">
+          <div class="icon-badge-ok">★</div>
+          <h3>Avaliação registrada com sucesso!</h3>
+          <p id="thanks-summary" class="text-muted"></p>
+          <button type="button" id="btn-novo-atendimento" class="btn btn-primary btn-block mt-14">
+            Iniciar Novo Atendimento
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      SANEPAR • Atendimento ao Cidadão de Curitiba
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

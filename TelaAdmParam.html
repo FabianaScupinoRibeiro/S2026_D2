@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANEPAR — Administração e Parametrização Global da Solução (TelaAdmParam)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admparam.css" />
+</head>
+<body>
+  <div class="adm-shell">
+    <!-- CABEÇALHO CORPORATIVO CLEAN (MESMA IDENTIDADE VISUAL DE TelaCidadao.html) -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR • Administração e Parametrização da Solução</h1>
+          <p class="brand-subtitle">
+            Metas Operacionais &amp; Simulação • <strong>Atendentes &amp; Escalas de Almoço</strong> • Avaliação &amp; Cancelamentos • <strong>Prioridades Legais, LGPD &amp; Auditoria</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="topbar-links">
+        <a href="TelaCidadao.html" class="btn-icon">📱 Cidadão</a>
+        <a href="TelaAvaliacaoCidadao.html" class="btn-icon">⭐ Tablet Avaliação</a>
+        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Recepção</a>
+        <a href="TelaAtendimento.html" class="btn-icon">🎧 Guichê</a>
+        <a href="TelaSupervisorLocal.html" class="btn-icon">📊 Supervisor</a>
+        <a href="TelaAnalisesDashboards.html" class="btn-icon">📈 Dashboards</a>
+        <a href="TelaGameParam.html" class="btn-icon">⚙️ Gamificação</a>
+        <a href="TelaGameVitrine2.html" class="btn-icon">🎁 Vitrine</a>
+        <button type="button" id="btn-save-all-adm" class="btn btn-primary btn-sm">
+          💾 Salvar Todas as Parametrizações
+        </button>
+        <button type="button" id="btn-reset-adm" class="btn-icon">↺ Restaurar Padrão</button>
+      </div>
+    </header>
+
+    <!-- BARRA COMPACTA E CLEAN DO MASCOTE AQUALINO (ASSISTENTE DO ADMINISTRADOR) -->
+    <section class="aqualino-clean-bar" id="aqualino-adm-panel" aria-label="Assistente Aqualino">
+      <div class="aqualino-bar-main">
+        <img src="MascoteHQ.png" alt="Mascote Aqualino SANEPAR" class="mascot-img-clean" />
+        <div class="aqualino-bar-text">
+          <div class="aqualino-bar-head">
+            <span class="tag tag-teal">💧 Aqualino • Consultor do Administrador</span>
+            <span class="text-muted" id="adm-last-saved-indicator">Última gravação global: Hoje, 17:19 (Versão v5.0)</span>
+          </div>
+          <div id="aqualino-adm-bubble" class="aqualino-clean-bubble" aria-live="polite">
+            Olá, Administrador! Organizei todas as parametrizações da solução em <strong>4 módulos limpos</strong> abaixo: <strong>(1)</strong> Metas (TME, TMA, Satisfação) e Motor de Simulação; <strong>(2)</strong> Cadastro de Atendentes e Horários/Almoço; <strong>(3)</strong> Perguntas de Avaliação e Justificativas de Cancelamento; e <strong>(4)</strong> Prioridades Legais, LGPD e Auditoria.
+          </div>
+        </div>
+        <button type="button" id="btn-toggle-aqualino-adm" class="btn btn-secondary btn-sm">
+          💬 Tirar Dúvida com o Aqualino
+        </button>
+      </div>
+
+      <div id="aqualino-adm-drawer" class="aqualino-qa-drawer hidden">
+        <form id="form-ask-aqualino-adm" class="aqualino-ask-form">
+          <input
+            id="input-ask-aqualino-adm"
+            type="text"
+            placeholder="Pergunte ao Aqualino como configurar metas, horários de almoço, perguntas de satisfação, prioridades legais ou LGPD..."
+          />
+          <button type="button" id="btn-voice-aqualino-adm" class="btn-mic-sup" title="Perguntar por voz">
+            🎤 Voz
+          </button>
+          <button type="submit" class="btn btn-primary btn-sm">Perguntar</button>
+        </form>
+        <div class="aqualino-quick-chips">
+          <span class="quick-chip-label">Dúvidas rápidas:</span>
+          <button type="button" class="chip-ask-adm" data-q="Como configurar as metas de TME, TMA, satisfação e os parâmetros de simulação de demanda?">
+            🎯 Metas &amp; Simulação de Demanda
+          </button>
+          <button type="button" class="chip-ask-adm" data-q="Como cadastrar o nome dos atendentes, horários de atendimento e escalas de almoço?">
+            👥 Atendentes &amp; Horário de Almoço
+          </button>
+          <button type="button" class="chip-ask-adm" data-q="Como parametrizar as perguntas de avaliação de satisfação e as justificativas para cancelamento?">
+            ⭐ Perguntas de Avaliação &amp; Cancelamentos
+          </button>
+          <button type="button" class="chip-ask-adm" data-q="Como ajustar a priorização legal de senhas e as regras de LGPD e auditoria?">
+            ⚖️ Priorização Legal, LGPD &amp; Auditoria
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANNER DE CONFIRMAÇÃO DE SALVAMENTO GLOBAL -->
+    <div id="adm-global-feedback" class="save-feedback-banner hidden" role="status" aria-live="polite"></div>
+
+    <!-- NAVEGAÇÃO EM 4 ABAS CLEAN PARA EVITAR POLUIÇÃO VISUAL -->
+    <nav class="adm-tabs-nav" aria-label="Módulos de Parametrização do Administrador">
+      <button type="button" class="adm-tab-btn active" data-tab="tab-metas-simulacao">
+        <span class="adm-tab-icon">🎯</span>
+        <div>
+          <strong>1. Metas (TME, TMA, NPS) &amp; Simulação</strong>
+          <small>SLAs de Espera, Atendimento, Satisfação e Previsão de Demanda</small>
+        </div>
+      </button>
+
+      <button type="button" class="adm-tab-btn" data-tab="tab-atendentes-horarios">
+        <span class="adm-tab-icon">👥</span>
+        <div>
+          <strong>2. Atendentes &amp; Horários / Almoço</strong>
+          <small>Cadastro de Equipe, Expediente e Escalonamento de Almoço</small>
+        </div>
+      </button>
+
+      <button type="button" class="adm-tab-btn" data-tab="tab-avaliacao-cancelamento">
+        <span class="adm-tab-icon">⭐</span>
+        <div>
+          <strong>3. Avaliação &amp; Cancelamentos</strong>
+          <small>Perguntas de Satisfação ao Cidadão e Motivos de Cancelamento</small>
+        </div>
+      </button>
+
+      <button type="button" class="adm-tab-btn" data-tab="tab-prioridades-lgpd">
+        <span class="adm-tab-icon">⚖️</span>
+        <div>
+          <strong>4. Prioridades Legais, LGPD &amp; Auditoria</strong>
+          <small>Requisitos Legais de Fila, Privacidade LGPD e Logs Auditáveis</small>
+        </div>
+      </button>
+    </nav>
+
+    <!-- ===================================================================== -->
+    <!-- MÓDULO 1: METAS (TME, TMA, SATISFAÇÃO) & PARÂMETROS DE SIMULAÇÃO       -->
+    <!-- ===================================================================== -->
+    <main id="tab-metas-simulacao" class="adm-tab-pane">
+      <div class="adm-grid-12">
+        <!-- 1A: Metas Operacionais e de Qualidade -->
+        <section class="card span-6">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Indicadores-Chave (SLAs Corporativos)</span>
+              <h2>Metas de Tempo de Espera (TME), Atendimento (TMA) e Satisfação</h2>
+            </div>
+            <span class="tag tag-blue">Gatilhos de Alerta do Aqualino</span>
+          </div>
+
+          <p class="section-desc">
+            Estes parâmetros definem os alvos operacionais monitorados em tempo real nas telas de Recepção, Guichê, Supervisão Local e Dashboards Estratégicos:
+          </p>
+
+          <div class="form-grid-2">
+            <div class="field-box">
+              <label for="adm-tme-target">Meta de TME no Guichê (min):</label>
+              <input type="number" id="adm-tme-target" min="2" max="30" value="10" />
+              <small class="field-hint">Tempo máximo objetivo entre emissão/check-in e chamada</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-tme-critical">Limiar Crítico de TME — Alerta Vermelho (min):</label>
+              <input type="number" id="adm-tme-critical" min="3" max="45" value="12" />
+              <small class="field-hint">Aciona recomendação imediata de abertura de guichês</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-tme-recepcao">Meta de Tempo de Triagem na Recepção (min):</label>
+              <input type="number" id="adm-tme-recepcao" min="1" max="10" value="2" />
+              <small class="field-hint">Check-in de chegada até conclusão da conferência documental</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-tma-target">Meta de TMA — Duração do Atendimento (min):</label>
+              <input type="number" id="adm-tma-target" min="2" max="30" value="8" />
+              <small class="field-hint">Tempo médio objetivo de atendimento no balcão</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-nps-target">Meta de Satisfação — Score NPS Mínimo (0–100):</label>
+              <input type="number" id="adm-nps-target" min="50" max="100" value="85" />
+              <small class="field-hint">Abaixo deste valor o Aqualino emite alerta de qualidade</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-stars-target">Meta de Avaliação Geral por Estrelas (1,0 a 5,0 ★):</label>
+              <input type="number" id="adm-stars-target" min="1" max="5" step="0.1" value="4.6" />
+              <small class="field-hint">Média mínima esperada nas avaliações pós-checkout</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-eval-coverage">Meta Mínima de Senhas Avaliadas Pós-Checkout (%):</label>
+              <input type="number" id="adm-eval-coverage" min="10" max="100" value="70" />
+              <small class="field-hint">Percentual mínimo de atendimentos com avaliação registrada</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-fcr-target">Meta de Resolutividade no 1º Atendimento — FCR (%):</label>
+              <input type="number" id="adm-fcr-target" min="50" max="100" value="90" />
+              <small class="field-hint">Percentual de demandas resolvidas sem retorno ou pendência</small>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1B: Parametrizações para Simulação de Atendimento Consoante a Previsão de Demanda -->
+        <section class="card span-6">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Motor Preditivo &amp; Dimensionamento</span>
+              <h2>Parâmetros de Simulação Consoante a Previsão de Demanda</h2>
+            </div>
+            <span class="tag tag-teal">Calibragem do Simulador</span>
+          </div>
+
+          <p class="section-desc">
+            Configure os pesos e coeficientes utilizados pelo algoritmo para recomendar a quantidade de atendentes necessários e simular cenários com base na previsão de demanda:
+          </p>
+
+          <div class="form-grid-2">
+            <div class="field-box">
+              <label for="adm-sim-capacity">Capacidade Padrão por Atendente (senhas / dia):</label>
+              <input type="number" id="adm-sim-capacity" min="10" max="60" value="24" />
+              <small class="field-hint">Base para recomendar a quantidade de guichês abertos</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-sim-lunch-penalty">Penalidade de Almoço Simultâneo no TME (%):</label>
+              <input type="number" id="adm-sim-lunch-penalty" min="50" max="500" step="10" value="300" />
+              <small class="field-hint">Aumento projetado no TME se todos almoçarem no mesmo horário</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-sim-senior-gain">Redução de TMA com Reforço Sênior (%):</label>
+              <input type="number" id="adm-sim-senior-gain" min="5" max="50" value="18" />
+              <small class="field-hint">Ganho de agilidade quando funcionários sêniores são ativados</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-sim-hist-weight">Peso da Série Histórica + SGC na Previsão (%):</label>
+              <input type="number" id="adm-sim-hist-weight" min="20" max="90" value="60" />
+              <small class="field-hint">Complementado por Agendamentos + Senhas Pendentes do Dia</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-sim-smoothing-days">Regra de Suavização de Agendamentos (Início do Mês):</label>
+              <select id="adm-sim-smoothing-days">
+                <option value="DIAS_1_A_5" selected>Bloquear agendamentos nos dias 01 a 05 (Pico Espontâneo)</option>
+                <option value="DIAS_1_A_3">Bloquear agendamentos nos dias 01 a 03 do mês</option>
+                <option value="LIMITE_50">Permitir apenas 50% das vagas nos dias 01 a 05</option>
+                <option value="SEM_BLOQUEIO">Sem bloqueio de calendário no início do mês</option>
+              </select>
+              <small class="field-hint">Evita sobreposição entre agendados e pico histórico de vencimento</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-sim-reception-retention">Taxa Estimada de Retenção na Recepção / Digital (%):</label>
+              <input type="number" id="adm-sim-reception-retention" min="5" max="60" value="34" />
+              <small class="field-hint">Demandas resolvidas na triagem (2ª via / orientação 156 e Copel)</small>
+            </div>
+          </div>
+
+          <div class="preview-formula-card" id="adm-sim-preview-box"></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- MÓDULO 2: CADASTRO DE ATENDENTES E HORÁRIOS DE ATENDIMENTO / ALMOÇO   -->
+    <!-- ===================================================================== -->
+    <main id="tab-atendentes-horarios" class="adm-tab-pane hidden">
+      <div class="adm-grid-12">
+        <!-- 2A: Horário de Funcionamento da Unidade & Formulário de Cadastro de Atendente -->
+        <section class="card span-5">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Expediente &amp; Força de Trabalho</span>
+              <h2>Cadastrar Atendente e Horário (c/ Almoço)</h2>
+            </div>
+            <span class="tag tag-blue" id="adm-attendants-total-badge">7 Cadastrados</span>
+          </div>
+
+          <div class="unit-hours-subbox">
+            <h4>🕒 Horário Padrão de Atendimento das Unidades</h4>
+            <div class="form-grid-2">
+              <div class="field-box">
+                <label for="adm-unit-open-time">Abertura das Centrais:</label>
+                <input type="time" id="adm-unit-open-time" value="08:00" />
+              </div>
+              <div class="field-box">
+                <label for="adm-unit-close-time">Fechamento das Centrais:</label>
+                <input type="time" id="adm-unit-close-time" value="17:00" />
+              </div>
+            </div>
+          </div>
+
+          <form id="form-add-attendant" class="clean-stack-form">
+            <h4>➕ Incluir Novo Atendente / Recepcionista na Escala</h4>
+
+            <div class="field-box">
+              <label for="att-inp-name">Nome Completo do Atendente:</label>
+              <input type="text" id="att-inp-name" placeholder="Ex.: Fernanda Costa Lima" required />
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-box">
+                <label for="att-sel-unit">Unidade de Atendimento:</label>
+                <select id="att-sel-unit">
+                  <option value="Central Rebouças (Curitiba)">Central Rebouças (Curitiba)</option>
+                  <option value="Posto Pinheirinho (Curitiba)">Posto Pinheirinho (Curitiba)</option>
+                  <option value="Posto Boa Vista (Curitiba)">Posto Boa Vista (Curitiba)</option>
+                  <option value="Posto Fazendinha (Curitiba)">Posto Fazendinha (Curitiba)</option>
+                </select>
+              </div>
+
+              <div class="field-box">
+                <label for="att-sel-desk">Guichê / Posto e Perfil:</label>
+                <select id="att-sel-desk">
+                  <option value="Guichê 01 • Pleno">Guichê 01 • Pleno</option>
+                  <option value="Guichê 02 • Pleno">Guichê 02 • Pleno</option>
+                  <option value="Guichê 03 • Pleno">Guichê 03 • Pleno</option>
+                  <option value="Guichê 04 • Pleno">Guichê 04 • Pleno</option>
+                  <option value="Guichê 05 • Sênior (Apoio)">Guichê 05 • Sênior (Apoio)</option>
+                  <option value="Guichê 06 • Sênior (Apoio)">Guichê 06 • Sênior (Apoio)</option>
+                  <option value="Balcão Recepção • Triagem">Balcão Recepção • Triagem</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-box">
+                <label for="att-inp-shift-start">Início do Expediente:</label>
+                <input type="time" id="att-inp-shift-start" value="08:00" required />
+              </div>
+
+              <div class="field-box">
+                <label for="att-inp-shift-end">Fim do Expediente:</label>
+                <input type="time" id="att-inp-shift-end" value="17:00" required />
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-box">
+                <label for="att-inp-lunch-start">Início do Horário de Almoço:</label>
+                <input type="time" id="att-inp-lunch-start" value="12:00" required />
+              </div>
+
+              <div class="field-box">
+                <label for="att-inp-lunch-end">Fim do Horário de Almoço:</label>
+                <input type="time" id="att-inp-lunch-end" value="13:00" required />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              ➕ Cadastrar Atendente e Horários
+            </button>
+          </form>
+        </section>
+
+        <!-- 2B: Quadro de Atendentes Cadastrados, Escalas de Almoço e Detector de Conflito -->
+        <section class="card span-7">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Quadro de Horários e Almoço</span>
+              <h2>Atendentes Cadastrados e Escalonamento de Horário de Almoço</h2>
+            </div>
+
+            <div class="field-box-inline">
+              <label for="filter-att-unit">Filtrar Unidade:</label>
+              <select id="filter-att-unit">
+                <option value="ALL">Todas as Unidades</option>
+                <option value="Central Rebouças (Curitiba)">Central Rebouças (Curitiba)</option>
+                <option value="Posto Pinheirinho (Curitiba)">Posto Pinheirinho (Curitiba)</option>
+                <option value="Posto Boa Vista (Curitiba)">Posto Boa Vista (Curitiba)</option>
+                <option value="Posto Fazendinha (Curitiba)">Posto Fazendinha (Curitiba)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Diagnóstico Automático de Escalonamento de Almoço -->
+          <div id="lunch-conflict-banner" class="lunch-check-banner"></div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome do Atendente</th>
+                  <th>Unidade &amp; Posto</th>
+                  <th>Expediente</th>
+                  <th>Horário de Almoço (Editável)</th>
+                  <th>Status</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="adm-attendants-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- MÓDULO 3: PERGUNTAS DE AVALIAÇÃO DE SATISFAÇÃO & CANCELAMENTOS        -->
+    <!-- ===================================================================== -->
+    <main id="tab-avaliacao-cancelamento" class="adm-tab-pane hidden">
+      <div class="adm-grid-12">
+        <!-- 3A: Perguntas Feitas ao Cidadão na Avaliação de Satisfação -->
+        <section class="card span-6">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Pesquisa Pós-Checkout (Celular e Tablet)</span>
+              <h2>Perguntas da Avaliação de Satisfação ao Cidadão</h2>
+            </div>
+            <span class="tag tag-green" id="adm-questions-count-tag">4 Perguntas Ativas</span>
+          </div>
+
+          <p class="section-desc">
+            Parametrize as perguntas apresentadas ao cidadão no momento da avaliação de satisfação (na <code>TelaCidadao.html</code> e no tablet <code>TelaAvaliacaoCidadao.html</code>):
+          </p>
+
+          <div id="adm-questions-list" class="items-stack"></div>
+
+          <form id="form-add-question" class="sub-add-form">
+            <h4>➕ Adicionar Nova Pergunta à Avaliação de Satisfação</h4>
+            <div class="field-box">
+              <label for="q-inp-text">Texto da Pergunta ao Cidadão:</label>
+              <input
+                type="text"
+                id="q-inp-text"
+                placeholder="Ex.: O tempo de espera na unidade atendeu à sua expectativa?"
+                required
+              />
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-box">
+                <label for="q-sel-type">Formato da Resposta:</label>
+                <select id="q-sel-type">
+                  <option value="Escala NPS (0 a 10)">Escala NPS (0 a 10)</option>
+                  <option value="Estrelas (1 a 5 ★)">Estrelas (1 a 5 ★)</option>
+                  <option value="Múltipla Escolha (Tags Rápidas)">Múltipla Escolha (Tags Rápidas)</option>
+                  <option value="Sim / Não">Sim / Não</option>
+                  <option value="Texto / Voz Aberto">Texto / Voz Aberto</option>
+                </select>
+              </div>
+
+              <div class="field-box">
+                <label for="q-sel-required">Obrigatoriedade:</label>
+                <select id="q-sel-required">
+                  <option value="Obrigatória">Obrigatória p/ envio</option>
+                  <option value="Opcional">Opcional</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-teal btn-sm">
+              ➕ Incluir Pergunta na Avaliação
+            </button>
+          </form>
+        </section>
+
+        <!-- 3B: Justificativas Padronizadas para Cancelamento e Não Resolução -->
+        <section class="card span-6">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Governança de Desfechos (Recepção e Guichê)</span>
+              <h2>Justificativas para Cancelamento e Não Resolução</h2>
+            </div>
+            <span class="tag tag-amber" id="adm-justifications-count-tag">5 Motivos Ativos</span>
+          </div>
+
+          <p class="section-desc">
+            Parametrize os motivos padronizados exigidos quando a Recepção ou o Atendente cancela uma senha (ex.: desistência/ausência) ou encerra sem resolução imediata:
+          </p>
+
+          <div id="adm-justifications-list" class="items-stack"></div>
+
+          <form id="form-add-justification" class="sub-add-form">
+            <h4>➕ Cadastrar Nova Justificativa de Cancelamento / Não Resolução</h4>
+            <div class="field-box">
+              <label for="just-inp-text">Descrição da Justificativa:</label>
+              <input
+                type="text"
+                id="just-inp-text"
+                placeholder="Ex.: Cidadão solicitou reagendamento para outra data por motivo pessoal"
+                required
+              />
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-box">
+                <label for="just-sel-scope">Onde é Utilizada:</label>
+                <select id="just-sel-scope">
+                  <option value="Recepção & Guichê (Cancelamento)">Recepção &amp; Guichê (Cancelamento)</option>
+                  <option value="Recepção (Triagem / Desistência)">Recepção (Triagem / Desistência)</option>
+                  <option value="Guichê (Ausência na Chamada)">Guichê (Ausência na Chamada)</option>
+                  <option value="Guichê (Não Resolvido no Balcão)">Guichê (Não Resolvido no Balcão)</option>
+                </select>
+              </div>
+
+              <div class="field-box">
+                <label for="just-sel-obs">Exige Observação Detalhada?</label>
+                <select id="just-sel-obs">
+                  <option value="Não">Não (Seleção rápida)</option>
+                  <option value="Sim (Obrigatório detalhar)">Sim (Obrigatório detalhar)</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm">
+              ➕ Cadastrar Justificativa
+            </button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- MÓDULO 4: PRIORIZAÇÃO LEGAL DE SENHAS, LGPD E AUDITORIAS              -->
+    <!-- ===================================================================== -->
+    <main id="tab-prioridades-lgpd" class="adm-tab-pane hidden">
+      <div class="adm-grid-12">
+        <!-- 4A: Priorização de Senhas em Atendimento a Requisitos Legais -->
+        <section class="card span-7">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Ordenação de Chamada &amp; Legislação</span>
+              <h2>Priorização de Senhas em Atendimento a Requisitos Legais</h2>
+            </div>
+            <span class="tag tag-blue">Conformidade Legal Automática</span>
+          </div>
+
+          <p class="section-desc">
+            Configure os pesos de intercalação de chamada nos guichês, os tetos máximos de espera por categoria legal e a regra anti-inanição da fila convencional:
+          </p>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Ativa</th>
+                  <th>Fila / Categoria &amp; Base Legal</th>
+                  <th>Prefixo</th>
+                  <th>Regra de Chamada / Intercalação</th>
+                  <th>TME Máx. (min)</th>
+                </tr>
+              </thead>
+              <tbody id="adm-legal-priority-tbody"></tbody>
+            </table>
+          </div>
+
+          <div class="form-grid-2" style="padding-top:6px;">
+            <div class="field-box">
+              <label for="adm-anti-starvation-min">Trava Anti-Inanição da Fila Normal (min):</label>
+              <input type="number" id="adm-anti-starvation-min" min="5" max="45" value="15" />
+              <small class="field-hint">Promove automaticamente senha normal se a espera atingir este limite</small>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-sched-tolerance-min">Tolerância de Chegada para Senha Agendada (min):</label>
+              <input type="number" id="adm-sched-tolerance-min" min="5" max="30" value="15" />
+              <small class="field-hint">Janela antes/depois do horário agendado para prioridade de check-in</small>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4B: Parametrizações Relacionadas à LGPD e às Auditorias -->
+        <section class="card span-5">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Lei nº 13.709/2018 &amp; Rastreabilidade</span>
+              <h2>Governança LGPD e Auditorias</h2>
+            </div>
+            <span class="tag tag-green">🔒 100% Auditável</span>
+          </div>
+
+          <p class="section-desc">
+            Defina as políticas de anonimização de dados pessoais, assinatura criptográfica de logs e retenção para auditorias internas e regulatórias (AGEPAR):
+          </p>
+
+          <div class="lgpd-switches-stack">
+            <label class="switch-card">
+              <input type="checkbox" id="chk-lgpd-anonymize-dash" checked />
+              <div>
+                <strong>Anonimização em Supervisão, Dashboards e Tablet</strong>
+                <small>Oculta Nome, CPF/CNPJ e Matrícula nas visões gerenciais e no tablet compartilhado, exibindo apenas o código da senha.</small>
+              </div>
+            </label>
+
+            <label class="switch-card">
+              <input type="checkbox" id="chk-lgpd-tv-mask" checked />
+              <div>
+                <strong>Privacidade no Painel de Chamada da Unidade</strong>
+                <small>Chama o cidadão exclusivamente pelo código da senha e número do guichê, sem expor dados cadastrais.</small>
+              </div>
+            </label>
+
+            <label class="switch-card">
+              <input type="checkbox" id="chk-audit-sha256" checked />
+              <div>
+                <strong>Logs Imutáveis com Assinatura Criptográfica SHA-256</strong>
+                <small>Gera hash inalterável para cada evento de emissão, check-in, chamada, transferência, cancelamento, checkout e avaliação.</small>
+              </div>
+            </label>
+
+            <label class="switch-card">
+              <input type="checkbox" id="chk-audit-anti-dup" checked />
+              <div>
+                <strong>Trava de Unicidade de Avaliação por Senha</strong>
+                <small>Libera a pesquisa de satisfação somente após encerramento/cancelamento e bloqueia avaliações duplicadas para a mesma senha.</small>
+              </div>
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="field-box">
+              <label for="adm-lgpd-audio-retention">Retenção de Transcrições de Voz:</label>
+              <select id="adm-lgpd-audio-retention">
+                <option value="90">90 dias (Expurgo automático)</option>
+                <option value="180" selected>180 dias (Padrão Regulatório)</option>
+                <option value="365">365 dias (Arquivo Anonimizado)</option>
+              </select>
+            </div>
+
+            <div class="field-box">
+              <label for="adm-audit-ssrs-replica">Sincronismo Read-Replica (SSRS):</label>
+              <select id="adm-audit-ssrs-replica">
+                <option value="5s">Tempo Real (5s • Desacoplado)</option>
+                <option value="30s" selected>Ciclo 30s (Zero impacto SGC)</option>
+                <option value="5m">Lote a cada 5 minutos</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- BOTÃO FLUTUANTE DO AQUALINO -->
+    <button
+      type="button"
+      id="btn-floating-aqualino-adm"
+      class="floating-aqualino-btn"
+      title="Tirar dúvidas sobre esta tela com o Aqualino"
+    >
+      <img src="MascoteHQ.png" alt="Aqualino" />
+      <span>Dúvidas? Pergunte ao Aqualino</span>
+    </button>
+  </div>
+
+  <script src="admparam.js"></script>
+</body>
+</html>

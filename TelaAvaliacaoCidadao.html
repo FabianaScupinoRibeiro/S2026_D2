@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SANEPAR Curitiba — Tablet de Avaliação do Atendimento Presencial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="avaliacao.css" />
+</head>
+<body>
+  <div class="tablet-shell">
+    <!-- CABEÇALHO CLEAN (MESMO ESTILO E IDENTIDADE VISUAL DE TelaCidadao.html) -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR Curitiba</h1>
+          <p class="brand-subtitle">Totem / Tablet Compartilhado • Avaliação de Satisfação Pós-Atendimento</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <span class="kiosk-badge">📱 Dispositivo Compartilhado da Unidade</span>
+        <button type="button" id="btn-reset-kiosk" class="btn-icon" title="Voltar ao início do tablet">
+          ↺ Tela Inicial
+        </button>
+      </div>
+    </header>
+
+    <!-- INDICADOR DE ETAPAS DO TABLET -->
+    <nav class="stepper" aria-label="Etapas da avaliação no tablet">
+      <div class="step-item active" id="nav-step-1">
+        <span class="step-num">1</span>
+        <span class="step-label">Início</span>
+      </div>
+      <div class="step-item" id="nav-step-2">
+        <span class="step-num">2</span>
+        <span class="step-label">Validar Senha</span>
+      </div>
+      <div class="step-item" id="nav-step-3">
+        <span class="step-num">3</span>
+        <span class="step-label">Sua Avaliação</span>
+      </div>
+      <div class="step-item" id="nav-step-4">
+        <span class="step-num">4</span>
+        <span class="step-label">Concluído</span>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <!-- =================================================================
+           ETAPA 1: TELA DE DESCANSO / BOAS-VINDAS DO TABLET COMPARTILHADO
+           COM A OPÇÃO "INICIAR AVALIAÇÃO DO ATENDIMENTO PRESENCIAL"
+           ================================================================= -->
+      <section id="pane-welcome" class="step-pane">
+        <div class="card welcome-card">
+          <div class="welcome-mascot-row">
+            <img src="MascoteHQ.png" alt="Mascote Aqualino SANEPAR" class="welcome-mascot-img" />
+            <div class="welcome-badge-wrap">
+              <span class="tag tag-blue">Atendimento Presencial Concluído</span>
+              <h2>Sua opinião é muito importante para a SANEPAR!</h2>
+              <p class="text-muted">
+                Este tablet está disponível para você registrar sua satisfação sobre o atendimento que acabou de receber no guichê ou na recepção, sem precisar de celular.
+              </p>
+            </div>
+          </div>
+
+          <div class="kiosk-highlights-grid">
+            <div class="kiosk-highlight-item">
+              <span class="kh-icon">🎫</span>
+              <div>
+                <strong>Vinculada à sua Senha</strong>
+                <small>Tenha em mãos o código da senha do seu atendimento de hoje.</small>
+              </div>
+            </div>
+            <div class="kiosk-highlight-item">
+              <span class="kh-icon">🔒</span>
+              <div>
+                <strong>Rápido, Seguro e Único</strong>
+                <small>Liberado logo após o encerramento do atendimento, sem expor dados pessoais.</small>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" id="btn-iniciar-avaliacao" class="btn btn-primary btn-xl btn-block">
+            ★ Iniciar avaliação do atendimento presencial
+          </button>
+        </div>
+
+        <!-- Painel discreto do status de senhas do dia (para visibilidade e testes rápidos no protótipo) -->
+        <div class="card">
+          <div class="card-head-inline">
+            <div>
+              <span class="tag tag-teal">Monitor de Senhas da Unidade Hoje</span>
+              <h3>Status de Liberação para Avaliação</h3>
+            </div>
+            <small class="text-muted">Somente senhas com atendimento encerrado e ainda não avaliadas são liberadas</small>
+          </div>
+          <div id="overview-tickets-list" class="overview-tickets-grid"></div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           ETAPA 2: VALIDAÇÃO DA SENHA (SÓ LIBERA APÓS ENCERRAMENTO E SEM DUPLICIDADE)
+           ================================================================= -->
+      <section id="pane-ticket-validation" class="step-pane hidden">
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-blue">1. Identificação da Senha de Atendimento</span>
+            <h2>Informe o código da sua senha para iniciar a avaliação</h2>
+            <p class="text-muted">
+              A avaliação é vinculada à sua senha e liberada exclusivamente após o encerramento do atendimento no guichê ou na recepção, evitando duplicidades.
+            </p>
+          </div>
+
+          <form id="form-validar-senha" class="ticket-form">
+            <div class="field">
+              <label for="input-senha-avaliacao">Código da Senha (ex.: N-104, P-042, A-205, R-318)</label>
+              <div class="ticket-input-row">
+                <input
+                  id="input-senha-avaliacao"
+                  type="text"
+                  placeholder="Digite sua senha (ex: N-104)"
+                  maxlength="10"
+                  autocomplete="off"
+                  required
+                />
+                <button type="button" id="btn-clear-senha" class="btn btn-secondary" title="Limpar campo">
+                  Limpar
+                </button>
+              </div>
+            </div>
+
+            <!-- Atalhos de toque no Tablet para simular os 3 cenários de validação -->
+            <div class="preset-group">
+              <span class="preset-caption">Toque em uma senha abaixo para preencher no tablet (Simulação de Cenários):</span>
+              <div id="validation-preset-chips" class="chips-wrap"></div>
+            </div>
+
+            <!-- Caixa de retorno da validação (Erro de Senha em Atendimento / Erro de Duplicidade / Sucesso) -->
+            <div id="ticket-validation-alert" class="validation-alert hidden" role="alert" aria-live="assertive"></div>
+
+            <div class="btn-row">
+              <button type="button" id="btn-voltar-welcome" class="btn btn-secondary">
+                ← Voltar ao Início
+              </button>
+              <button type="submit" id="btn-validar-prosseguir" class="btn btn-primary flex-1">
+                Validar Senha e Continuar →
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           ETAPA 3: FORMULÁRIO DE AVALIAÇÃO DO ATENDIMENTO (IGUAL À TelaCidadao.html)
+           ================================================================= -->
+      <section id="pane-rating-form" class="step-pane hidden">
+        <div class="card">
+          <div class="card-head">
+            <div class="head-top-flex">
+              <span class="tag tag-green">✓ Senha Validada • Atendimento Encerrado</span>
+              <button type="button" id="btn-trocar-senha" class="btn-link">Trocar senha</button>
+            </div>
+            <h2>Avalie seu atendimento na SANEPAR</h2>
+            <p class="text-muted">Sua nota ajuda a aprimorar nossos serviços presenciais em Curitiba.</p>
+          </div>
+
+          <!-- Resumo da Senha Vinculada (Anonimizado — LGPD) -->
+          <div id="validated-ticket-banner" class="ticket-context-banner"></div>
+
+          <!-- 1. Pergunta Específica de NPS (0 a 10) -->
+          <div class="rating-section">
+            <label class="section-label">
+              1. Em uma escala de <strong>0 a 10</strong>, o quanto você recomendaria o atendimento da SANEPAR a um amigo ou familiar?
+              <span class="tag tag-teal">NPS</span>
+            </label>
+            <div id="nps-scale" class="nps-row" role="radiogroup" aria-label="Escala NPS de 0 a 10"></div>
+            <div class="nps-legend">
+              <span>0 • Nada provável</span>
+              <strong id="nps-selected-label">Toque em uma nota de 0 a 10</strong>
+              <span>10 • Extremamente provável</span>
+            </div>
+          </div>
+
+          <!-- 2. Avaliação Geral do Atendimento (1 a 5 Estrelas) -->
+          <div class="rating-section">
+            <label class="section-label">2. Avaliação geral do atendimento recebido:</label>
+            <div id="star-rating" class="stars-bar" role="radiogroup" aria-label="Avaliação geral de 1 a 5 estrelas">
+              <button type="button" class="star" data-star="1" aria-label="1 estrela">★</button>
+              <button type="button" class="star" data-star="2" aria-label="2 estrelas">★</button>
+              <button type="button" class="star" data-star="3" aria-label="3 estrelas">★</button>
+              <button type="button" class="star" data-star="4" aria-label="4 estrelas">★</button>
+              <button type="button" class="star" data-star="5" aria-label="5 estrelas">★</button>
+            </div>
+            <small id="star-label" class="text-muted">Toque nas estrelas (de 1 a 5 estrelas)</small>
+          </div>
+
+          <!-- 3. Destaques Opcionais -->
+          <div class="rating-section">
+            <label class="section-label">
+              3. O que você mais gostou? <span class="text-muted">(opcional)</span>
+            </label>
+            <div class="chips-wrap" id="rating-tags">
+              <button type="button" class="chip chip-tag">Pouco tempo de espera</button>
+              <button type="button" class="chip chip-tag">Triagem clara na recepção</button>
+              <button type="button" class="chip chip-tag">Cordialidade do atendente</button>
+              <button type="button" class="chip chip-tag">Problema resolvido</button>
+              <button type="button" class="chip chip-tag">Orientação clara e objetiva</button>
+            </div>
+          </div>
+
+          <!-- 4. Comentário Adicional (Texto ou Voz no Tablet) -->
+          <div class="field">
+            <div class="label-bar">
+              <label for="input-comentario">Comentário adicional <span class="text-muted">(opcional)</span></label>
+              <button type="button" id="btn-voice-comment" class="btn-mic" aria-pressed="false">
+                <span aria-hidden="true">🎤</span>
+                <span id="voice-comment-label">Falar comentário por voz</span>
+              </button>
+            </div>
+            <textarea
+              id="input-comentario"
+              rows="2"
+              placeholder="Se desejar, deixe um elogio ou sugestão (digitando ou falando pelo microfone)..."
+            ></textarea>
+          </div>
+
+          <button type="button" id="btn-enviar-avaliacao" class="btn btn-primary btn-xl btn-block" disabled>
+            ✓ Enviar Avaliação da Senha
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           ETAPA 4: CONFIRMAÇÃO E REINÍCIO AUTOMÁTICO PARA O PRÓXIMO CIDADÃO
+           ================================================================= -->
+      <section id="pane-thanks" class="step-pane hidden">
+        <div class="card resolved-box">
+          <div class="icon-badge-ok">★</div>
+          <h2>Avaliação registrada com sucesso!</h2>
+          <p id="thanks-summary" class="text-muted"></p>
+
+          <div id="thanks-anti-duplicity-note" class="anti-dup-pill">
+            🔒 Esta avaliação foi vinculada de forma definitiva à sua senha e bloqueada contra duplicidades.
+          </div>
+
+          <button type="button" id="btn-proximo-cidadao" class="btn btn-primary btn-xl btn-block mt-14">
+            Concluir e Liberar Tablet para o Próximo Cidadão (<span id="auto-return-sec">12</span>s)
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      SANEPAR • Atendimento Presencial ao Cidadão de Curitiba • Proteção de Dados LGPD (Lei nº 13.709/2018)
+    </footer>
+  </div>
+
+  <script src="avaliacao.js"></script>
+</body>
+</html>

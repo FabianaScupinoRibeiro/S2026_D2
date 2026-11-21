@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANEPAR Curitiba — Tela de Atendimento (Guichê)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="atendimento.css" />
+</head>
+<body>
+  <div class="attendant-shell">
+    <!-- CABEÇALHO CLEAN (MESMA IDENTIDADE DE TelaCidadao.html e TelaRecepcao.html) -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR Curitiba • Guichê de Atendimento</h1>
+          <p class="brand-subtitle">Atendente: <strong id="current-attendant-name">Ana Paula Ribeiro (Guichê 02)</strong> • Central Rebouças</p>
+        </div>
+      </div>
+
+      <!-- Controle de Jornada do Atendente (Início do dia, Pausas, Fim do dia) -->
+      <div class="shift-controls" aria-label="Controle de jornada do atendente">
+        <span id="shift-status-badge" class="tag tag-green">● Jornada Ativa (Disponível)</span>
+        <button type="button" id="btn-iniciar-dia" class="btn-shift hidden" title="Iniciar expediente do dia">
+          ▶ Iniciar Dia
+        </button>
+        <div class="pause-group" id="pause-controls-group">
+          <select id="select-pause-type" aria-label="Selecionar tipo de pausa">
+            <option value="Pausa para Almoço">🍽️ Pausa Almoço</option>
+            <option value="Pausa Café / Descanso (15 min)">☕ Pausa Café (15m)</option>
+            <option value="Pausa Rápida / Banheiro">🚻 Pausa Rápida</option>
+            <option value="Reunião / Alinhamento">👥 Alinhamento</option>
+          </select>
+          <button type="button" id="btn-pausar-retomar" class="btn-shift">
+            ⏸ Iniciar Pausa
+          </button>
+        </div>
+        <button type="button" id="btn-encerrar-dia" class="btn-shift btn-shift-end">
+          ⏹ Encerrar Dia
+        </button>
+      </div>
+
+      <div class="topbar-links">
+        <a href="TelaCidadao.html" class="btn-icon">📱 Tela Cidadão</a>
+        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Tela Recepção</a>
+        <button type="button" id="btn-reset-demo" class="btn-icon">↺ Restaurar Demo</button>
+      </div>
+    </header>
+
+    <!-- PAINEL DE GAMIFICAÇÃO COM AQUALINO + INDICADORES DO ATENDENTE -->
+    <section class="dashboard-strip" aria-label="Gamificação com Aqualino e Indicadores do Guichê">
+      <!-- Card do Mascote Aqualino -->
+      <div class="mascot-card">
+        <div class="mascot-avatar-wrap">
+          <img src="MascoteHQ.png" alt="Mascote Aqualino SANEPAR" class="mascot-img" />
+          <span class="mascot-level-pill" id="mascot-level">Nível 4 • Especialista</span>
+        </div>
+
+        <div class="mascot-content">
+          <div class="mascot-header-row">
+            <div>
+              <span class="tag tag-blue">Gamificação • Peso Principal: Satisfação do Cidadão</span>
+              <h2 class="mascot-title">Aqualino acompanha seu atendimento no Guichê!</h2>
+            </div>
+            <div class="score-display">
+              <small>Seus Pontos Hoje</small>
+              <strong id="score-points">620 pts</strong>
+            </div>
+          </div>
+
+          <!-- Balão de Dicas Contextuais e Motivação do Aqualino -->
+          <div id="aqualino-speech" class="mascot-bubble" aria-live="polite">
+            💡 <strong>Dica do Aqualino:</strong> Clique em <strong>"📢 Chamar Próxima Senha"</strong> para carregar instantaneamente o <strong>Contexto do Cliente</strong>. Lembre-se: a avaliação de satisfação após o checkout tem o maior peso na sua pontuação (até <strong>+100 pts</strong>), e em atendimentos compartilhados os dois atendentes ganham pontos!
+          </div>
+
+          <div class="gamification-footer">
+            <div class="xp-bar-wrap">
+              <div class="xp-labels">
+                <span>Progresso Diário: <strong id="xp-progress-label">620 / 800 pts</strong></span>
+                <span id="xp-bonus-hint">Satisfação Média: 4,9 ★ (Peso 50% da pontuação)</span>
+              </div>
+              <div class="xp-track">
+                <div id="xp-fill" class="xp-fill" style="width: 77%"></div>
+              </div>
+            </div>
+
+            <div class="badges-row">
+              <span class="badge-medal earned" title="Nota de satisfação acima de 4.8 estrelas">⭐ Campeão de Satisfação (Peso Máx.)</span>
+              <span class="badge-medal earned" title="Alta taxa de resolução no primeiro atendimento">✓ Resolvedor Master</span>
+              <span class="badge-medal earned" title="Colaboração em atendimentos transferidos">🤝 Equipe Unida</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 KPIs de Desempenho do Atendente no Dia -->
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-highlight">
+          <div class="kpi-top">
+            <span class="kpi-label">Satisfação dos Cidadãos</span>
+            <span class="tag tag-amber">★ Maior Peso (50%)</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-satisfaction" class="kpi-big text-amber">4,9 ★</strong>
+            <span class="kpi-target">NPS: <strong id="kpi-nps-avg">9,4</strong> (<span id="kpi-eval-count">8</span> aval.)</span>
+          </div>
+          <p class="kpi-sub">Se 2 atendentes atuarem na senha, ambos pontuam conforme a satisfação</p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Tempo de Atendimento</span>
+            <span id="kpi-current-timer-badge" class="tag tag-blue">Atual: 00m 00s</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-avg-service-time" class="kpi-big">06m 24s</strong>
+            <span class="kpi-target">Média por senha hoje</span>
+          </div>
+          <p class="kpi-sub">Tempo médio entre o check-in no guichê e o checkout do cidadão</p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Tempo Ocioso Acumulado</span>
+            <span id="kpi-idle-state-badge" class="tag tag-teal">Contabilizando</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-idle-time" class="kpi-big text-teal">04m 15s</strong>
+            <span class="kpi-target">Sem senha ativa</span>
+          </div>
+          <p class="kpi-sub">Pausa automaticamente durante atendimentos ou pausas registradas</p>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Resolvidos vs. Não Resolvidos</span>
+            <span class="tag tag-green">+40 pts / resolvido</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-resolved-ratio" class="kpi-big text-green">7 / 1</strong>
+            <span class="kpi-target"><strong id="kpi-resolved-pct">88%</strong> resolutividade</span>
+          </div>
+          <p class="kpi-sub"><span id="kpi-resolved-num">7</span> casos resolvidos • <span id="kpi-unresolved-num">1</span> não resolvido (justificado)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÁREA PRINCIPAL DO GUICHÊ (2 COLUNAS) -->
+    <main class="workspace">
+      <div class="guiche-layout">
+        <!-- ===============================================================
+             COLUNA ESQUERDA: TODAS AS SENHAS GERADAS E AGENDADAS PARA O DIA
+             =============================================================== -->
+        <aside class="queue-column">
+          <div class="card">
+            <div class="card-head-row">
+              <div>
+                <span class="tag tag-blue">Fila do Dia • Guichê 02</span>
+                <h2>Senhas Geradas e Agendadas</h2>
+                <p class="text-muted">Veja a demanda de cada senha e os documentos conferidos pela recepção.</p>
+              </div>
+              <button type="button" id="btn-chamar-proxima" class="btn btn-primary">
+                📢 Chamar Próxima Senha
+              </button>
+            </div>
+
+            <!-- Filtros da fila do dia -->
+            <div class="chips-wrap" id="queue-filters">
+              <button type="button" class="chip active" data-filter="all">Todas (<span id="count-all">5</span>)</button>
+              <button type="button" class="chip" data-filter="preferencial">Preferenciais</button>
+              <button type="button" class="chip" data-filter="agendada">Agendadas</button>
+              <button type="button" class="chip" data-filter="transferida">Transferidas</button>
+            </div>
+
+            <!-- Lista de todas as senhas geradas e agendadas -->
+            <div id="day-tickets-list" class="ticket-queue-list"></div>
+          </div>
+        </aside>
+
+        <!-- ===============================================================
+             COLUNA DIREITA: MESA DE ATENDIMENTO, CONTEXTO IMEDIATO & EXECUÇÃO
+             =============================================================== -->
+        <section class="service-column">
+          <!-- Estado vazio antes de chamar uma senha -->
+          <div id="desk-empty-card" class="card empty-desk">
+            <div class="empty-desk-inner">
+              <span class="empty-icon">📢</span>
+              <h2>Nenhuma senha em chamada no momento</h2>
+              <p class="text-muted">
+                Clique em <strong>"📢 Chamar Próxima Senha"</strong> (ou no botão <strong>"Chamar Senha"</strong> em qualquer item da lista ao lado) para carregar automaticamente o <strong>Contexto do Cliente</strong> e iniciar o atendimento.
+              </p>
+              <button type="button" id="btn-chamar-proxima-empty" class="btn btn-primary">
+                📢 Chamar Próxima Senha Agora
+              </button>
+            </div>
+          </div>
+
+          <!-- Painel Principal da Senha Chamada / Em Atendimento -->
+          <div id="desk-active-card" class="card hidden">
+            <!-- Barra de Status da Senha, Chamada, Rechamadas, Ausência e Check-in no Guichê -->
+            <div class="desk-top-bar">
+              <div>
+                <div class="desk-badges-row">
+                  <span id="desk-ticket-type-tag" class="tag tag-teal">Preferencial • Pessoa Idosa</span>
+                  <span id="desk-call-state-tag" class="tag tag-amber">🔔 Chamando no Painel (1ª chamada)</span>
+                  <span id="desk-transfer-badge" class="tag tag-blue hidden"></span>
+                </div>
+                <div class="desk-title-row">
+                  <h2 id="desk-ticket-code" class="desk-code">P-041</h2>
+                  <span id="desk-citizen-name" class="desk-name">Sr. Antônio Ferreira</span>
+                </div>
+              </div>
+
+              <div class="desk-timer-box">
+                <small id="desk-timer-label">Tempo de Atendimento</small>
+                <strong id="desk-service-timer">00m 00s</strong>
+                <span id="desk-call-counter-text">Chamadas realizadas: 1x</span>
+              </div>
+            </div>
+
+            <!-- Controles de Chamada / Rechamada Múltipla / Ausência / Check-in no Guichê -->
+            <div id="call-controls-bar" class="call-controls-box">
+              <div class="call-controls-info">
+                <strong>Controle de Chamada da Senha:</strong>
+                <p class="text-muted small-note">Você pode rechamar a senha múltiplas vezes no painel, registrar ausência ou fazer o check-in quando o cidadão chegar ao guichê.</p>
+              </div>
+              <div class="btn-row-wrap">
+                <button type="button" id="btn-rechamar-senha" class="btn btn-secondary btn-sm">
+                  🔔 Rechamar Senha (<span id="recall-count-num">1</span>x)
+                </button>
+                <button type="button" id="btn-registrar-ausencia" class="btn btn-danger-outline btn-sm">
+                  🚫 Registrar Ausência do Cidadão
+                </button>
+                <button type="button" id="btn-checkin-guiche" class="btn btn-primary btn-sm">
+                  ✓ Fazer Check-in e Iniciar Atendimento
+                </button>
+              </div>
+            </div>
+
+            <!-- BLOCO DE CONTEXTUALIZAÇÃO IMEDIATA DO CLIENTE (Carregado automaticamente ao chamar a senha) -->
+            <div class="context-block" aria-live="polite">
+              <div class="context-head">
+                <span class="tag tag-blue">⚡ Contextualização Imediata SGC</span>
+                <span class="context-sub">Carregado automaticamente ao chamar a senha</span>
+              </div>
+
+              <div class="context-grid">
+                <div class="context-item">
+                  <small>Nome do Titular</small>
+                  <strong id="ctx-titular">Antônio Carlos Ferreira</strong>
+                </div>
+                <div class="context-item">
+                  <small>Matrícula e Categoria</small>
+                  <strong id="ctx-matricula-cat">118920-4 • Residencial</strong>
+                </div>
+                <div class="context-item">
+                  <small>Status da Ligação</small>
+                  <span id="ctx-status-ligacao" class="tag tag-green">Ativa</span>
+                </div>
+                <div class="context-item">
+                  <small>Situação Financeira</small>
+                  <strong id="ctx-financeiro" class="text-amber">1 fatura vencida (R$ 84,50)</strong>
+                </div>
+                <div class="context-item context-full">
+                  <small>Últimas Ocorrências Registradas</small>
+                  <strong id="ctx-ocorrencias">Solicitação de verificação de hidrômetro em 10/11</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Demanda apresentada pelo cidadão + Documentos que o cidadão trouxe (conferidos pela recepção) -->
+            <div class="demand-docs-grid">
+              <div class="demand-box">
+                <div class="box-title-row">
+                  <strong>📋 Demanda Apresentada pelo Cidadão</strong>
+                  <span id="desk-demand-category" class="tag tag-teal">Contestação / Revisão</span>
+                </div>
+                <p id="desk-demand-text" class="demand-quote"></p>
+                <div id="desk-previous-attendant-notes" class="prev-notes hidden"></div>
+              </div>
+
+              <div class="docs-box">
+                <div class="box-title-row">
+                  <strong>📄 Documentos Trazidos (Conferidos na Recepção)</strong>
+                  <span class="tag tag-green">✓ Recepção OK</span>
+                </div>
+                <ul id="desk-docs-list" class="docs-checked-list"></ul>
+              </div>
+            </div>
+
+            <!-- Dica contextual do Aqualino para resolver a questão em atendimento -->
+            <div class="aqualino-tip-inline">
+              <img src="MascoteHQ.png" alt="Aqualino" class="tip-mini-mascot" />
+              <div>
+                <strong>💡 Dica do Aqualino para resolver este caso:</strong>
+                <p id="desk-aqualino-tip"></p>
+              </div>
+            </div>
+
+            <!-- ÁREA DE EXECUÇÃO DO ATENDIMENTO (Habilitada após o Check-in no Guichê) -->
+            <div id="service-execution-area" class="execution-locked">
+              <div class="lock-notice" id="execution-lock-banner">
+                🔒 Clique em <strong>"✓ Fazer Check-in e Iniciar Atendimento"</strong> acima assim que o cidadão se sentar no guichê para habilitar o registro da orientação e o encerramento/transferência.
+              </div>
+
+              <!-- Resumo da Orientação Apresentada ao Cidadão (Texto ou Áudio Transcrito + Limpar) -->
+              <div class="orientation-box">
+                <div class="label-bar">
+                  <label for="textarea-resumo-orientacao">
+                    <strong>Resumo da orientação apresentada ao cidadão (obrigatório):</strong>
+                  </label>
+                  <div class="audio-controls">
+                    <button type="button" id="btn-gravar-audio" class="btn-mic" aria-pressed="false">
+                      🎤 <span id="audio-btn-label">Inserir por Áudio (Transcrever)</span>
+                    </button>
+                    <button type="button" id="btn-limpar-resumo" class="btn-clear" title="Apagar tudo para gravar novamente">
+                      🗑️ Limpar
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Barra de gravação de áudio ativa -->
+                <div id="audio-recording-bar" class="voice-bar hidden">
+                  <div class="wave-bars" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                  <span id="audio-status-text">Gravando áudio do atendente e transcrevendo em tempo real...</span>
+                  <button type="button" id="btn-concluir-audio" class="btn-voice-done">Inserir Transcrição</button>
+                </div>
+
+                <textarea
+                  id="textarea-resumo-orientacao"
+                  rows="3"
+                  placeholder="Digite ou grave por áudio o resumo da orientação dada ao cidadão. Você pode revisar, editar ou clicar em 'Limpar' para gravar novamente..."
+                ></textarea>
+              </div>
+
+              <!-- Escolha de Desfecho: Resolver (Checkout), Não Resolvido (Justificar + Checkout) ou Transferir -->
+              <div class="resolution-panel">
+                <h4>Conclusão ou Transferência do Atendimento:</h4>
+
+                <div class="outcome-tabs">
+                  <button type="button" class="outcome-tab active" data-outcome="resolved">
+                    ✓ Tema Resolvido (Checkout)
+                  </button>
+                  <button type="button" class="outcome-tab" data-outcome="unresolved">
+                    ⚠️ Não Pôde Ser Resolvido (Justificar)
+                  </button>
+                  <button type="button" class="outcome-tab" data-outcome="transfer">
+                    ⇄ Transferir p/ Outro Atendente
+                  </button>
+                </div>
+
+                <!-- Subpainel 1: Tema Resolvido -->
+                <div id="outcome-pane-resolved" class="outcome-pane">
+                  <p class="text-muted small-note">
+                    O problema do cidadão foi solucionado. Ao encerrar, o sistema registrará o <strong>Checkout do Cidadão</strong> e liberará a <strong>Avaliação de Satisfação</strong>.
+                  </p>
+                  <button type="button" id="btn-encerrar-resolvido" class="btn btn-primary btn-block">
+                    ✓ Encerrar Atendimento (Tema Resolvido) e Fazer Checkout
+                  </button>
+                </div>
+
+                <!-- Subpainel 2: Não Foi Possível Resolver (Exige justificativa) -->
+                <div id="outcome-pane-unresolved" class="outcome-pane hidden">
+                  <div class="field">
+                    <label for="select-unresolved-reason"><strong>Indique por que o tema não pôde ser resolvido hoje (obrigatório):</strong></label>
+                    <select id="select-unresolved-reason">
+                      <option value="">-- Selecione o motivo do impedimento --</option>
+                      <option value="Necessidade de vistoria técnica presencial em campo pela equipe operacional">Necessidade de vistoria técnica presencial em campo pela equipe operacional</option>
+                      <option value="Pendência judicial ou bloqueio cadastral sobre a matrícula do imóvel">Pendência judicial ou bloqueio cadastral sobre a matrícula do imóvel</option>
+                      <option value="Necessidade de adequação hidrossanitária interna sob responsabilidade do cliente">Necessidade de adequação hidrossanitária interna sob responsabilidade do cliente</option>
+                      <option value="Divergência documental complementar que exige anuência do proprietário">Divergência documental complementar que exige anuência do proprietário</option>
+                      <option value="Demanda depende de análise de segundo nível / ouvidoria técnica">Demanda depende de análise de segundo nível / ouvidoria técnica</option>
+                    </select>
+                  </div>
+                  <button type="button" id="btn-encerrar-nao-resolvido" class="btn btn-amber btn-block">
+                    ⚠️ Registrar Impedimento, Encerrar Atendimento e Fazer Checkout
+                  </button>
+                </div>
+
+                <!-- Subpainel 3: Transferir para Outro Atendente -->
+                <div id="outcome-pane-transfer" class="outcome-pane hidden">
+                  <p class="text-muted small-note">
+                    Ao transferir, o <strong>último atendente</strong> que atender o cidadão fará o encerramento e o checkout. Quando o cidadão avaliar, <strong>ambos os atendentes ganharão pontos</strong>!
+                  </p>
+                  <div class="form-row-2">
+                    <div class="field">
+                      <label for="select-transfer-target">Transferir para o(a) atendente:</label>
+                      <select id="select-transfer-target">
+                        <option value="Marcos Oliveira (Guichê 03 — Especialista Comercial/Débitos)">Marcos Oliveira (Guichê 03 — Especialista Comercial/Débitos)</option>
+                        <option value="Carla Souza (Guichê 04 — Supervisão Técnica)">Carla Souza (Guichê 04 — Supervisão Técnica)</option>
+                        <option value="Roberto Dias (Guichê 01 — Atendimento Geral)">Roberto Dias (Guichê 01 — Atendimento Geral)</option>
+                      </select>
+                    </div>
+                    <div class="field">
+                      <label for="select-transfer-reason">Motivo da transferência:</label>
+                      <select id="select-transfer-reason">
+                        <option value="Alçada de negociação especial / parcelamento customizado">Alçada de negociação especial / parcelamento customizado</option>
+                        <option value="Análise técnica especializada de consumo / hidrômetro">Análise técnica especializada de consumo / hidrômetro</option>
+                        <option value="Continuidade em guichê de supervisão cadastral">Continuidade em guichê de supervisão cadastral</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button type="button" id="btn-confirmar-transferencia" class="btn btn-teal btn-block">
+                    ⇄ Transferir Senha para Outro Atendente (Mantém Histórico p/ Pontuação Dupla)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Histórico de Senhas Atendidas no Guichê Hoje -->
+          <div class="card">
+            <div class="card-head-row">
+              <div>
+                <span class="tag tag-teal">Produtividade do Guichê</span>
+                <h3>Histórico de Atendimentos Realizados Hoje</h3>
+              </div>
+              <span class="text-muted small-note">Inclui tempos individuais, co-atendimentos, resoluções e notas de satisfação</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="clean-table">
+                <thead>
+                  <tr>
+                    <th>Senha</th>
+                    <th>Cliente / Matrícula</th>
+                    <th>Demanda</th>
+                    <th>Atendente(s)</th>
+                    <th>Tempo</th>
+                    <th>Desfecho / Orientação</th>
+                    <th>Satisfação</th>
+                  </tr>
+                </thead>
+                <tbody id="attendant-history-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      SANEPAR Curitiba • Tela do Atendente (Guichê) • Contextualização SGC, Transcrição de Áudio, Transferência e Gamificação Aqualino
+    </footer>
+  </div>
+
+  <script src="atendimento.js"></script>
+</body>
+</html>

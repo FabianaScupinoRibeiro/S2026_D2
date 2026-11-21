@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANEPAR — Vitrine de Prêmios, Patrocinadores e Ranking (TelaGameVitrine)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="gamevitrine.css" />
+</head>
+<body>
+  <div class="vitrine-shell">
+    <!-- CABEÇALHO CORPORATIVO CLEAN (MESMA IDENTIDADE VISUAL DE TelaCidadao.html) -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR • Vitrine Estratégica de Prêmios &amp; Ranking</h1>
+          <p class="brand-subtitle">
+            Catálogo por Categoria • <strong>Patrocinadores Oficiais (Positivo Informática, iFood e Parceiros)</strong> • Ranking em Tempo Real &amp; Histórico por Ciclo
+          </p>
+        </div>
+      </div>
+
+      <div class="realtime-ticker" aria-live="polite">
+        <span class="pulse-dot"></span>
+        <span>Ciclo na Vitrine: <strong id="top-vitrine-cycle-badge">Ciclo 2026.4 (Vigente)</strong></span>
+        <span>• Relógio: <strong id="live-clock-display">13:02:00</strong></span>
+        <span class="lgpd-pill" title="Conformidade estrita com a Lei nº 13.709/2018 (LGPD)">
+          🔒 Governança &amp; LGPD
+        </span>
+      </div>
+
+      <div class="topbar-links">
+        <a href="TelaCidadao.html" class="btn-icon">📱 Cidadão</a>
+        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Recepção</a>
+        <a href="TelaAtendimento.html" class="btn-icon">🎧 Guichê</a>
+        <a href="TelaSupervisorLocal.html" class="btn-icon">📊 Supervisor Local</a>
+        <a href="TelaAnalisesDashboards.html" class="btn-icon">📈 Dashboards</a>
+        <a href="TelaGameParam.html" class="btn-icon">⚙️ Regras Gamificação</a>
+        <button type="button" id="btn-reset-vitrine" class="btn-icon">↺ Restaurar Padrão</button>
+      </div>
+    </header>
+
+    <!-- BARRA DE FILTROS GLOBAIS DA VITRINE (CICLO, CATEGORIA DE PREMIAÇÃO, FAIXA E PATROCINADOR) -->
+    <section class="filter-bar" aria-label="Filtros da Vitrine de Prêmios e Ranking">
+      <div class="filter-bar-header">
+        <div>
+          <span class="section-tag">Gestão Estratégica de Reconhecimento &amp; Parcerias Institucionais</span>
+          <h2 class="filter-bar-title">Filtre o Catálogo de Prêmios, os Patrocinadores e o Status do Ranking por Ciclo e Categoria</h2>
+        </div>
+        <div class="filter-bar-actions">
+          <button type="button" id="btn-toggle-new-prize" class="btn btn-teal btn-sm">
+            ➕ Cadastrar Novo Prêmio Patrocinado no Ciclo
+          </button>
+        </div>
+      </div>
+
+      <div class="vitrine-filters-grid">
+        <div class="field-box">
+          <label for="filter-vitrine-cycle">1. Ciclo de Gamificação:</label>
+          <select id="filter-vitrine-cycle">
+            <option value="C_2026_4">🟢 Ciclo 2026.4 (Vigente • Out–Dez/2026) — Em Disputa</option>
+            <option value="C_2027_1">🔵 Ciclo 2027.1 (Planejado • Jan–Mar/2027) — Operação Verão</option>
+            <option value="C_2026_3">⚪ Ciclo 2026.3 (Histórico Encerrado • Jul–Set/2026)</option>
+            <option value="C_2026_2">⚪ Ciclo 2026.2 (Histórico Encerrado • Abr–Jun/2026)</option>
+          </select>
+        </div>
+
+        <div class="field-box">
+          <label for="filter-vitrine-category">2. Categoria de Premiação (Perfil / Grupo):</label>
+          <select id="filter-vitrine-category">
+            <option value="ALL">Todas as Categorias (Individual + Grupo)</option>
+            <option value="RECEPCAO">🛎️ Recepcionistas (Mérito Individual + Grupo)</option>
+            <option value="ATENDENTE">🎧 Atendentes de Guichê (Mérito Individual + Grupo)</option>
+            <option value="SUPERVISOR">📊 Supervisores Locais (Mérito Individual + Grupo)</option>
+            <option value="GRUPO">🤝 Equipe da Unidade / Central (100% Mérito do Grupo)</option>
+          </select>
+        </div>
+
+        <div class="field-box">
+          <label for="filter-vitrine-tier">3. Faixa de Premiação:</label>
+          <select id="filter-vitrine-tier">
+            <option value="ALL">Todas as Faixas (Ouro &amp; Prata)</option>
+            <option value="OURO">🥇 Faixa Ouro (1º Nível • Excelência)</option>
+            <option value="PRATA">🥈 Faixa Prata (2º Nível • Destaque Regional)</option>
+          </select>
+        </div>
+
+        <div class="field-box">
+          <label for="filter-vitrine-sponsor">4. Patrocinador Oficial do Prêmio:</label>
+          <select id="filter-vitrine-sponsor">
+            <option value="ALL">Todos os Patrocinadores Oficiais</option>
+            <option value="Positivo Informática">💻 Positivo Informática (Periféricos, Mouses, Teclados e Notebooks)</option>
+            <option value="iFood">🍔 iFood (Vouchers Gastronômicos e Experiências de Equipe)</option>
+            <option value="SESC Paraná">🏖️ SESC Paraná (Hospedagem, Lazer e Cultura)</option>
+            <option value="Fundação Sanepar & Senac">🎓 Fundação Sanepar &amp; Senac (Certificações e Reconhecimento)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Aviso quando o ciclo selecionado está em Histórico Encerrado (somente leitura) -->
+      <div id="vitrine-readonly-banner" class="readonly-lock-banner hidden" role="status" aria-live="polite">
+        🔒 <strong>Ciclo com Histórico Encerrado (Modo Somente Visualização):</strong> O catálogo de prêmios, patrocinadores e os vencedores homologados deste ciclo são imutáveis para auditoria.
+      </div>
+
+      <!-- Formulário Expansível para Cadastrar Novo Prêmio Patrocinado no Ciclo (Vigente ou Planejado) -->
+      <div id="new-prize-drawer" class="new-prize-drawer hidden">
+        <div class="drawer-head">
+          <h3>➕ Cadastrar Novo Prêmio e Patrocinador no Ciclo Selecionado</h3>
+          <button type="button" id="btn-close-new-prize" class="btn btn-secondary btn-sm">✕ Fechar</button>
+        </div>
+        <form id="form-add-prize" class="new-prize-grid">
+          <div class="field-box">
+            <label for="np-category">Categoria de Premiação:</label>
+            <select id="np-category">
+              <option value="RECEPCAO">🛎️ Recepcionistas</option>
+              <option value="ATENDENTE">🎧 Atendentes de Guichê</option>
+              <option value="SUPERVISOR">📊 Supervisores Locais</option>
+              <option value="GRUPO">🤝 Equipe da Unidade (Grupo)</option>
+            </select>
+          </div>
+
+          <div class="field-box">
+            <label for="np-tier">Faixa da Premiação:</label>
+            <select id="np-tier">
+              <option value="OURO">🥇 Faixa Ouro (1º Nível)</option>
+              <option value="PRATA">🥈 Faixa Prata (2º Nível)</option>
+            </select>
+          </div>
+
+          <div class="field-box">
+            <label for="np-sponsor">Patrocinador Oficial:</label>
+            <select id="np-sponsor">
+              <option value="Positivo Informática">💻 Positivo Informática</option>
+              <option value="iFood">🍔 iFood</option>
+              <option value="SESC Paraná">🏖️ SESC Paraná</option>
+              <option value="Fundação Sanepar & Senac">🎓 Fundação Sanepar &amp; Senac</option>
+            </select>
+          </div>
+
+          <div class="field-box">
+            <label for="np-title">Título do Prêmio:</label>
+            <input type="text" id="np-title" placeholder="Ex.: Kit Mouse & Teclado Sem Fio Positivo + Headset" required />
+          </div>
+
+          <div class="field-box">
+            <label for="np-desc">Especificação / Detalhes do Prêmio:</label>
+            <input type="text" id="np-desc" placeholder="Ex.: Combo ergonômico wireless 2.4GHz patrocinado pela Positivo Informática" required />
+          </div>
+
+          <div class="field-box">
+            <label for="np-min-pts">Pontuação Mín. Exigida (pts):</label>
+            <input type="number" id="np-min-pts" min="200" max="5000" step="20" value="1100" required />
+          </div>
+
+          <div class="field-box">
+            <label for="np-qty">Cotas / Unidades Disponíveis:</label>
+            <input type="number" id="np-qty" min="1" max="500" value="15" required />
+          </div>
+
+          <div class="field-box add-prize-btn-wrap">
+            <button type="submit" class="btn btn-primary">💾 Salvar Prêmio na Vitrine</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="vitrine-feedback-banner" class="save-feedback-banner hidden" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- PAINEL DO MASCOTE AQUALINO (TIRA-DÚVIDAS DE UTILIZAÇÃO DA TELA + SÍNTESE DA VITRINE) + 4 KPIS -->
+    <section class="dashboard-strip" aria-label="Assistente Aqualino e Indicadores da Vitrine de Prêmios">
+      <div class="mascot-vitrine-card" id="aqualino-vitrine-panel">
+        <div class="mascot-avatar-wrap">
+          <img src="MascoteHQ.png" alt="Mascote Aqualino SANEPAR" class="mascot-img" />
+          <span class="mascot-status-pill">💧 Aqualino • Consultor da Vitrine</span>
+        </div>
+
+        <div class="mascot-vitrine-content">
+          <div class="mascot-head-row">
+            <div>
+              <span class="tag tag-teal" id="vitrine-cycle-status-tag">Vitrine Ativa • Ciclo 2026.4</span>
+              <h2 class="mascot-title">Orientação sobre Catálogo, Patrocinadores, Ranking &amp; Tira-Dúvidas da Tela</h2>
+            </div>
+            <span class="sponsor-highlight-pill">🤝 100% Custeado por Parceiros Patrocinadores</span>
+          </div>
+
+          <!-- Balão Dinâmico do Aqualino -->
+          <div id="aqualino-vitrine-bubble" class="mascot-bubble" aria-live="polite"></div>
+
+          <!-- Caixa Conversacional Direta para Tirar Dúvidas de Utilização da Tela -->
+          <div class="aqualino-ask-box">
+            <form id="form-ask-aqualino-vitrine" class="aqualino-ask-form">
+              <input
+                id="input-ask-aqualino-vitrine"
+                type="text"
+                placeholder="Tem dúvida sobre como usar esta tela? Pergunte ao Aqualino (ex.: como ver o ranking de um prêmio, filtrar patrocinadores, consultar histórico)..."
+              />
+              <button type="button" id="btn-voice-aqualino-vitrine" class="btn-mic-sup" title="Perguntar por voz">
+                🎤 Voz
+              </button>
+              <button type="submit" class="btn btn-primary btn-sm">Perguntar ao Aqualino</button>
+            </form>
+
+            <div class="aqualino-quick-chips">
+              <span class="quick-chip-label">Dúvidas rápidas sobre a tela:</span>
+              <button type="button" class="chip-ask-vitrine" data-q="Como visualizar o catálogo de prêmios disponíveis para cada categoria (Recepcionistas, Atendentes, Supervisores e Grupo)?">
+                🎁 Catálogo por Categoria
+              </button>
+              <button type="button" class="chip-ask-vitrine" data-q="Como funcionam os patrocinadores de cada prêmio (como Positivo Informática e iFood) nesta tela?">
+                🤝 Patrocinadores (Positivo / iFood)
+              </button>
+              <button type="button" class="chip-ask-vitrine" data-q="Como acompanhar o status atual do ranking de cada prêmio específico?">
+                🏆 Status do Ranking por Prêmio
+              </button>
+              <button type="button" class="chip-ask-vitrine" data-q="Como consultar o histórico das premiações entregues em cada ciclo?">
+                🗂️ Histórico de Premiações por Ciclo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 CARDS RESUMO DA VITRINE NO CICLO SELECIONADO -->
+      <div class="kpi-4-grid">
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Prêmios no Catálogo (Ciclo)</span>
+            <span class="tag tag-blue" id="kpi-vitrine-cat-tag">4 Categorias</span>
+          </div>
+          <div class="kpi-big text-blue" id="kpi-vitrine-prizes-count">8 Prêmios</div>
+          <div class="kpi-foot">
+            <span id="kpi-vitrine-unidades-total">142 cotas disponíveis no ciclo</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Patrocinadores Oficiais</span>
+            <span class="tag tag-teal">Parceria Custo Zero</span>
+          </div>
+          <div class="kpi-big text-teal" id="kpi-vitrine-sponsors-count">4 Parceiros</div>
+          <div class="kpi-foot">
+            <span>Positivo Informática, iFood, SESC PR e Senac</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Habilitados no Ranking Atual</span>
+            <span class="tag tag-green" id="kpi-vitrine-leaders-tag">Acima da Meta</span>
+          </div>
+          <div class="kpi-big text-green" id="kpi-vitrine-qualified-count">34 Líderes</div>
+          <div class="kpi-foot">
+            <span id="kpi-vitrine-top-score">Maior nota atual: 1.410 pts (Ouro)</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Histórico de Premiações</span>
+            <span class="tag tag-amber">Auditado LGPD</span>
+          </div>
+          <div class="kpi-big" id="kpi-vitrine-history-count">218 Entregas</div>
+          <div class="kpi-foot">
+            <span>Acumulado nos ciclos homologados</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- GRADE PRINCIPAL DA VITRINE -->
+    <main class="vitrine-grid">
+      <!-- BLOCO 1: CATÁLOGO DE PRÊMIOS DISPONÍVEIS POR CATEGORIA E PATROCINADOR (7 COLUNAS) -->
+      <section class="card span-7">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">1. Catálogo de Prêmios por Categoria &amp; Patrocinador</span>
+            <h2 id="catalog-section-title">Vitrine de Prêmios Disponíveis — Ciclo 2026.4</h2>
+          </div>
+          <span class="tag tag-blue" id="catalog-count-badge">8 Prêmios Exibidos</span>
+        </div>
+
+        <p class="section-desc">
+          Cada cartão exibe a <strong>Categoria de Premiação</strong> (Recepcionistas, Atendentes, Supervisores Locais ou Equipe da Unidade), a <strong>Faixa (Ouro / Prata)</strong>, o <strong>Patrocinador Oficial</strong> (ex.: <em>Positivo Informática</em>, <em>iFood</em>), o líder atual da disputa e o botão para abrir o <strong>Ranking Detalhado daquele prêmio</strong> ao lado:
+        </p>
+
+        <!-- Barra Rápida de Resumo dos Patrocinadores -->
+        <div id="sponsors-summary-strip" class="sponsors-strip"></div>
+
+        <!-- Grade de Cartões de Prêmios -->
+        <div id="prize-catalog-cards" class="prize-catalog-grid"></div>
+      </section>
+
+      <!-- BLOCO 2: VISIBILIDADE DO STATUS ATUAL DO RANKING DE CADA PRÊMIO (5 COLUNAS) -->
+      <section class="card span-5" id="ranking-panel-card">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">2. Status Atual do Ranking por Prêmio</span>
+            <h2 id="ranking-prize-title">Disputa em Tempo Real pelo Prêmio Selecionado</h2>
+          </div>
+          <span class="tag tag-green" id="ranking-status-pill">Atualizado em Tempo Real</span>
+        </div>
+
+        <div class="field-box">
+          <label for="select-ranking-prize">Selecione o Prêmio para Inspecionar o Ranking Completo:</label>
+          <select id="select-ranking-prize"></select>
+        </div>
+
+        <!-- Cabeçalho de Destaque do Prêmio e Patrocinador em Disputa -->
+        <div id="ranking-prize-highlight" class="ranking-prize-banner"></div>
+
+        <!-- Lista / Tabela de Classificação (Pódio e Concorrentes) daquele Prêmio -->
+        <div id="ranking-leaderboard-list" class="leaderboard-stack"></div>
+      </section>
+
+      <!-- BLOCO 3: HISTÓRICO DAS PREMIAÇÕES DE CADA CICLO (12 COLUNAS) -->
+      <section class="card span-12">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">3. Histórico Consolidado das Premiações de Cada Ciclo</span>
+            <h2>Registro Histórico de Prêmios Conquistados, Patrocinadores e Homologação por Ciclo</h2>
+          </div>
+
+          <div class="filter-chips-bar" id="history-cycle-tabs">
+            <button type="button" class="chip active" data-hist-cycle="ALL">Todos os Ciclos</button>
+            <button type="button" class="chip" data-hist-cycle="C_2026_4">🟢 Ciclo 2026.4 (Vigente — Prévia Líderes)</button>
+            <button type="button" class="chip" data-hist-cycle="C_2026_3">⚪ Ciclo 2026.3 (Encerrado — Entregues)</button>
+            <button type="button" class="chip" data-hist-cycle="C_2026_2">⚪ Ciclo 2026.2 (Encerrado — Entregues)</button>
+          </div>
+        </div>
+
+        <p class="section-desc">
+          Consulte todas as premiações históricas de cada ciclo de gamificação, com identificação da categoria contemplada, pontuação final alcançada (Mérito Individual + Mérito do Grupo), item concedido, patrocinador responsável pelo fornecimento e status de entrega:
+        </p>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ciclo</th>
+                <th>Categoria de Premiação</th>
+                <th>Faixa</th>
+                <th>Prêmio Concedido</th>
+                <th>Patrocinador Oficial</th>
+                <th>Contemplado / Unidade (Código LGPD)</th>
+                <th>Pontuação Final (Ind. + Grupo)</th>
+                <th>Status da Premiação</th>
+              </tr>
+            </thead>
+            <tbody id="awards-history-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- BOTÃO FLUTUANTE DO AQUALINO -->
+    <button
+      type="button"
+      id="btn-floating-aqualino-vitrine"
+      class="floating-aqualino-btn"
+      title="Tirar dúvidas sobre esta tela com o Aqualino"
+    >
+      <img src="MascoteHQ.png" alt="Aqualino" />
+      <span>Dúvidas? Pergunte ao Aqualino</span>
+    </button>
+  </div>
+
+  <script src="gamevitrine.js"></script>
+</body>
+</html>

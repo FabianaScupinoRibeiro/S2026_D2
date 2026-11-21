@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANEPAR Curitiba — Tela do Supervisor Local</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="supervisor.css" />
+</head>
+<body>
+  <div class="supervisor-shell">
+    <!-- CABEÇALHO CLEAN (MESMA IDENTIDADE DE TelaCidadao.html) -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR Curitiba • Supervisão Local</h1>
+          <p class="brand-subtitle">Gestão Operacional em Tempo Real, Previsão de Demanda e Dimensionamento</p>
+        </div>
+      </div>
+
+      <!-- Filtros Hierárquicos de Visão (Agência -> Fila -> Guichê/Atendente) -->
+      <div class="hierarchy-filter-bar" aria-label="Filtros hierárquicos de visão">
+        <div class="filter-item">
+          <label for="select-unidade-sup">Unidade:</label>
+          <select id="select-unidade-sup">
+            <option value="Central Rebouças">Central Rebouças (Curitiba)</option>
+            <option value="Rua da Cidadania Pinheirinho">Posto Pinheirinho (Curitiba)</option>
+            <option value="Rua da Cidadania Boa Vista">Posto Boa Vista (Curitiba)</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="select-nivel-visao">Nível de Visão:</label>
+          <select id="select-nivel-visao">
+            <option value="ALL">Visão Agregada — Toda a Agência</option>
+            <option value="QUEUE_CONV">Fila: Convencional</option>
+            <option value="QUEUE_PREF">Fila: Preferencial Legal</option>
+            <option value="QUEUE_AG">Fila: Agendados</option>
+            <option value="G-01">Atendente Individual: Guichê 01 (Roberto D.)</option>
+            <option value="G-02">Atendente Individual: Guichê 02 (Ana Paula R.)</option>
+            <option value="G-03">Atendente Individual: Guichê 03 (Marcos O.)</option>
+            <option value="G-04">Atendente Individual: Guichê 04 (Carla S.)</option>
+            <option value="G-05">Atendente Individual: Guichê 05 (Sênior • Apoio)</option>
+            <option value="G-06">Atendente Individual: Guichê 06 (Sênior • Apoio)</option>
+          </select>
+        </div>
+
+        <span class="lgpd-badge" title="Nenhum nome, CPF, CNPJ ou matrícula de cidadão é exibido nesta tela">
+          🔒 LGPD Ativa: Dados de Cidadãos Anonimizados
+        </span>
+      </div>
+
+      <div class="topbar-links">
+        <a href="TelaCidadao.html" class="btn-icon">📱 Tela Cidadão</a>
+        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Tela Recepção</a>
+        <a href="TelaAtendimento.html" class="btn-icon">🎧 Tela Guichê</a>
+        <a href="TelaGameVitrine2.html" class="btn-icon">🎁 Vitrine de Prêmios</a>
+        <button type="button" id="btn-reset-sup" class="btn-icon">↺ Restaurar Demo</button>
+      </div>
+    </header>
+
+    <!-- MONITORAMENTO ATIVO, GAMIFICAÇÃO DO SUPERVISOR COM AQUALINO E TIRA-DÚVIDAS -->
+    <section class="dashboard-strip" aria-label="Gamificação e Monitoramento Ativo Aqualino">
+      <div class="mascot-alert-card" id="aqualino-alert-panel">
+        <div class="mascot-avatar-wrap">
+          <img src="MascoteHQ.png" alt="Mascote Aqualino SANEPAR" class="mascot-img" />
+          <span class="mascot-status-pill" id="sup-mascot-level">Nível 4 • Líder Operacional</span>
+        </div>
+
+        <div class="mascot-alert-content">
+          <div class="mascot-head-row">
+            <div>
+              <span class="tag tag-red" id="active-alerts-count-badge">3 Alertas Críticos Ativos</span>
+              <h2 class="mascot-title">Aqualino • Gamificação da Supervisão, Monitoramento e Assistente</h2>
+            </div>
+
+            <div class="sup-head-right">
+              <div class="sup-score-display" id="sup-score-card">
+                <small>Seus Pontos Hoje (Supervisor)</small>
+                <div class="sup-score-val-row">
+                  <strong id="sup-score-points">680 pts</strong>
+                  <span id="sup-score-delta-badge" class="sup-delta-pill hidden">+120 pts!</span>
+                </div>
+              </div>
+
+              <div class="quick-intervention-btns">
+                <button type="button" id="btn-aplicar-recomendacao-aqualino" class="btn btn-primary btn-sm">
+                  ⚡ Aplicar Recomendação: Abrir +2 Guichês Sênior &amp; Escalonar Almoço (+120 pts)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="aqualino-recommendation-text" class="mascot-bubble" aria-live="polite">
+            🚨 <strong>Atenção, Supervisor!</strong> Identifiquei <strong>TME atual de 14m 20s</strong> (acima do objetivo de <strong>10m 00s</strong>) e <strong>gargalo na Fila Convencional (9 senhas em espera)</strong>. Além disso, se todos os atendentes saírem juntos para o almoço às 12h, o tempo de espera subirá em <strong>+300%</strong>! <strong>Recomendação:</strong> abra +2 guichês com funcionários sêniores, escale o almoço em 2 turnos e redirecione o Guichê 04 (ocioso há 08m 40s) para atender a fila convencional.
+          </div>
+
+          <!-- Balão Motivacional de Gamificação do Aqualino (como na TelaAtendimento.html) -->
+          <div id="aqualino-motivational-text" class="sup-motivational-banner" aria-live="polite">
+            💡 <strong>Motivação do Aqualino (Gamificação):</strong> Cada vez que você atua para corrigir um ponto crítico da unidade — aplicando minha recomendação (<strong>+120 pts</strong>), efetivando uma simulação equilibrada (<strong>+80 pts</strong>), abrindo/redistribuindo guichês (<strong>+60 pts</strong>) ou transferindo senhas de filas com gargalo (<strong>+45 pts</strong>) — sua pontuação sobe rumo à <strong>Faixa Ouro</strong>!
+          </div>
+
+          <!-- Barra de Progresso de Gamificação e Medalhas do Supervisor -->
+          <div class="sup-gamification-footer">
+            <div class="sup-xp-bar-wrap">
+              <div class="sup-xp-labels">
+                <span>Progresso Diário do Supervisor: <strong id="sup-xp-progress-label">680 / 1.000 pts</strong></span>
+                <span id="sup-xp-bonus-hint">Meta Principal: Mitigar alertas críticos e manter TME ≤ 10m 00s</span>
+              </div>
+              <div class="sup-xp-track">
+                <div id="sup-xp-fill" class="sup-xp-fill" style="width: 68%"></div>
+              </div>
+            </div>
+
+            <div class="sup-badges-row">
+              <span id="badge-sup-gargalo" class="sup-badge-medal" title="Conquistada ao abrir guichês ou transferir senhas de gargalos">
+                ⚡ Mitigador de Gargalos
+              </span>
+              <span id="badge-sup-almoco" class="sup-badge-medal" title="Conquistada ao escalonar o horário de almoço em 2 turnos">
+                🍽️ Mestre do Escalonamento
+              </span>
+              <span id="badge-sup-target" class="sup-badge-medal" title="Conquistada quando o TME da unidade fica dentro da meta (≤ 10m)">
+                🏆 Unidade no Target (TME ≤ 10m)
+              </span>
+              <a href="TelaGameVitrine2.html" class="sup-vitrine-link">
+                🎁 Ver Prêmios e Ranking na Vitrine →
+              </a>
+            </div>
+          </div>
+
+          <!-- Lista de Alertas de Condições Críticas -->
+          <div id="critical-alerts-strip" class="alerts-grid"></div>
+
+          <!-- Campo Direto para o Supervisor Tirar Dúvidas de Utilização da Tela com o Aqualino -->
+          <div class="aqualino-ask-box" id="aqualino-ask-box">
+            <form id="form-perguntar-aqualino" class="aqualino-ask-form">
+              <input
+                id="input-pergunta-aqualino"
+                type="text"
+                placeholder="Tem dúvida sobre como usar alguma função desta tela? Digite ou fale aqui para o Aqualino responder..."
+              />
+              <button type="button" id="btn-voz-aqualino" class="btn-mic-sup" title="Falar dúvida por voz">
+                🎤 Voz
+              </button>
+              <button type="submit" class="btn btn-teal btn-sm">
+                Perguntar ao Aqualino
+              </button>
+            </form>
+            <div class="chips-wrap">
+              <span class="ask-hint-label">Exemplos de dúvidas:</span>
+              <button type="button" class="chip chip-ask-aqualino" data-question="Como funciona o simulador de cenários e o botão de aplicar simulação?">
+                Como simular e aplicar cenários?
+              </button>
+              <button type="button" class="chip chip-ask-aqualino" data-question="Por que os horários passados no gráfico em tempo real não mudam?">
+                Por que o passado no gráfico não muda?
+              </button>
+              <button type="button" class="chip chip-ask-aqualino" data-question="Como transferir senhas entre guichês ou abrir novos guichês?">
+                Como transferir senhas ou abrir guichês?
+              </button>
+              <button type="button" class="chip chip-ask-aqualino" data-question="Como usar os filtros de Unidade, Nível de Visão e o Drill-Down dos indicadores?">
+                Como usar filtros e Drill-Down?
+              </button>
+              <button type="button" class="chip chip-ask-aqualino" data-question="Por que os dados pessoais dos cidadãos não aparecem na tela?">
+                Proteção de dados (LGPD)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 KPIS AUDITÁVEIS COM DRILL-DOWN AO CLICAR -->
+      <div class="kpi-grid-5">
+        <button type="button" class="kpi-card clickable-kpi active-drill" data-drill="tme" id="kpi-card-tme">
+          <div class="kpi-top">
+            <span class="kpi-label">TME (Tempo Médio Espera)</span>
+            <span id="kpi-tme-status" class="tag tag-red">Acima do Target</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-tme-val" class="kpi-big text-red">14m 20s</strong>
+            <span class="kpi-target">Meta: ≤ <strong id="kpi-tme-target-lbl">10m 00s</strong></span>
+          </div>
+          <p class="kpi-sub">Check-in → Chamada no guichê • <strong>Clique p/ Drill-down 🔍</strong></p>
+        </button>
+
+        <button type="button" class="kpi-card clickable-kpi" data-drill="tma" id="kpi-card-tma">
+          <div class="kpi-top">
+            <span class="kpi-label">TMA (Tempo Médio Atend.)</span>
+            <span id="kpi-tma-status" class="tag tag-blue">Meta ≤ 08m 00s</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-tma-val" class="kpi-big">07m 45s</strong>
+            <span class="kpi-target">Cronometrado no guichê</span>
+          </div>
+          <p class="kpi-sub">Duração por senha e por atendente • <strong>Clique p/ Drill-down 🔍</strong></p>
+        </button>
+
+        <button type="button" class="kpi-card clickable-kpi" data-drill="ociosidade" id="kpi-card-ociosidade">
+          <div class="kpi-top">
+            <span class="kpi-label">Ociosidade &amp; Efetivo</span>
+            <span id="kpi-staff-status" class="tag tag-amber">Falta Efetivo (-2)</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-idle-val" class="kpi-big text-teal">06m 12s</strong>
+            <span class="kpi-target">Ativos: <strong id="kpi-active-staff">4</strong> / Rec.: <strong id="kpi-rec-staff">6</strong></span>
+          </div>
+          <p class="kpi-sub">1 guichê livre (Guichê 04 há 08m 40s) • <strong>Clique p/ Drill-down 🔍</strong></p>
+        </button>
+
+        <button type="button" class="kpi-card clickable-kpi" data-drill="nps" id="kpi-card-nps">
+          <div class="kpi-top">
+            <span class="kpi-label">Qualidade (NPS) &amp; Avaliações</span>
+            <span id="kpi-nps-status" class="tag tag-amber">Meta NPS ≥ 85</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-nps-val" class="kpi-big text-amber">78</strong>
+            <span class="kpi-target"><strong id="kpi-eval-with">34</strong> c/ aval. • <strong id="kpi-eval-without">10</strong> s/ aval.</span>
+          </div>
+          <p class="kpi-sub">77% avaliados / 23% sem avaliação • <strong>Clique p/ Drill-down 🔍</strong></p>
+        </button>
+
+        <button type="button" class="kpi-card clickable-kpi" data-drill="demanda" id="kpi-card-demanda">
+          <div class="kpi-top">
+            <span class="kpi-label">Previsão Hoje &amp; Fila Atual</span>
+            <span class="tag tag-teal">Tempo Real</span>
+          </div>
+          <div class="kpi-value-row">
+            <strong id="kpi-forecast-today" class="kpi-big">142</strong>
+            <span class="kpi-target"><strong id="kpi-waiting-now" class="text-red">16</strong> aguardando agora</span>
+          </div>
+          <p class="kpi-sub">Histórico (78) + Agend. (48) + Emitidas pendentes (16) • <strong>Drill-down 🔍</strong></p>
+        </button>
+      </div>
+    </section>
+
+    <main class="workspace">
+      <!-- =================================================================
+           BLOCO 1: PAINEL DE DRILL-DOWN INTERATIVO DO INDICADOR SELECIONADO
+           (100% em conformidade com a LGPD — sem dados pessoais dos cidadãos)
+           ================================================================= -->
+      <section class="card drilldown-card" id="drilldown-section" aria-live="polite">
+        <div class="card-head-row">
+          <div>
+            <span class="tag tag-blue" id="drill-badge">Drill-Down Ativo • Indicador Selecionado</span>
+            <h2 id="drill-title">Análise Detalhada: Tempo Médio de Espera (TME) por Fila e Guichê</h2>
+            <p class="text-muted" id="drill-subtitle">
+              Toque em qualquer um dos 5 indicadores acima para alternar a visão analítica detalhada. Dados exibidos sob máscara LGPD.
+            </p>
+          </div>
+          <div class="chips-wrap" id="drill-selector-pills">
+            <button type="button" class="chip active" data-drill-btn="tme">TME (Espera)</button>
+            <button type="button" class="chip" data-drill-btn="tma">TMA (Atendimento)</button>
+            <button type="button" class="chip" data-drill-btn="ociosidade">Ociosidade &amp; Efetivo</button>
+            <button type="button" class="chip" data-drill-btn="nps">NPS (Com vs. Sem Avaliação)</button>
+            <button type="button" class="chip" data-drill-btn="demanda">Composição da Demanda</button>
+          </div>
+        </div>
+
+        <div id="drill-content-area" class="drill-grid"></div>
+      </section>
+
+      <!-- =================================================================
+           BLOCO 2: PREVISÃO DE DEMANDA (HOJE E PRÓXIMOS DIAS) + SIMULADOR DE CENÁRIOS
+           ================================================================= -->
+      <section class="two-col-grid">
+        <!-- Coluna Esquerda: Simulador de Dimensionamento, TME Objetivo e Impacto do Almoço -->
+        <div class="card">
+          <div class="card-head">
+            <span class="tag tag-blue">Dimensionamento &amp; Simulação de Cenários</span>
+            <h2>Simulador de Efetivo, Meta de Espera e Escala de Almoço</h2>
+            <p class="text-muted">
+              Parametrize o TME objetivo e simule o impacto de mais/menos atendentes e da escala de almoço sobre o tempo de espera.
+            </p>
+          </div>
+
+          <div class="sim-controls-grid">
+            <!-- Parâmetro 1: TME Objetivo Parametrizável -->
+            <div class="sim-box">
+              <div class="sim-label-row">
+                <label for="range-target-tme">1. Tempo Médio de Espera Objetivo (Parametrizável):</label>
+                <strong id="sim-target-tme-display" class="text-primary">10 min</strong>
+              </div>
+              <input id="range-target-tme" type="range" min="4" max="20" step="1" value="10" />
+              <div class="sim-scale-labels">
+                <span>4 min (Rigoroso)</span>
+                <span>10 min (Padrão)</span>
+                <span>20 min (Tolerante)</span>
+              </div>
+            </div>
+
+            <!-- Parâmetro 2: Quantidade de Atendentes Simulados -->
+            <div class="sim-box">
+              <div class="sim-label-row">
+                <label for="range-attendants">2. Simular Quantidade de Atendentes no Turno:</label>
+                <strong id="sim-attendants-display" class="text-primary">4 atendentes</strong>
+              </div>
+              <input id="range-attendants" type="range" min="2" max="8" step="1" value="4" />
+              <div class="sim-scale-labels">
+                <span>2 (Crítico)</span>
+                <span>4 (Atual)</span>
+                <span>6 (Recomendado)</span>
+                <span>8 (Reforço Máx.)</span>
+              </div>
+            </div>
+
+            <!-- Parâmetro 3: Escala de Horário de Almoço (Impacto de +300% se todos saírem juntos) -->
+            <div class="sim-box">
+              <label for="select-lunch-policy"><strong>3. Política de Horário de Almoço (12h às 14h):</strong></label>
+              <select id="select-lunch-policy">
+                <option value="simultaneo" selected>
+                  ⚠️ Todos no mesmo horário de almoço (Pico de +300% no TME entre 12h e 14h)
+                </option>
+                <option value="escalonado">
+                  ✓ Almoço escalonado em 2 turnos (50% às 12h / 50% às 13h — Suaviza espera)
+                </option>
+              </select>
+            </div>
+
+            <!-- Parâmetro 4: Perfil da Equipe (Inclusão de Sêniores) -->
+            <div class="sim-box">
+              <label class="checkbox-inline">
+                <input type="checkbox" id="check-senior-reinforcement" />
+                <span>Incluir <strong>2 funcionários sêniores</strong> nos guichês extras (reduz TMA médio em 18%)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Resultado da Recomendação Automática e Impacto Simulado -->
+          <div class="sim-recommendation-banner" id="sim-result-banner">
+            <div class="sim-rec-item">
+              <small>Efetivo Recomendado p/ a Demanda Hoje</small>
+              <strong id="sim-recommended-staff">6 atendentes</strong>
+            </div>
+            <div class="sim-rec-item">
+              <small>TME Estimado no Cenário Simulado</small>
+              <strong id="sim-projected-tme" class="text-red">14m 20s (Pico Almoço: 42m)</strong>
+            </div>
+            <div class="sim-rec-item">
+              <small>Status da Simulação</small>
+              <span id="sim-status-tag" class="tag tag-red">Defasagem de 2 Atendentes</span>
+            </div>
+          </div>
+
+          <button type="button" id="btn-aplicar-simulacao" class="btn btn-primary btn-block">
+            ✓ Aplicar Simulação na Operação da Unidade
+          </button>
+          <div id="sim-apply-feedback" class="sim-feedback-ok hidden" aria-live="polite"></div>
+        </div>
+
+        <!-- Coluna Direita: Gráficos em Tempo Real (Curva Horária de TME + Previsão Hoje e Dias Seguintes) -->
+        <div class="card">
+          <div class="card-head-row">
+            <div>
+              <div class="chart-badges-row">
+                <span class="tag tag-teal">Gráficos em Tempo Real</span>
+                <span id="chart-consult-time-badge" class="tag tag-blue">🕒 Horário da Consulta: 11:45 (08h–11h Consolidado • 12h–17h Projetado)</span>
+              </div>
+              <h2>Impacto no Tempo de Espera por Hora &amp; Previsão de Demanda</h2>
+              <p class="text-muted">
+                Os horários anteriores ao momento da consulta (08h às 11h) são dados realizados no passado e permanecem fixos; apenas os horários futuros (12h às 17h) sofrem impacto das simulações.
+              </p>
+            </div>
+          </div>
+
+          <!-- Gráfico 1: Curva Horária de TME vs. Meta (08h às 17h) -->
+          <div class="chart-box">
+            <div class="chart-header">
+              <strong>Curva Horária do Tempo Médio de Espera (TME) vs. Agendamentos (08h–17h)</strong>
+              <span class="chart-legend">
+                <span><i class="dot dot-past"></i> Passado Realizado (Fixo: 08h–11h)</span>
+                <span><i class="dot dot-blue"></i> Projetado / Simulado (12h–17h)</span>
+                <span><i class="dot dot-red"></i> Pico Almoço / Gargalo</span>
+                <span><i class="dot dot-green"></i> Abaixo da Meta</span>
+              </span>
+            </div>
+            <div id="hourly-tme-chart" class="bar-chart-hourly"></div>
+          </div>
+
+          <!-- Gráfico 2: Previsão de Demanda (Dia Corrente + Próximos Dias Úteis) -->
+          <div class="chart-box">
+            <div class="chart-header">
+              <strong>Previsão de Demanda: Hoje (Histórico + Agendados + Emitidas Pendentes) e Próximos Dias</strong>
+              <span class="chart-legend">
+                <span><i class="dot dot-blue"></i> Histórico Espontâneo</span>
+                <span><i class="dot dot-teal"></i> Agendamentos</span>
+                <span><i class="dot dot-amber"></i> Emitidas Hoje (Não Atendidas)</span>
+              </span>
+            </div>
+            <div id="multi-day-forecast-chart" class="forecast-days-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           BLOCO 3: OPERAÇÃO FÍSICA EM TEMPO REAL — TRÁFEGO, OCIOSIDADE, GARGALOS E INTERVENÇÕES ÁGEIS
+           ================================================================= -->
+      <section class="two-col-grid">
+        <!-- Coluna Esquerda: Status dos Guichês, Ociosidade e Drill-Down por Guichê (LGPD) -->
+        <div class="card">
+          <div class="card-head-row">
+            <div>
+              <span class="tag tag-blue">Monitoramento de Guichês e Ociosidade</span>
+              <h2>Status dos Atendentes, Tempos e Gargalos Locais</h2>
+              <p class="text-muted">
+                Clique em qualquer guichê para fazer drill-down nas senhas atendidas e em andamento (anonimizadas conforme LGPD).
+              </p>
+            </div>
+          </div>
+
+          <!-- Mapa de Gargalo Local em Tempo Real -->
+          <div id="bottleneck-banner" class="bottleneck-alert">
+            <strong>🔥 Gargalo Local Identificado Agora:</strong>
+            <span id="bottleneck-text">
+              Fila <strong>Convencional</strong> com <strong>9 senhas em espera</strong> (TME máx: 16m 10s, ex.: senha <code>C-104</code>), enquanto o <strong>Guichê 04</strong> está ocioso há <strong>08m 40s</strong> aguardando apenas agendados.
+            </span>
+          </div>
+
+          <!-- Lista de Guichês Ativos / Ociosos / Fechados -->
+          <div id="guiches-status-grid" class="guiches-sup-grid"></div>
+
+          <!-- Drill-Down de Senhas do Guichê Selecionado (Estritamente LGPD: Código, Fila, Serviço, TME, TMA) -->
+          <div class="guiche-drill-box" id="guiche-drill-box">
+            <div class="box-title-row">
+              <strong id="guiche-drill-title">🔍 Drill-Down do Guichê 01 (Roberto D.) — Visão Protegida LGPD</strong>
+              <span class="tag tag-green">Sem Dados Pessoais</span>
+            </div>
+            <div class="table-responsive">
+              <table class="clean-table">
+                <thead>
+                  <tr>
+                    <th>Código da Senha</th>
+                    <th>Tipo de Fila</th>
+                    <th>Serviço de Triagem</th>
+                    <th>TME (Espera)</th>
+                    <th>TMA (Atend.)</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="guiche-drill-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: Intervenções Ágeis na Distribuição de Filas + Registro de Ações do Gestor -->
+        <div class="col-stack">
+          <!-- Card de Intervenções Ágeis na Distribuição de Filas -->
+          <div class="card">
+            <div class="card-head">
+              <span class="tag tag-teal">Atuação Direta sobre a Agência</span>
+              <h2>Intervenções Ágeis na Distribuição de Filas</h2>
+              <p class="text-muted">
+                Transfira senhas em espera entre guichês, redistribua categorias de atendimento ou priorize guichês imediatamente.
+              </p>
+            </div>
+
+            <!-- Intervenção 1: Transferir Senha entre Atendentes / Guichês -->
+            <form id="form-transferir-fila" class="intervention-box">
+              <h4>1. Transferir Senha em Espera / Sobrecarga para Outro Guichê</h4>
+              <div class="form-row-3">
+                <div class="field">
+                  <label for="select-senha-intervencao">Senha (Código LGPD):</label>
+                  <select id="select-senha-intervencao"></select>
+                </div>
+                <div class="field">
+                  <label for="select-guiche-destino">Guichê de Destino:</label>
+                  <select id="select-guiche-destino">
+                    <option value="G-04">Guichê 04 (Carla S. • Ocioso há 08m 40s)</option>
+                    <option value="G-01">Guichê 01 (Roberto D. • Ativo)</option>
+                    <option value="G-02">Guichê 02 (Ana Paula R. • Ativo)</option>
+                    <option value="G-05">Guichê 05 (Sênior • Apoio)</option>
+                  </select>
+                </div>
+                <div class="field field-btn-align">
+                  <button type="submit" class="btn btn-primary btn-sm btn-block">
+                    ⇄ Transferir Senha
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Intervenção 2: Redistribuir Categorias / Priorizar Guichê -->
+            <form id="form-redistribuir-guiche" class="intervention-box">
+              <h4>2. Redistribuir Categoria de Fila ou Abrir Guichê de Reforço</h4>
+              <div class="form-row-3">
+                <div class="field">
+                  <label for="select-guiche-regra">Selecionar Guichê:</label>
+                  <select id="select-guiche-regra">
+                    <option value="G-04">Guichê 04 (Carla S. — Atual: Apenas Agendados)</option>
+                    <option value="G-05">Guichê 05 (Funcionário Sênior — Fechado)</option>
+                    <option value="G-06">Guichê 06 (Funcionário Sênior — Fechado)</option>
+                    <option value="G-03">Guichê 03 (Marcos O. — Atual: Convencional)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="select-nova-regra">Nova Prioridade / Regra:</label>
+                  <select id="select-nova-regra">
+                    <option value="Priorizar Fila Convencional (Desafogar Gargalo)">Priorizar Fila Convencional (Desafogar Gargalo)</option>
+                    <option value="Priorizar Preferencial Legal (Idoso / PcD / Gestante)">Priorizar Preferencial Legal (Idoso / PcD / Gestante)</option>
+                    <option value="Abrir Guichê com Funcionário Sênior (Todas as Filas)">Abrir Guichê com Funcionário Sênior (Todas as Filas)</option>
+                  </select>
+                </div>
+                <div class="field field-btn-align">
+                  <button type="submit" class="btn btn-teal btn-sm btn-block">
+                    ⚡ Aplicar Regra
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Card de Registro de Ações Tomadas pelo Gestor (Data/Hora + Impacto no Histórico) -->
+          <div class="card">
+            <div class="card-head">
+              <span class="tag tag-amber">Enriquecimento de Análise Histórica</span>
+              <h2>Registro de Ações Tomadas pelo Supervisor</h2>
+              <p class="text-muted">
+                Registre as intervenções com data e horário para explicar variações nos gráficos históricos de TME e TMA.
+              </p>
+            </div>
+
+            <div class="chips-wrap">
+              <button
+                type="button"
+                class="chip chip-action-preset"
+                data-action="Tempo de espera estava muito alto; solicitada abertura de mais 2 guichês com funcionários mais sêniores para reduzir TMA e TME."
+              >
+                + Abrir 2 guichês c/ funcionários sêniores
+              </button>
+              <button
+                type="button"
+                class="chip chip-action-preset"
+                data-action="Horário de almoço escalonado em 2 turnos (12h e 13h) para evitar pico de 300% no tempo de espera."
+              >
+                + Escalonar turno de almoço
+              </button>
+              <button
+                type="button"
+                class="chip chip-action-preset"
+                data-action="Guichê 04 redistribuído da fila Agendada para apoiar o gargalo da fila Convencional."
+              >
+                + Redistribuir Guichê 04 p/ fila Convencional
+              </button>
+            </div>
+
+            <form id="form-acao-gestor" class="form-grid">
+              <div class="form-row-datetime">
+                <div class="field">
+                  <label for="input-acao-datahora">Data e Horário da Ação:</label>
+                  <input id="input-acao-datahora" type="datetime-local" value="2026-11-17T11:45" />
+                </div>
+                <div class="field">
+                  <label for="select-acao-indicador">Indicador Impactado:</label>
+                  <select id="select-acao-indicador">
+                    <option value="Redução de TME e TMA (Abertura de Guichês Sênior)">Redução de TME e TMA (Abertura de Guichês Sênior)</option>
+                    <option value="Prevenção de Pico no Almoço (Escalonamento)">Prevenção de Pico no Almoço (Escalonamento)</option>
+                    <option value="Redução de Ociosidade (Redistribuição de Filas)">Redução de Ociosidade (Redistribuição de Filas)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="textarea-acao-gestor">Descrição da Ação Tomada pelo Supervisor:</label>
+                <textarea
+                  id="textarea-acao-gestor"
+                  rows="2"
+                  placeholder="Ex: O tempo de espera estava muito alto e solicitei que mais 2 guichês fossem abertos com funcionários mais sêniores..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">
+                📌 Registrar Ação no Histórico e Atualizar Curva de Desempenho
+              </button>
+            </form>
+
+            <div id="manager-actions-log" class="manager-log-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           BLOCO 4: HISTÓRICO AUDITÁVEL DE JORNADA EM TEMPO REAL (LGPD ANONIMIZADO)
+           ================================================================= -->
+      <section class="card">
+        <div class="card-head-row">
+          <div>
+            <span class="tag tag-blue">Rastreabilidade Instantânea &amp; Conformidade LGPD</span>
+            <h2>Histórico Auditável de Chamadas e Atendimentos da Agência</h2>
+            <p class="text-muted">
+              Registro inalterável identificado exclusivamente por Código da Senha (ex.: <code>C-104</code>, <code>P-042</code>), Tipo de Fila, Serviço de Triagem, TME, TMA e Avaliação.
+            </p>
+          </div>
+          <span class="tag tag-green">🔒 0 Dados Sensíveis Expostos</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Código da Senha</th>
+                <th>Tipo de Fila</th>
+                <th>Serviço de Triagem</th>
+                <th>Guichê</th>
+                <th>TME (Espera)</th>
+                <th>TMA (Atendimento)</th>
+                <th>Avaliação (NPS)</th>
+                <th>Status / Evento Auditado</th>
+              </tr>
+            </thead>
+            <tbody id="audit-log-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Botão Flutuante do Mascote Aqualino para tirar dúvidas de utilização em qualquer ponto da tela -->
+    <button type="button" id="btn-floating-aqualino" class="floating-faq-btn" title="Perguntar ao Aqualino sobre a utilização da tela">
+      <img src="MascoteHQ.png" alt="Aqualino" />
+      <span>💬 Perguntar ao Aqualino</span>
+    </button>
+
+    <footer class="footer">
+      SANEPAR Curitiba • Tela do Supervisor Local • Previsão de Demanda, Simulação de Efetivo, Alertas Aqualino e Conformidade LGPD
+    </footer>
+  </div>
+
+  <script src="supervisor.js"></script>
+</body>
+</html>

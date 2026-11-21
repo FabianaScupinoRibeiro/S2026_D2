@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANEPAR — Parametrização Estratégica de Gamificação (TelaGameParam)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="gameparam.css" />
+</head>
+<body>
+  <div class="game-shell">
+    <!-- CABEÇALHO CORPORATIVO CLEAN (MESMA IDENTIDADE VISUAL DE TelaCidadao.html) -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
+        </div>
+        <div>
+          <h1 class="brand-name">SANEPAR • Parametrização Estratégica de Gamificação</h1>
+          <p class="brand-subtitle">
+            Gestão de Regras por Ciclo • <strong>Mérito Individual &amp; Mérito do Grupo</strong> • Recepcionistas, Atendentes e Supervisores Locais
+          </p>
+        </div>
+      </div>
+
+      <div class="realtime-ticker" aria-live="polite">
+        <span class="pulse-dot"></span>
+        <span>Ciclo em Edição: <strong id="top-active-cycle-badge">Ciclo 2026.4 (Vigente)</strong></span>
+        <span>• Relógio: <strong id="live-clock-display">12:10:00</strong></span>
+        <span class="lgpd-pill" title="Conformidade estrita com a Lei nº 13.709/2018 (LGPD)">
+          🔒 Governança &amp; LGPD
+        </span>
+      </div>
+
+      <div class="topbar-links">
+        <a href="TelaCidadao.html" class="btn-icon">📱 Cidadão</a>
+        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Recepção</a>
+        <a href="TelaAtendimento.html" class="btn-icon">🎧 Guichê</a>
+        <a href="TelaSupervisorLocal.html" class="btn-icon">📊 Supervisor Local</a>
+        <a href="TelaAnalisesDashboards.html" class="btn-icon">📈 Dashboards</a>
+        <a href="TelaGameVitrine.html" class="btn-icon">🎁 Vitrine de Prêmios</a>
+        <button type="button" id="btn-reset-gameparam" class="btn-icon">↺ Restaurar Padrão</button>
+      </div>
+    </header>
+
+    <!-- BARRA DE GESTÃO DO CICLO ATUAL (SELEÇÃO, CRIAÇÃO, VIGÊNCIA, ATIVAÇÃO/ENCERRAMENTO/EXCLUSÃO E GRAVAÇÃO NO HISTÓRICO) -->
+    <section class="cycle-bar" aria-label="Seleção e Configuração de Ciclo de Gamificação">
+      <div class="cycle-bar-header">
+        <div>
+          <span class="section-tag">Governança de Ciclos Independentes • Cada Ciclo Possui Suas Próprias Regras</span>
+          <h2 class="cycle-bar-title">Selecione um Ciclo do Histórico para Inspecionar/Editar ou Crie um Novo Ciclo</h2>
+        </div>
+        <div class="cycle-bar-actions">
+          <button type="button" id="btn-new-cycle" class="btn btn-secondary btn-sm">
+            ➕ Criar Novo Ciclo (Clonar Regras Atuais)
+          </button>
+          <button type="button" id="btn-activate-cycle" class="btn btn-teal btn-sm hidden" title="Ativar este ciclo planejado na rede">
+            🟢 Ativar Ciclo
+          </button>
+          <button type="button" id="btn-delete-cycle" class="btn btn-danger btn-sm hidden" title="Apagar ciclo que foi criado mas ainda não chegou a ser ativado">
+            🗑️ Apagar Ciclo (Não Ativado)
+          </button>
+          <button type="button" id="btn-close-cycle" class="btn btn-amber btn-sm hidden" title="Ciclos que já foram ativados não podem ser apagados, apenas encerrados">
+            🔒 Encerrar Ciclo Ativado
+          </button>
+          <button type="button" id="btn-save-cycle" class="btn btn-primary btn-sm">
+            💾 Salvar Alterações nas Regras deste Ciclo
+          </button>
+        </div>
+      </div>
+
+      <div id="cycle-readonly-banner" class="readonly-lock-banner hidden" role="status" aria-live="polite">
+        🔒 <strong>Ciclo com Histórico Encerrado (Modo Somente Visualização):</strong> As regras, pesos, perfis e faixas de pontuação deste ciclo estão congelados para auditoria histórica e não podem ser alterados nem excluídos.
+      </div>
+
+      <div class="cycle-fields-grid">
+        <div class="field-box">
+          <label for="select-active-cycle">1. Ciclo Carregado na Tela:</label>
+          <select id="select-active-cycle"></select>
+        </div>
+
+        <div class="field-box">
+          <label for="input-cycle-name">2. Nome / Identificação do Ciclo:</label>
+          <input type="text" id="input-cycle-name" placeholder="Ex.: Ciclo 2026.4 — Excelência SGC & Atendimento" />
+        </div>
+
+        <div class="field-box">
+          <label for="input-cycle-start">3. Início da Vigência:</label>
+          <input type="date" id="input-cycle-start" />
+        </div>
+
+        <div class="field-box">
+          <label for="input-cycle-end">4. Fim da Vigência:</label>
+          <input type="date" id="input-cycle-end" />
+        </div>
+
+        <div class="field-box">
+          <label for="select-cycle-status">5. Status do Ciclo:</label>
+          <select id="select-cycle-status">
+            <option value="VIGENTE">🟢 Vigente (Ciclo Ativo na Rede)</option>
+            <option value="PLANEJADO">🔵 Planejado / Rascunho (Ciclo Futuro)</option>
+            <option value="ENCERRADO">⚪ Encerrado (Histórico Auditado)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="cycle-save-feedback" class="save-feedback-banner hidden" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- PAINEL DO MASCOTE AQUALINO (TIRA-DÚVIDAS DE UTILIZAÇÃO DA TELA + SÍNTESE DO CICLO) + 4 KPIS -->
+    <section class="dashboard-strip" aria-label="Assistente Aqualino e Indicadores do Ciclo de Gamificação">
+      <div class="mascot-game-card" id="aqualino-game-panel">
+        <div class="mascot-avatar-wrap">
+          <img src="MascoteHQ.png" alt="Mascote Aqualino SANEPAR" class="mascot-img" />
+          <span class="mascot-status-pill">💧 Aqualino • Consultor da Tela</span>
+        </div>
+
+        <div class="mascot-game-content">
+          <div class="mascot-head-row">
+            <div>
+              <span class="tag tag-teal" id="game-cycle-status-badge">Ciclo Vigente • Regras Ativas</span>
+              <h2 class="mascot-title">Orientação Estratégica &amp; Tira-Dúvidas de Utilização da Tela</h2>
+            </div>
+            <span class="version-pill" id="game-cycle-version-lbl">Versão da Regra: v4.2</span>
+          </div>
+
+          <!-- Balão Dinâmico do Aqualino -->
+          <div id="aqualino-game-bubble" class="mascot-bubble" aria-live="polite"></div>
+
+          <!-- Caixa de Perguntas Diretas ao Aqualino sobre a Utilização da Tela -->
+          <div class="aqualino-ask-box">
+            <form id="form-ask-aqualino-game" class="aqualino-ask-form">
+              <input
+                id="input-ask-aqualino-game"
+                type="text"
+                placeholder="Tem dúvida sobre como usar esta tela? Pergunte ao Aqualino (ex.: como configurar mérito do grupo, criar ciclo, incluir supervisores)..."
+              />
+              <button type="button" id="btn-voice-aqualino-game" class="btn-mic-sup" title="Perguntar por voz">
+                🎤 Voz
+              </button>
+              <button type="submit" class="btn btn-primary btn-sm">Perguntar ao Aqualino</button>
+            </form>
+
+            <div class="aqualino-quick-chips">
+              <span class="quick-chip-label">Dúvidas rápidas sobre a tela:</span>
+              <button type="button" class="chip-ask-game" data-q="Como parametrizar o peso entre mérito individual e mérito do grupo?">
+                ⚖️ Mérito Individual × Grupo
+              </button>
+              <button type="button" class="chip-ask-game" data-q="Como configurar quais perfis (recepcionistas, atendentes e supervisores locais) concorrem aos prêmios?">
+                👥 Perfis Concorrentes
+              </button>
+              <button type="button" class="chip-ask-game" data-q="Como funciona o histórico de regras de cada ciclo e como criar um ciclo com regras próprias?">
+                🗂️ Histórico de Ciclos
+              </button>
+              <button type="button" class="chip-ask-game" data-q="Como editar pontos, metas, pesos ou adicionar uma nova regra de gamificação?">
+                ⚙️ Editar e Criar Regras
+              </button>
+              <button type="button" class="chip-ask-game" data-q="Como usar o simulador para testar a pontuação e os prêmios de um profissional e sua unidade?">
+                🧮 Simulador de Prêmios
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 CARDS RESUMO DO CICLO SELECIONADO -->
+      <div class="kpi-4-grid">
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Divisão: Individual × Grupo</span>
+            <span class="tag tag-blue" id="kpi-merit-tag">Equilíbrio Ativo</span>
+          </div>
+          <div class="kpi-big text-blue" id="kpi-merit-split">65% / 35%</div>
+          <div class="kpi-foot">
+            <span id="kpi-merit-desc">65% Mérito Individual • 35% Mérito do Grupo</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Perfis Concorrendo no Ciclo</span>
+            <span class="tag tag-green" id="kpi-roles-tag">3 Categorias</span>
+          </div>
+          <div class="kpi-big text-teal" id="kpi-roles-count">3 Perfis</div>
+          <div class="kpi-foot">
+            <span id="kpi-roles-list">Recepcionistas, Atendentes e Supervisores</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Regras Ativas neste Ciclo</span>
+            <span class="tag tag-teal" id="kpi-rules-tag">Parametrizadas</span>
+          </div>
+          <div class="kpi-big text-green" id="kpi-rules-count">11 Regras</div>
+          <div class="kpi-foot">
+            <span id="kpi-rules-breakdown">8 Individuais + 3 Coletivas (Grupo)</span>
+          </div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-top">
+            <span class="kpi-label">Histórico de Ciclos Salvos</span>
+            <span class="tag tag-amber" id="kpi-history-tag">Auditável</span>
+          </div>
+          <div class="kpi-big" id="kpi-cycles-total">4 Ciclos</div>
+          <div class="kpi-foot">
+            <span>Última gravação: <strong id="kpi-last-saved">Hoje, 12:10</strong></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- GRADE PRINCIPAL DE PARAMETRIZAÇÃO -->
+    <main class="gameparam-grid">
+      <!-- BLOCO 1: PERFIS CONCORRENTES AOS PRÊMIOS + PONDERAÇÃO MÉRITO INDIVIDUAL VS. GRUPO -->
+      <section class="card span-12">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">1. Participantes &amp; Ponderação de Mérito do Ciclo</span>
+            <h2>Perfis Concorrendo aos Prêmios e Equilíbrio entre Mérito Individual e Mérito do Grupo</h2>
+          </div>
+          <span class="tag tag-blue" id="block1-cycle-indicator">Configuração exclusiva do Ciclo 2026.4</span>
+        </div>
+
+        <div class="participants-and-weights-grid">
+          <!-- 1.1 Perfis Concorrentes -->
+          <div class="roles-config-panel">
+            <h3 class="subpanel-title">👥 Perfis Elegíveis que Concorrem aos Prêmios neste Ciclo</h3>
+            <p class="subpanel-desc">
+              Habilite ou desabilite quais funções participam da premiação neste ciclo e defina os critérios mínimos de elegibilidade:
+            </p>
+
+            <div class="role-cards-stack">
+              <!-- Recepcionistas -->
+              <div class="role-param-card" id="role-card-recepcao">
+                <div class="role-card-top">
+                  <label class="role-switch-label">
+                    <input type="checkbox" id="chk-role-recepcao" checked />
+                    <span class="role-title">🛎️ Recepcionistas das Centrais</span>
+                  </label>
+                  <span class="tag tag-green" id="badge-role-recepcao">Concorrendo ✓</span>
+                </div>
+                <p class="role-desc">
+                  Avaliados por agilidade no check-in de chegada, conferência documental assertiva, resolução expressa (fila evitada) e cordialidade na triagem.
+                </p>
+                <div class="role-elig-row">
+                  <label>
+                    Mín. triagens/mês:
+                    <input type="number" id="input-min-att-recepcao" min="10" max="1000" value="180" />
+                  </label>
+                  <label>
+                    Assiduidade mín. (%):
+                    <input type="number" id="input-min-pres-recepcao" min="50" max="100" value="92" />
+                  </label>
+                </div>
+              </div>
+
+              <!-- Atendentes -->
+              <div class="role-param-card" id="role-card-atendente">
+                <div class="role-card-top">
+                  <label class="role-switch-label">
+                    <input type="checkbox" id="chk-role-atendente" checked />
+                    <span class="role-title">🎧 Atendentes de Guichê</span>
+                  </label>
+                  <span class="tag tag-green" id="badge-role-atendente">Concorrendo ✓</span>
+                </div>
+                <p class="role-desc">
+                  Avaliados pela nota de satisfação pós-checkout (maior peso), resolutividade no 1º atendimento (FCR), cumprimento de TMA/TME e qualidade do registro SGC.
+                </p>
+                <div class="role-elig-row">
+                  <label>
+                    Mín. atendimentos/mês:
+                    <input type="number" id="input-min-att-atendente" min="10" max="1000" value="140" />
+                  </label>
+                  <label>
+                    % mín. senhas avaliadas:
+                    <input type="number" id="input-min-eval-atendente" min="10" max="100" value="65" />
+                  </label>
+                </div>
+              </div>
+
+              <!-- Supervisores Locais -->
+              <div class="role-param-card" id="role-card-supervisor">
+                <div class="role-card-top">
+                  <label class="role-switch-label">
+                    <input type="checkbox" id="chk-role-supervisor" checked />
+                    <span class="role-title">📊 Supervisores Locais de Unidade</span>
+                  </label>
+                  <span class="tag tag-green" id="badge-role-supervisor">Concorrendo ✓</span>
+                </div>
+                <p class="role-desc">
+                  Avaliados pela manutenção do TME da unidade na meta (≤ 10m), escalonamento inteligente de turnos/almoço, atuação rápida em alertas e NPS global da Central.
+                </p>
+                <div class="role-elig-row">
+                  <label>
+                    % dias TME na meta:
+                    <input type="number" id="input-min-sla-supervisor" min="10" max="100" value="85" />
+                  </label>
+                  <label>
+                    Engajamento equipe (%):
+                    <input type="number" id="input-min-team-supervisor" min="10" max="100" value="80" />
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1.2 Ponderação Mérito Individual vs. Mérito do Grupo -->
+          <div class="merit-balance-panel">
+            <h3 class="subpanel-title">⚖️ Ponderação: Mérito Individual × Mérito do Grupo (Unidade)</h3>
+            <p class="subpanel-desc">
+              Defina quanto da nota final de premiação vem do desempenho individual de cada profissional e quanto vem do resultado coletivo conquistado em equipe pela Central de Relacionamento:
+            </p>
+
+            <div class="merit-slider-box">
+              <div class="merit-labels-row">
+                <div class="merit-pill ind-pill">
+                  <span>🏅 Peso do Mérito Individual</span>
+                  <strong id="lbl-weight-ind">65%</strong>
+                </div>
+                <div class="merit-pill grp-pill">
+                  <span>🤝 Peso do Mérito do Grupo (Unidade)</span>
+                  <strong id="lbl-weight-grp">35%</strong>
+                </div>
+              </div>
+
+              <input
+                type="range"
+                id="range-merit-individual"
+                min="20"
+                max="90"
+                step="5"
+                value="65"
+                aria-label="Ajustar proporção entre Mérito Individual e Mérito do Grupo"
+              />
+
+              <div class="merit-visual-bar">
+                <div id="bar-merit-ind" class="bar-seg-ind" style="width: 65%">65% Individual</div>
+                <div id="bar-merit-grp" class="bar-seg-grp" style="width: 35%">35% Grupo</div>
+              </div>
+            </div>
+
+            <div class="group-bonus-rules-box">
+              <h4>🚀 Gatilhos Coletivos e Multiplicadores de Grupo</h4>
+              <div class="bonus-fields-grid">
+                <div class="field-box">
+                  <label for="select-group-multiplier">Multiplicador por Meta Coletiva Batida:</label>
+                  <select id="select-group-multiplier">
+                    <option value="1.20">Bônus Coletivo +20% (Unidade com TME ≤ 10m e NPS ≥ 85)</option>
+                    <option value="1.30">Bônus Coletivo +30% (Excelência Total: TME ≤ 8m + NPS ≥ 90 + FCR ≥ 92%)</option>
+                    <option value="1.10">Bônus Coletivo +10% (Unidade com TME ≤ 10m no Ciclo)</option>
+                    <option value="1.00">Sem Multiplicador Extra (Somente Média Ponderada Ind. × Grupo)</option>
+                  </select>
+                </div>
+
+                <div class="field-box">
+                  <label for="select-coop-rule">Regra de Solidariedade Recepção ↔ Guichê ↔ Supervisão:</label>
+                  <select id="select-coop-rule">
+                    <option value="INTEGRADA">Ativa: Fila evitada na recepção e suporte em pico pontuam para todo o grupo</option>
+                    <option value="PARCIAL">Parcial: Pontuação coletiva apurada apenas pelo NPS e TME final da agência</option>
+                    <option value="SEGMENTADA">Segmentada: Meta coletiva separada entre equipe de recepção e equipe de guichês</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="formula-preview-box" id="formula-preview-banner">
+                <strong>📐 Fórmula Ativa neste Ciclo:</strong>
+                <code>Pontuação Final = [(Pontos Individuais × 65%) + (Pontos do Grupo × 35%)] × Multiplicador Coletivo (1,20x)</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BLOCO 2: TABELA DE REGRAS PARAMETRIZÁVEIS (INDIVIDUAIS POR PERFIL E COLETIVAS DO GRUPO) -->
+      <section class="card span-12">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">2. Motor de Regras Parametrizáveis do Ciclo</span>
+            <h2 id="rules-section-title">Critérios, Metas, Pontos e Pesos (Mérito Individual &amp; Mérito do Grupo)</h2>
+          </div>
+
+          <div class="filter-chips-bar" id="rules-category-tabs">
+            <button type="button" class="chip active" data-role-filter="ALL">Todas as Regras</button>
+            <button type="button" class="chip" data-role-filter="RECEPCAO">🛎️ Recepcionistas</button>
+            <button type="button" class="chip" data-role-filter="ATENDENTE">🎧 Atendentes</button>
+            <button type="button" class="chip" data-role-filter="SUPERVISOR">📊 Supervisores Locais</button>
+            <button type="button" class="chip" data-role-filter="GRUPO">🤝 Mérito do Grupo (Coletivo)</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ativa</th>
+                <th>Perfil / Escopo</th>
+                <th>Natureza do Mérito</th>
+                <th>Regra / Indicador de Desempenho</th>
+                <th>Meta / Parâmetro Alvo</th>
+                <th>Pontos Base (XP)</th>
+                <th>Peso / Multiplicador</th>
+                <th>Apuração</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="rules-param-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- FORMULÁRIO PARA ADICIONAR NOVA REGRA PARAMETRIZÁVEL AO CICLO -->
+        <div class="add-rule-panel">
+          <h3>➕ Adicionar Nova Regra Parametrizada a este Ciclo</h3>
+          <form id="form-add-rule" class="add-rule-grid">
+            <div class="field-box">
+              <label for="new-rule-role">Perfil / Escopo:</label>
+              <select id="new-rule-role">
+                <option value="RECEPCAO">🛎️ Recepcionistas</option>
+                <option value="ATENDENTE">🎧 Atendentes (Guichê)</option>
+                <option value="SUPERVISOR">📊 Supervisores Locais</option>
+                <option value="GRUPO">🤝 Grupo / Equipe da Unidade</option>
+              </select>
+            </div>
+
+            <div class="field-box">
+              <label for="new-rule-merit">Tipo de Mérito:</label>
+              <select id="new-rule-merit">
+                <option value="INDIVIDUAL">🏅 Mérito Individual</option>
+                <option value="GRUPO">🤝 Mérito do Grupo (Coletivo)</option>
+              </select>
+            </div>
+
+            <div class="field-box">
+              <label for="new-rule-name">Nome da Regra / Indicador:</label>
+              <input
+                type="text"
+                id="new-rule-name"
+                placeholder="Ex.: Zero Reclamação Ouvidoria no Mês"
+                required
+              />
+            </div>
+
+            <div class="field-box">
+              <label for="new-rule-target">Meta / Parâmetro Alvo:</label>
+              <input
+                type="text"
+                id="new-rule-target"
+                placeholder="Ex.: 0 ocorrências ou ≥ 95%"
+                required
+              />
+            </div>
+
+            <div class="field-box">
+              <label for="new-rule-points">Pontos Base (XP):</label>
+              <input type="number" id="new-rule-points" min="5" max="1000" step="5" value="40" required />
+            </div>
+
+            <div class="field-box">
+              <label for="new-rule-weight">Peso:</label>
+              <select id="new-rule-weight">
+                <option value="1.0">1,0x (Padrão)</option>
+                <option value="1.5">1,5x (Intermediário)</option>
+                <option value="2.0">2,0x (Alto Impacto)</option>
+                <option value="3.0">3,0x (Prioridade Estratégica)</option>
+              </select>
+            </div>
+
+            <div class="field-box">
+              <label for="new-rule-freq">Frequência:</label>
+              <select id="new-rule-freq">
+                <option value="Por Atendimento">Por Atendimento</option>
+                <option value="Diário">Diário</option>
+                <option value="Semanal">Semanal</option>
+                <option value="Mensal / Ciclo">Mensal / Ciclo</option>
+              </select>
+            </div>
+
+            <div class="field-box add-rule-btn-wrap">
+              <button type="submit" class="btn btn-teal">➕ Incluir Regra no Ciclo</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- BLOCO 3: FAIXAS DE PONTUAÇÃO PARA PREMIAÇÃO (7 COLUNAS) + SIMULADOR DE PONTUAÇÃO (5 COLUNAS) -->
+      <section class="card span-7">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">3. Catálogo de Prêmios &amp; Reconhecimentos do Ciclo</span>
+            <h2>Premiações por Perfil (Mérito Individual) e Premiação Coletiva do Grupo</h2>
+          </div>
+          <span class="tag tag-teal">Faixas de Pontuação por Ciclo</span>
+        </div>
+
+        <p class="section-desc">
+          Parametrize as faixas de pontuação mínima exigidas para habilitação nas categorias <strong>Ouro</strong> e <strong>Prata</strong> dos <strong>Recepcionistas</strong>, <strong>Atendentes</strong>, <strong>Supervisores Locais</strong> e da <strong>Equipe Campeã (Grupo)</strong> neste ciclo (a definição específica dos itens de prêmio é realizada em tela dedicada):
+        </p>
+
+        <div id="prizes-config-grid" class="prizes-grid"></div>
+      </section>
+
+      <section class="card span-5">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">Simulador Estratégico de Regras</span>
+            <h2>Simular Pontuação &amp; Prêmio no Ciclo</h2>
+          </div>
+          <span class="tag tag-blue">Teste em Tempo Real</span>
+        </div>
+
+        <p class="section-desc">
+          Verifique como as regras e pesos parametrizados para o ciclo atual calculam a nota de um participante somando seu <strong>Mérito Individual</strong> ao <strong>Mérito do Grupo</strong>:
+        </p>
+
+        <div class="sim-controls-stack">
+          <div class="field-box">
+            <label for="sim-select-role">1. Perfil do Concorrente Simulado:</label>
+            <select id="sim-select-role">
+              <option value="RECEPCAO">🛎️ Recepcionista de Central de Relacionamento</option>
+              <option value="ATENDENTE" selected>🎧 Atendente de Guichê Presencial</option>
+              <option value="SUPERVISOR">📊 Supervisor Local de Unidade</option>
+            </select>
+          </div>
+
+          <div class="field-box">
+            <label for="sim-range-ind">
+              2. Desempenho nas Metas Individuais do Perfil: <strong id="sim-lbl-ind-pct">88% de cumprimento</strong>
+            </label>
+            <input type="range" id="sim-range-ind" min="40" max="100" step="2" value="88" />
+          </div>
+
+          <div class="field-box">
+            <label for="sim-range-grp">
+              3. Desempenho Coletivo da Unidade (Grupo): <strong id="sim-lbl-grp-pct">92% das metas da agência</strong>
+            </label>
+            <input type="range" id="sim-range-grp" min="40" max="100" step="2" value="92" />
+          </div>
+
+          <div class="field-box">
+            <label class="role-switch-label">
+              <input type="checkbox" id="sim-chk-collective-goal" checked />
+              <span>Unidade bateu a Meta Coletiva do Ciclo (TME ≤ 10m e NPS ≥ 85)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="sim-result-card" id="sim-result-box">
+          <div class="sim-metrics-row">
+            <div class="sim-metric">
+              <small>Pontos Individuais (Brutos)</small>
+              <strong id="sim-val-ind-raw">1.120 pts</strong>
+              <span id="sim-val-ind-weighted">Ponderado (65%): 728 pts</span>
+            </div>
+            <div class="sim-metric">
+              <small>Pontos do Grupo (Unidade)</small>
+              <strong id="sim-val-grp-raw">960 pts</strong>
+              <span id="sim-val-grp-weighted">Ponderado (35%): 336 pts</span>
+            </div>
+            <div class="sim-metric highlight">
+              <small>Pontuação Final no Ciclo</small>
+              <strong id="sim-val-final-score" class="text-green">1.277 pts</strong>
+              <span id="sim-val-mult-applied">Inclui Bônus Coletivo 1,20x</span>
+            </div>
+          </div>
+
+          <div class="sim-prize-outcome" id="sim-prize-outcome"></div>
+        </div>
+      </section>
+
+      <!-- BLOCO 4: HISTÓRICO DE REGRAS DE CADA CICLO (GOVERNANÇA, AUDITORIA E COMPARATIVO) -->
+      <section class="card span-12">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">4. Histórico Completo das Regras por Ciclo</span>
+            <h2>Repositório Histórico de Ciclos de Gamificação (Regras Independentes por Ciclo)</h2>
+          </div>
+          <span class="tag tag-green">Rastreabilidade &amp; Versionamento Integral</span>
+        </div>
+
+        <p class="section-desc">
+          Cada ciclo preserva o seu próprio conjunto de regras, pesos de mérito individual/grupo, perfis participantes e catálogo de prêmios. Clique em <strong>"📂 Carregar Ciclo"</strong> para visualizar ou editar suas regras no painel acima, ou em <strong>"🔍 Ver Snapshot"</strong> para inspecionar o resumo congelado do ciclo:
+        </p>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Código &amp; Nome do Ciclo</th>
+                <th>Período de Vigência</th>
+                <th>Status</th>
+                <th>Perfis Concorrentes</th>
+                <th>Mérito (Ind. × Grupo)</th>
+                <th>Regras &amp; Destaque do Ciclo</th>
+                <th>Versão / Última Gravação</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="cycles-history-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- PAINEL DETALHADO (SNAPSHOT) DE INSPEÇÃO DAS REGRAS DO CICLO SELECIONADO NO HISTÓRICO -->
+        <div id="cycle-snapshot-drawer" class="cycle-snapshot-drawer hidden" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <!-- BOTÃO FLUTUANTE DO AQUALINO -->
+    <button
+      type="button"
+      id="btn-floating-aqualino-game"
+      class="floating-aqualino-btn"
+      title="Tirar dúvidas sobre esta tela com o Aqualino"
+    >
+      <img src="MascoteHQ.png" alt="Aqualino" />
+      <span>Dúvidas? Pergunte ao Aqualino</span>
+    </button>
+  </div>
+
+  <script src="gameparam.js"></script>
+</body>
+</html>
