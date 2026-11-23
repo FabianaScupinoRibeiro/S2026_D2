@@ -25,8 +25,11 @@
 
       <div class="topbar-actions">
         <span class="kiosk-badge">📱 Dispositivo Compartilhado da Unidade</span>
-        <button type="button" id="btn-reset-kiosk" class="btn-icon" title="Voltar ao início do tablet">
-          ↺ Tela Inicial
+        <a href="index.html" id="btn-voltar-index" class="btn-icon btn-home-link" title="Voltar para a tela inicial (Index.html)">
+          🏠 Início
+        </a>
+        <button type="button" id="btn-reset-kiosk" class="btn-icon" title="Iniciar nova avaliação no tablet">
+          ↺ Nova Avaliação
         </button>
       </div>
     </header>
@@ -230,9 +233,14 @@
             ></textarea>
           </div>
 
-          <button type="button" id="btn-enviar-avaliacao" class="btn btn-primary btn-xl btn-block" disabled>
-            ✓ Enviar Avaliação da Senha
-          </button>
+          <div class="rating-actions-stack">
+            <button type="button" id="btn-enviar-avaliacao" class="btn btn-primary btn-xl btn-block" disabled>
+              ✓ Enviar Avaliação da Senha
+            </button>
+            <button type="button" id="btn-encerrar-sem-avaliar" class="btn btn-secondary btn-xl btn-block">
+              Atendimento encerrado • Não desejo realizar a avaliação
+            </button>
+          </div>
         </div>
       </section>
 
@@ -241,8 +249,8 @@
            ================================================================= -->
       <section id="pane-thanks" class="step-pane hidden">
         <div class="card resolved-box">
-          <div class="icon-badge-ok">★</div>
-          <h2>Avaliação registrada com sucesso!</h2>
+          <div id="thanks-icon" class="icon-badge-ok">★</div>
+          <h2 id="thanks-title">Avaliação registrada com sucesso!</h2>
           <p id="thanks-summary" class="text-muted"></p>
 
           <div id="thanks-anti-duplicity-note" class="anti-dup-pill">

@@ -22,9 +22,14 @@
           <p class="brand-subtitle">Atendimento Digital ao Cidadão</p>
         </div>
       </div>
-      <button type="button" id="btn-reset" class="btn-icon" title="Reiniciar atendimento">
-        ↺ Reiniciar
-      </button>
+      <div class="topbar-actions">
+        <a href="index.html" id="btn-voltar-index" class="btn-icon btn-home-link" title="Voltar para a tela inicial (Index.html)">
+          🏠 Início
+        </a>
+        <button type="button" id="btn-reset" class="btn-icon" title="Reiniciar atendimento">
+          ↺ Reiniciar
+        </button>
+      </div>
     </header>
 
     <!-- NAVEGAÇÃO DE ETAPAS (CLICÁVEL) -->
@@ -60,10 +65,62 @@
         <div class="card">
           <div class="card-head">
             <span class="tag tag-blue">1. Identificação do Cliente</span>
-            <h2>Informe seu CPF, CNPJ ou Matrícula</h2>
+            <h2>Escolha sua opção de login ou informe seus dados</h2>
+            <p class="text-muted">Acesse com sua conta integrada para preenchimento automático ou informe CPF, CNPJ ou matrícula.</p>
           </div>
 
-          <div class="preset-group">
+          <!-- Opções de Login do Cliente -->
+          <div class="login-options-group" role="radiogroup" aria-label="Opções de login do cliente">
+            <span class="preset-caption">Opções de Login:</span>
+            <div class="login-options-grid">
+              <button type="button" class="login-option-btn" data-login-mode="central" data-login-label="Central de Segurança" data-doc="123.456.789-00" data-matricula="104892-3">
+                <span class="login-opt-icon" aria-hidden="true">🛡️</span>
+                <span class="login-opt-text">
+                  <strong>Central de Segurança</strong>
+                  <small>Login corporativo / SANEPAR</small>
+                </span>
+              </button>
+
+              <button type="button" class="login-option-btn" data-login-mode="govbr" data-login-label="Entrar com gov.br" data-doc="987.654.321-11" data-matricula="882310-5">
+                <span class="login-opt-icon login-badge-gov" aria-hidden="true">gov.br</span>
+                <span class="login-opt-text">
+                  <strong>Entrar com gov.br</strong>
+                  <small>Identidade digital federal</small>
+                </span>
+              </button>
+
+              <button type="button" class="login-option-btn" data-login-mode="google" data-login-label="Entrar usando Google" data-doc="321.654.987-22" data-matricula="541209-8">
+                <span class="login-opt-icon login-badge-google" aria-hidden="true">G</span>
+                <span class="login-opt-text">
+                  <strong>Entrar usando Google</strong>
+                  <small>Conta Google vinculada</small>
+                </span>
+              </button>
+
+              <button type="button" class="login-option-btn" data-login-mode="ecpf" data-login-label="Certificado Digital e-CPF" data-doc="45.678.912/0001-34" data-matricula="339014-7">
+                <span class="login-opt-icon" aria-hidden="true">🔐</span>
+                <span class="login-opt-text">
+                  <strong>Certificado Digital e-CPF</strong>
+                  <small>ICP-Brasil • e-CPF / e-CNPJ</small>
+                </span>
+              </button>
+
+              <button type="button" class="login-option-btn active login-option-full" data-login-mode="manual" data-login-label="Ainda não sou cadastrado">
+                <span class="login-opt-icon" aria-hidden="true">✍️</span>
+                <span class="login-opt-text">
+                  <strong>Ainda não sou cadastrado</strong>
+                  <small>Informar manualmente meu CPF, CNPJ ou matrícula abaixo</small>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div id="login-auth-banner" class="login-auth-banner hidden" aria-live="polite">
+            <span class="status-dot"></span>
+            <span id="login-auth-text">Autenticado com sucesso — documento preenchido automaticamente.</span>
+          </div>
+
+          <div id="preset-manual-group" class="preset-group">
             <span class="preset-caption">Toque para simular perfis de clientes:</span>
             <div class="chips-wrap">
               <button type="button" class="chip chip-preset" data-doc="123.456.789-00" data-matricula="104892-3">
@@ -397,6 +454,54 @@
               <p class="text-muted">Ao chegar na unidade SANEPAR, faça o check-in lendo o QR Code na entrada.</p>
             </div>
           </div>
+
+          <div class="ticket-print-actions">
+            <button type="button" id="btn-imprimir-senha" class="btn btn-secondary btn-block">
+              🖨️ Imprimir Senha Gerada
+            </button>
+          </div>
+
+          <!-- Simulação Visual de Impressão da Senha -->
+          <div id="ticket-print-simulation" class="print-sim-box hidden" aria-live="polite">
+            <div id="print-sim-status-bar" class="print-sim-status">
+              <span class="status-dot"></span>
+              <span id="print-sim-status-text">✓ Comprovante da senha impresso com sucesso!</span>
+            </div>
+
+            <div class="thermal-ticket-paper">
+              <div class="thermal-head">
+                <strong>SANEPAR • CURITIBA</strong>
+                <small>Comprovante de Senha de Atendimento</small>
+              </div>
+              <div class="thermal-code-box">
+                <small>SENHA</small>
+                <strong id="print-ticket-code">N-127</strong>
+                <span id="print-ticket-category">Senha Normal (Convencional)</span>
+              </div>
+              <div class="thermal-details">
+                <div><span>Cliente:</span><strong id="print-ticket-citizen">Cidadão(ã)</strong></div>
+                <div><span>CPF/CNPJ:</span><strong id="print-ticket-doc">Não informado</strong></div>
+                <div><span>Matrícula:</span><strong id="print-ticket-matricula">104892-3</strong></div>
+                <div><span>Unidade:</span><strong id="print-ticket-unit">Central Rebouças</strong></div>
+                <div><span>Quando:</span><strong id="print-ticket-datetime">Hoje • Fila Digital</strong></div>
+                <div><span>Serviço:</span><strong id="print-ticket-subject">Troca de Titularidade</strong></div>
+                <div><span>Emissão:</span><strong id="print-ticket-timestamp">Agora</strong></div>
+              </div>
+              <div class="thermal-qr-wrap">
+                <div id="print-ticket-qr" class="thermal-qr-box" aria-hidden="true"></div>
+                <small>Apresente este QR Code no totem de entrada da agência</small>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button type="button" id="btn-browser-print" class="btn btn-primary btn-sm flex-1">
+                🖨️ Enviar p/ Impressora
+              </button>
+              <button type="button" id="btn-close-print-sim" class="btn btn-secondary btn-sm flex-1">
+                Fechar Comprovante
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Painel de Senhas Sendo Atendidas no Momento -->
@@ -547,15 +652,20 @@
             <textarea id="input-comentario" rows="2" placeholder="Deixe uma sugestão ou elogio..."></textarea>
           </div>
 
-          <button type="button" id="btn-enviar-avaliacao" class="btn btn-primary btn-block" disabled>
-            Enviar Avaliação
-          </button>
+          <div class="rating-actions-stack">
+            <button type="button" id="btn-enviar-avaliacao" class="btn btn-primary btn-block" disabled>
+              Enviar Avaliação
+            </button>
+            <button type="button" id="btn-encerrar-sem-avaliar" class="btn btn-secondary btn-block">
+              Atendimento encerrado • Não desejo realizar a avaliação
+            </button>
+          </div>
         </div>
 
-        <!-- Agradecimento final -->
+        <!-- Agradecimento / Encerramento final -->
         <div id="rating-thanks-card" class="card resolved-box hidden">
-          <div class="icon-badge-ok">★</div>
-          <h3>Avaliação registrada com sucesso!</h3>
+          <div id="thanks-icon" class="icon-badge-ok">★</div>
+          <h3 id="thanks-title">Avaliação registrada com sucesso!</h3>
           <p id="thanks-summary" class="text-muted"></p>
           <button type="button" id="btn-novo-atendimento" class="btn btn-primary btn-block mt-14">
             Iniciar Novo Atendimento

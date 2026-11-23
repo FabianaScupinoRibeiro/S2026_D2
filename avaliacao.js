@@ -182,7 +182,9 @@
       if (tk.status !== "ENCERRADO") {
         badgeHtml = `<span class="tag tag-amber">⏳ Em Andamento (Bloqueada)</span>`;
       } else if (tk.evaluated) {
-        badgeHtml = `<span class="tag tag-red">🔒 Já Avaliada (${tk.evaluatedAt})</span>`;
+        badgeHtml = tk.skippedEvaluation
+          ? `<span class="tag tag-red">🔒 Encerrada s/ Avaliação (${tk.evaluatedAt})</span>`
+          : `<span class="tag tag-red">🔒 Já Avaliada (${tk.evaluatedAt})</span>`;
       } else {
         badgeHtml = `<span class="tag tag-green">✓ Encerrada • Liberada</span>`;
       }
@@ -279,13 +281,16 @@
       return false;
     }
 
-    // REGRA 2: Evita duplicidades (bloqueia caso a senha já tenha sido avaliada)
+    // REGRA 2: Evita duplicidades (bloqueia caso a senha já tenha sido avaliada ou dispensada)
     if (found.evaluated) {
       alertBox.className = "validation-alert error-duplicate";
+      const dupDetail = found.skippedEvaluation
+        ? `Esta senha já teve o encerramento registrado sem avaliação hoje às <strong>${found.evaluatedAt}</strong>.`
+        : `Esta senha já teve sua avaliação de satisfação registrada hoje às <strong>${found.evaluatedAt}</strong> (Nota NPS <strong>${found.npsScore}/10</strong> • <strong>${found.starScore} ★</strong>).`;
       alertBox.innerHTML = `
-        🔒 <strong>Avaliação já realizada para a senha ${found.code} (Duplicidade Bloqueada):</strong><br/>
-        Esta senha já teve sua avaliação de satisfação registrada hoje às <strong>${found.evaluatedAt}</strong> (Nota NPS <strong>${found.npsScore}/10</strong> • <strong>${found.starScore} ★</strong>).<br/>
-        Para garantir a integridade dos indicadores, cada senha só pode ser avaliada uma única vez.
+        🔒 <strong>Registro já concluído para a senha ${found.code} (Duplicidade Bloqueada):</strong><br/>
+        ${dupDetail}<br/>
+        Para garantir a integridade dos indicadores, cada senha só pode ser utilizada uma única vez.
       `;
       alertBox.classList.remove("hidden");
       return false;
@@ -460,32 +465,12 @@
   });
 
   // =========================================================================
-  // ENVIO DA AVALIAÇÃO E BLOQUEIO IMEDIATO CONTRA DUPLICIDADE
+  // ENVIO DA AVALIAÇÃO (OU ENCERRAMENTO SEM AVALIAR) E BLOQUEIO CONTRA DUPLICIDADE
   // =========================================================================
-  $("#btn-enviar-avaliacao").addEventListener("click", () => {
-    if (state.selectedNps === null || state.selectedStars === null) return;
-    const tk = ticketsDb.find((t) => t.code === state.activeTicketCode);
-    if (!tk || tk.evaluated) return;
-
-    // Registra a avaliação vinculada à senha e bloqueia futuras avaliações para esta senha
-    tk.evaluated = true;
-    tk.evaluatedAt = currentHHMM();
-    tk.npsScore = state.selectedNps;
-    tk.starScore = state.selectedStars;
-
-    const tagsArr = Array.from(state.selectedTags);
-    const tagsSummary = tagsArr.length ? ` • Destaques: ${tagsArr.join(", ")}` : "";
-
-    $("#thanks-summary").innerHTML = `
-      Obrigado por avaliar a <strong>Senha ${tk.code}</strong> (${tk.service} • ${tk.desk})!<br/>
-      Nota NPS registrada: <strong>${tk.npsScore}/10</strong> • Avaliação Geral: <strong>${tk.starScore} de 5 estrelas</strong>${tagsSummary}.
-    `;
-
-    goToStep(4);
-
-    // Contagem regressiva automática para liberar o tablet compartilhado ao próximo cidadão
+  function startAutoReturnCountdown() {
     state.autoReturnSec = 12;
     $("#auto-return-sec").textContent = String(state.autoReturnSec);
+    if (state.autoReturnTimer) clearInterval(state.autoReturnTimer);
     state.autoReturnTimer = setInterval(() => {
       state.autoReturnSec -= 1;
       if (state.autoReturnSec <= 0) {
@@ -496,6 +481,55 @@
         $("#auto-return-sec").textContent = String(state.autoReturnSec);
       }
     }, 1000);
+  }
+
+  $("#btn-enviar-avaliacao").addEventListener("click", () => {
+    if (state.selectedNps === null || state.selectedStars === null) return;
+    const tk = ticketsDb.find((t) => t.code === state.activeTicketCode);
+    if (!tk || tk.evaluated) return;
+
+    // Registra a avaliação vinculada à senha e bloqueia futuras avaliações para esta senha
+    tk.evaluated = true;
+    tk.skippedEvaluation = false;
+    tk.evaluatedAt = currentHHMM();
+    tk.npsScore = state.selectedNps;
+    tk.starScore = state.selectedStars;
+
+    const tagsArr = Array.from(state.selectedTags);
+    const tagsSummary = tagsArr.length ? ` • Destaques: ${tagsArr.join(", ")}` : "";
+
+    $("#thanks-icon").textContent = "★";
+    $("#thanks-title").textContent = "Avaliação registrada com sucesso!";
+    $("#thanks-summary").innerHTML = `
+      Obrigado por avaliar a <strong>Senha ${tk.code}</strong> (${tk.service} • ${tk.desk})!<br/>
+      Nota NPS registrada: <strong>${tk.npsScore}/10</strong> • Avaliação Geral: <strong>${tk.starScore} de 5 estrelas</strong>${tagsSummary}.
+    `;
+    $("#thanks-anti-duplicity-note").textContent =
+      "🔒 Esta avaliação foi vinculada de forma definitiva à sua senha e bloqueada contra duplicidades.";
+
+    goToStep(4);
+    startAutoReturnCountdown();
+  });
+
+  $("#btn-encerrar-sem-avaliar").addEventListener("click", () => {
+    const tk = ticketsDb.find((t) => t.code === state.activeTicketCode);
+    if (!tk || tk.evaluated) return;
+
+    tk.evaluated = true;
+    tk.skippedEvaluation = true;
+    tk.evaluatedAt = currentHHMM();
+
+    $("#thanks-icon").textContent = "✓";
+    $("#thanks-title").textContent = "Atendimento encerrado com sucesso!";
+    $("#thanks-summary").innerHTML = `
+      O encerramento do seu atendimento da <strong>Senha ${tk.code}</strong> (${tk.service} • ${tk.desk}) foi confirmado sem realização de avaliação, conforme sua opção.<br/>
+      Obrigado por utilizar os serviços da SANEPAR!
+    `;
+    $("#thanks-anti-duplicity-note").textContent =
+      "🔒 O encerramento sem avaliação foi vinculado de forma definitiva à sua senha e bloqueado contra duplicidades.";
+
+    goToStep(4);
+    startAutoReturnCountdown();
   });
 
   $("#btn-proximo-cidadao").addEventListener("click", () => {

@@ -78,6 +78,20 @@
       message:
         "Olá, João Pedro! Sua matrícula 882310-5 (Boa Vista • Curitiba) está com as faturas em dia. Descreva abaixo o que precisa resolver ou retire sua senha presencial.",
     },
+    "32165498722": {
+      name: "Ana Paula Ferreira",
+      matricula: "541209-8",
+      hasOpenBill: false,
+      message:
+        "Olá, Ana Paula! Sua matrícula 541209-8 (Pinheirinho • Curitiba) foi localizada via conta Google e está com faturas em dia. Descreva abaixo sua solicitação ou retire sua senha presencial.",
+    },
+    "5412098": {
+      name: "Ana Paula Ferreira",
+      matricula: "541209-8",
+      hasOpenBill: false,
+      message:
+        "Olá, Ana Paula! Sua matrícula 541209-8 (Pinheirinho • Curitiba) foi localizada via conta Google e está com faturas em dia. Descreva abaixo sua solicitação ou retire sua senha presencial.",
+    },
   };
 
   const $ = (sel) => document.querySelector(sel);
@@ -169,17 +183,65 @@
   });
 
   // =========================================================================
-  // ETAPA 1A: IDENTIFICAÇÃO + CONSULTA EM MILISSEGUNDOS
+  // ETAPA 1A: IDENTIFICAÇÃO + OPÇÕES DE LOGIN + CONSULTA EM MILISSEGUNDOS
   // =========================================================================
   const inputDoc = $("#input-doc");
   const inputMatricula = $("#input-matricula");
+  const loginAuthBanner = $("#login-auth-banner");
+  const loginAuthText = $("#login-auth-text");
+  const presetManualGroup = $("#preset-manual-group");
 
   inputDoc.addEventListener("input", (e) => {
     e.target.value = formatDoc(e.target.value);
   });
 
+  function setLoginMode(btn) {
+    const mode = btn.dataset.loginMode;
+    const label = btn.dataset.loginLabel || "Login";
+
+    $$(".login-option-btn").forEach((b) => b.classList.toggle("active", b === btn));
+
+    if (mode === "manual") {
+      inputDoc.readOnly = false;
+      inputMatricula.readOnly = false;
+      inputDoc.value = "";
+      inputMatricula.value = "";
+      if (loginAuthBanner) loginAuthBanner.classList.add("hidden");
+      if (presetManualGroup) presetManualGroup.classList.remove("hidden");
+      $("#sgc-result-box").classList.add("hidden");
+      $("#fatura-express-card").classList.add("hidden");
+      inputDoc.focus();
+    } else {
+      const autoDoc = btn.dataset.doc || "123.456.789-00";
+      const autoMat = btn.dataset.matricula || "104892-3";
+      inputDoc.value = formatDoc(autoDoc);
+      inputMatricula.value = autoMat;
+      inputDoc.readOnly = true;
+      inputMatricula.readOnly = true;
+
+      if (presetManualGroup) presetManualGroup.classList.add("hidden");
+      if (loginAuthBanner && loginAuthText) {
+        const docType = onlyDigits(autoDoc).length > 11 ? "CNPJ" : "CPF";
+        loginAuthText.innerHTML = `Autenticado via <strong>${label}</strong> — ${docType} <strong>${inputDoc.value}</strong> preenchido automaticamente.`;
+        loginAuthBanner.classList.remove("hidden");
+      }
+      runFastLookup();
+    }
+  }
+
+  $$(".login-option-btn").forEach((btn) => {
+    btn.addEventListener("click", () => setLoginMode(btn));
+  });
+
   $$(".chip-preset").forEach((chip) => {
     chip.addEventListener("click", () => {
+      const manualBtn = document.querySelector('.login-option-btn[data-login-mode="manual"]');
+      if (manualBtn) {
+        $$(".login-option-btn").forEach((b) => b.classList.toggle("active", b === manualBtn));
+      }
+      inputDoc.readOnly = false;
+      inputMatricula.readOnly = false;
+      if (loginAuthBanner) loginAuthBanner.classList.add("hidden");
       inputDoc.value = chip.dataset.doc;
       inputMatricula.value = chip.dataset.matricula;
       runFastLookup();
@@ -811,10 +873,63 @@
     $("#totem-qr-preview").innerHTML = generateQrSvg(`TOTEM-${tk.unit}`);
     $("#scanner-unit-label").textContent = `Totem Entrada • ${tk.unit.split("—")[0].trim()}`;
 
+    const printSimBox = $("#ticket-print-simulation");
+    if (printSimBox) printSimBox.classList.add("hidden");
+
     updateLeaveHomeGuidance();
     renderLiveQueue();
     renderUnitMetrics(false);
     startQueueTimer();
+  }
+
+  // Simulação de impressão da senha gerada
+  function simulateTicketPrint() {
+    if (!state.ticket) createDefaultTicketIfNeeded();
+    const tk = state.ticket;
+    const printBox = $("#ticket-print-simulation");
+    const statusBar = $("#print-sim-status-bar");
+    const statusText = $("#print-sim-status-text");
+    if (!printBox) return;
+
+    $("#print-ticket-code").textContent = tk.code;
+    $("#print-ticket-category").textContent = tk.categoryLabel;
+    $("#print-ticket-citizen").textContent = state.citizen.name || "Cidadão(ã)";
+    $("#print-ticket-doc").textContent = state.citizen.doc || inputDoc.value.trim() || "Não informado";
+    $("#print-ticket-matricula").textContent = state.citizen.matricula || inputMatricula.value.trim() || "104892-3";
+    $("#print-ticket-unit").textContent = tk.unit.split("—")[0].trim();
+    $("#print-ticket-datetime").textContent = tk.datetime;
+    $("#print-ticket-subject").textContent = tk.subject;
+    $("#print-ticket-timestamp").textContent = `${new Date().toLocaleDateString("pt-BR")} às ${currentHHMMSS()}`;
+    $("#print-ticket-qr").innerHTML = generateQrSvg(`PRINT-${tk.code}-${state.citizen.matricula}`);
+
+    printBox.classList.remove("hidden");
+    statusBar.classList.add("printing");
+    statusText.textContent = `🖨️ Imprimindo comprovante da senha ${tk.code}... aguarde`;
+    printBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    setTimeout(() => {
+      statusBar.classList.remove("printing");
+      statusText.textContent = `✓ Senha ${tk.code} impressa com sucesso! Retire seu comprovante.`;
+    }, 850);
+  }
+
+  const btnImprimirSenha = $("#btn-imprimir-senha");
+  if (btnImprimirSenha) {
+    btnImprimirSenha.addEventListener("click", simulateTicketPrint);
+  }
+
+  const btnBrowserPrint = $("#btn-browser-print");
+  if (btnBrowserPrint) {
+    btnBrowserPrint.addEventListener("click", () => {
+      window.print();
+    });
+  }
+
+  const btnClosePrintSim = $("#btn-close-print-sim");
+  if (btnClosePrintSim) {
+    btnClosePrintSim.addEventListener("click", () => {
+      $("#ticket-print-simulation").classList.add("hidden");
+    });
   }
 
   function updateLeaveHomeGuidance() {
@@ -985,9 +1100,20 @@
   $("#btn-enviar-avaliacao").addEventListener("click", () => {
     $("#rating-form-card").classList.add("hidden");
     $("#rating-thanks-card").classList.remove("hidden");
+    $("#thanks-icon").textContent = "★";
+    $("#thanks-title").textContent = "Avaliação registrada com sucesso!";
     const tags = Array.from(state.rating.tags);
     const extra = tags.length ? ` • Destaques: ${tags.join(", ")}` : "";
     $("#thanks-summary").textContent = `Nota NPS: ${state.rating.nps}/10 • Avaliação Geral: ${state.rating.stars}/5 estrelas${extra}. Obrigado!`;
+  });
+
+  $("#btn-encerrar-sem-avaliar").addEventListener("click", () => {
+    $("#rating-form-card").classList.add("hidden");
+    $("#rating-thanks-card").classList.remove("hidden");
+    $("#thanks-icon").textContent = "✓";
+    $("#thanks-title").textContent = "Atendimento encerrado com sucesso!";
+    const ticketInfo = state.ticket ? ` (Senha ${state.ticket.code})` : "";
+    $("#thanks-summary").textContent = `O encerramento do seu atendimento${ticketInfo} foi confirmado sem realização de avaliação, conforme sua opção. Obrigado por utilizar os serviços da SANEPAR!`;
   });
 
   function resetAll() {
@@ -997,10 +1123,19 @@
     state.checkedIn = false;
     state.rating = { nps: null, stars: 0, tags: new Set(), comment: "" };
 
+    inputDoc.readOnly = false;
+    inputMatricula.readOnly = false;
     inputDoc.value = "";
     inputMatricula.value = "";
     inputProblema.value = "";
     $("#input-comentario").value = "";
+    if (loginAuthBanner) loginAuthBanner.classList.add("hidden");
+    if (presetManualGroup) presetManualGroup.classList.remove("hidden");
+    $$(".login-option-btn").forEach((b) =>
+      b.classList.toggle("active", b.dataset.loginMode === "manual")
+    );
+    const printSimBox = $("#ticket-print-simulation");
+    if (printSimBox) printSimBox.classList.add("hidden");
     $("#sgc-result-box").classList.add("hidden");
     $("#fatura-express-card").classList.add("hidden");
     $("#triage-result-card").classList.add("hidden");

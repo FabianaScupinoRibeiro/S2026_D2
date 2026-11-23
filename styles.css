@@ -117,6 +117,12 @@ body {
   color: var(--text-muted);
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .btn-icon {
   background: var(--bg-shell);
   border: 1px solid var(--border);
@@ -127,6 +133,16 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-home-link {
+  background: var(--primary-soft);
+  border-color: var(--primary-border);
+  color: var(--primary);
 }
 
 .btn-icon:hover {
@@ -1394,9 +1410,265 @@ body {
   color: #f59e0b;
 }
 
+.rating-actions-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .footer {
   text-align: center;
   padding: 14px;
   font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* OPÇÕES DE LOGIN NA IDENTIFICAÇÃO DO CLIENTE */
+.login-options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.login-option-btn {
+  background: var(--bg-shell);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.login-option-btn:hover {
+  border-color: var(--primary-border);
+  background: #f0f7ff;
+}
+
+.login-option-btn.active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.login-option-full {
+  grid-column: 1 / -1;
+}
+
+.login-opt-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.login-badge-gov {
+  background: #1351b4;
+  color: #ffffff;
+  border-color: #1351b4;
+  font-size: 0.62rem;
+  letter-spacing: -0.02em;
+}
+
+.login-badge-google {
+  background: #ffffff;
+  color: #ea4335;
+  border-color: #dadce0;
+  font-size: 0.95rem;
+}
+
+.login-opt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.login-opt-text strong {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.login-opt-text small {
+  font-size: 0.67rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.login-auth-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green-soft);
+  border: 1px solid var(--green-border);
+  color: #065f46;
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* SIMULAÇÃO DE IMPRESSÃO DE SENHA (COMPROVANTE TÉRMICO) */
+.ticket-print-actions {
+  padding-top: 4px;
+}
+
+.print-sim-box {
+  background: var(--bg-shell);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.print-sim-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--green);
+  background: var(--green-soft);
+  border: 1px solid var(--green-border);
+  padding: 8px 11px;
+  border-radius: var(--radius-sm);
+}
+
+.print-sim-status.printing {
+  color: var(--amber);
+  background: var(--amber-soft);
+  border-color: var(--amber-border);
+}
+
+.thermal-ticket-paper {
+  background: #fffef9;
+  border: 1px dashed #94a3b8;
+  border-top: 4px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
+  font-family: 'Inter', monospace;
+}
+
+.thermal-head {
+  text-align: center;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.thermal-head strong {
+  font-size: 0.86rem;
+  color: var(--primary);
+  letter-spacing: 0.04em;
+}
+
+.thermal-head small {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.thermal-code-box {
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.thermal-code-box small {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.thermal-code-box strong {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.1;
+}
+
+.thermal-code-box span {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.thermal-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.76rem;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 10px;
+}
+
+.thermal-details > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.thermal-details span {
+  color: var(--text-muted);
+}
+
+.thermal-details strong {
+  color: var(--text-main);
+  text-align: right;
+}
+
+.thermal-qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.thermal-qr-box {
+  width: 74px;
+  height: 74px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px;
+}
+
+.thermal-qr-wrap small {
+  font-size: 0.68rem;
   color: var(--text-muted);
 }

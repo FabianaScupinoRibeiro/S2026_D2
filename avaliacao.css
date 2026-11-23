@@ -146,6 +146,16 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-home-link {
+  background: var(--primary-soft);
+  border-color: var(--primary-border);
+  color: var(--primary);
 }
 
 .btn-icon:hover {
@@ -780,6 +790,12 @@ textarea:focus {
 
 .btn-row {
   display: flex;
+  gap: 10px;
+}
+
+.rating-actions-stack {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
