@@ -103,6 +103,7 @@
       arrival: "15:55",
       checkinRec: "15:57",
       waitSeconds: 102,
+      guiche: "G-02",
     },
     {
       code: "P-041",
@@ -115,6 +116,52 @@
       arrival: "16:01",
       checkinRec: "16:03",
       waitSeconds: 118,
+      guiche: "G-01",
+    },
+  ];
+
+  const initialAgencyCounters = () => [
+    {
+      id: "G-01",
+      attendant: "Mariana Costa",
+      rule: "Exclusivo Preferencial Legal (Idoso / PcD / Gestante)",
+      isOpen: true,
+      newlyOpened: false,
+    },
+    {
+      id: "G-02",
+      attendant: "Rafael Souza",
+      rule: "Apoio Prioritário • Fila Normal + Agendados",
+      isOpen: true,
+      newlyOpened: false,
+    },
+    {
+      id: "G-03",
+      attendant: "Camila Teixeira",
+      rule: "Exclusivo Preferencial Legal (Idoso / PcD / Gestante)",
+      isOpen: true,
+      newlyOpened: false,
+    },
+    {
+      id: "G-04",
+      attendant: "Bruno Oliveira",
+      rule: "Atendimento Universal (Todas as Filas)",
+      isOpen: true,
+      newlyOpened: false,
+    },
+    {
+      id: "G-05",
+      attendant: "Patrícia Lima (Reserva)",
+      rule: "Guichê Fechado • Disponível p/ Reforço",
+      isOpen: false,
+      newlyOpened: false,
+    },
+    {
+      id: "G-06",
+      attendant: "Lucas Rocha (Reserva)",
+      rule: "Guichê Fechado • Disponível p/ Reforço",
+      isOpen: false,
+      newlyOpened: false,
     },
   ];
 
@@ -179,9 +226,11 @@
     completedWaitSeconds: [95, 112, 130, 88, 145, 102, 118, 84, 134],
     pendingQueue: initialPendingQueue(),
     releasedQueue: initialReleasedQueue(),
+    agencyCounters: initialAgencyCounters(),
     selectedTicketCode: "N-128",
     history: initialHistory(),
     nextTicketNum: 129,
+    lastGeneratedTicket: null,
     walkinTriage: null,
     walkinWhenMode: "hoje",
     walkinSelectedDate: null,
@@ -213,6 +262,41 @@
   function nowHHMM() {
     const d = new Date();
     return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  }
+
+  function nowHHMMSS() {
+    const d = new Date();
+    return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`;
+  }
+
+  function generateQrSvg(seedText) {
+    const size = 21;
+    let hash = 0;
+    for (let i = 0; i < seedText.length; i++) {
+      hash = (hash * 31 + seedText.charCodeAt(i)) >>> 0;
+    }
+    const isFinder = (r, c) =>
+      (r < 7 && c < 7) || (r < 7 && c >= size - 7) || (r >= size - 7 && c < 7);
+
+    let rects = "";
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        let filled = false;
+        if (isFinder(r, c)) {
+          const lr = r >= size - 7 ? r - (size - 7) : r;
+          const lc = c >= size - 7 ? c - (size - 7) : c;
+          filled =
+            lr === 0 || lr === 6 || lc === 0 || lc === 6 || (lr >= 2 && lr <= 4 && lc >= 2 && lc <= 4);
+        } else {
+          const v = (hash ^ (r * 73856093) ^ (c * 19349663)) >>> 0;
+          filled = v % 3 !== 0;
+        }
+        if (filled) {
+          rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#0f172a"/>`;
+        }
+      }
+    }
+    return `<svg viewBox="0 0 ${size} ${size}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="#ffffff"/>${rects}</svg>`;
   }
 
   function onlyDigits(str) {
@@ -391,6 +475,77 @@
       });
       docsUl.appendChild(li);
     });
+
+    const inspPrintBox = $("#insp-print-simulation");
+    if (inspPrintBox && state.printedInspTicketCode !== tk.code) {
+      inspPrintBox.classList.add("hidden");
+    }
+  }
+
+  // Simulação de impressão da senha selecionada na Aba 1 (Conferência)
+  function simulateInspectionTicketPrint() {
+    const tk = state.pendingQueue.find((t) => t.code === state.selectedTicketCode);
+    if (!tk) return;
+    const printBox = $("#insp-print-simulation");
+    const statusBar = $("#insp-print-status-bar");
+    const statusText = $("#insp-print-status-text");
+    if (!printBox) return;
+
+    state.printedInspTicketCode = tk.code;
+
+    $("#insp-print-code").textContent = tk.code;
+    $("#insp-print-category").textContent = tk.priorityLabel;
+    $("#insp-print-citizen").textContent = tk.name;
+    $("#insp-print-doc").textContent = tk.doc || "Não informado";
+    $("#insp-print-matricula").textContent = tk.matricula || "104892-3";
+    $("#insp-print-datetime").textContent = `Hoje • Chegada ${tk.arrivalTimeStr}`;
+    $("#insp-print-subject").textContent = tk.caseType;
+    $("#insp-print-timestamp").textContent = `${new Date().toLocaleDateString("pt-BR")} às ${nowHHMMSS()}`;
+    $("#insp-print-qr").innerHTML = generateQrSvg(`REC-INSP-${tk.code}-${tk.matricula}`);
+
+    printBox.classList.remove("hidden");
+    statusBar.classList.add("printing");
+    statusText.textContent = `🖨️ Imprimindo comprovante da senha ${tk.code}... aguarde`;
+    printBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    setTimeout(() => {
+      statusBar.classList.remove("printing");
+      statusText.textContent = `✓ Senha ${tk.code} impressa com sucesso! Retire o comprovante.`;
+    }, 850);
+
+    syncPrintOnlyMount("#insp-print-simulation");
+  }
+
+  function syncPrintOnlyMount(simBoxSelector) {
+    const mount = $("#print-only-mount");
+    const simBox = $(simBoxSelector);
+    if (!mount || !simBox) return;
+    const paper = simBox.querySelector(".thermal-ticket-paper");
+    if (paper) {
+      mount.innerHTML = "";
+      mount.appendChild(paper.cloneNode(true));
+    }
+  }
+
+  function printOnlyThermalTicket(simBoxSelector) {
+    syncPrintOnlyMount(simBoxSelector);
+    window.print();
+  }
+
+  const btnImprimirInsp = $("#btn-imprimir-senha-insp");
+  if (btnImprimirInsp) {
+    btnImprimirInsp.addEventListener("click", simulateInspectionTicketPrint);
+  }
+  const btnInspBrowserPrint = $("#btn-insp-browser-print");
+  if (btnInspBrowserPrint) {
+    btnInspBrowserPrint.addEventListener("click", () => printOnlyThermalTicket("#insp-print-simulation"));
+  }
+  const btnInspClosePrint = $("#btn-insp-close-print");
+  if (btnInspClosePrint) {
+    btnInspClosePrint.addEventListener("click", () => {
+      state.printedInspTicketCode = null;
+      $("#insp-print-simulation").classList.add("hidden");
+    });
   }
 
   $("#btn-marcar-todos-docs").addEventListener("click", () => {
@@ -445,6 +600,7 @@
       arrival: tk.arrivalTimeStr,
       checkinRec: checkinTime,
       waitSeconds: tk.waitSeconds,
+      guiche: (tk.queueKey || "normal") === "normal" ? "G-02" : "G-01",
     });
 
     state.history.unshift({
@@ -562,6 +718,7 @@
 
     if (!state.releasedQueue.length) {
       container.innerHTML = `<div class="empty-state">Nenhuma senha liberada aguardando chamada no momento.</div>`;
+      populateReceptionInterventionSelects();
       return;
     }
 
@@ -574,6 +731,7 @@
             <div class="q-code-line">
               <span class="q-code">${item.code}</span>
               <span class="tag ${item.priorityTagClass}">${item.priorityLabel}</span>
+              <span class="tag tag-teal">Guichê: ${item.guiche || "G-02"}</span>
               <span class="tag tag-green">Check-in Recepção: ${item.checkinRec}</span>
             </div>
             <span class="q-name">${item.name} • Mat. ${item.matricula}</span>
@@ -699,6 +857,157 @@
       });
 
       container.appendChild(div);
+    });
+
+    populateReceptionInterventionSelects();
+  }
+
+  function populateReceptionInterventionSelects() {
+    const selTicket = $("#select-senha-intervencao");
+    const selDest = $("#select-guiche-destino");
+    const selRuleCounter = $("#select-guiche-regra");
+
+    if (selTicket) {
+      const prevVal = selTicket.value;
+      selTicket.innerHTML = "";
+      if (state.releasedQueue.length === 0) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Nenhuma senha liberada aguardando chamada";
+        selTicket.appendChild(opt);
+      } else {
+        state.releasedQueue.forEach((t) => {
+          const opt = document.createElement("option");
+          opt.value = t.code;
+          opt.textContent = `${t.code} • ${t.priorityLabel} (${t.demand}) — Atual: ${t.guiche || "G-02"}`;
+          selTicket.appendChild(opt);
+        });
+        if (prevVal && state.releasedQueue.some((t) => t.code === prevVal)) {
+          selTicket.value = prevVal;
+        }
+      }
+    }
+
+    if (selDest && state.agencyCounters) {
+      const prevDest = selDest.value;
+      selDest.innerHTML = "";
+      const openCounters = state.agencyCounters.filter((c) => c.isOpen);
+      openCounters.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        const badgeNew = c.newlyOpened ? "✨ [NOVO ABERTO] " : "";
+        opt.textContent = `${badgeNew}${c.id} (${c.attendant}) — ${c.rule}`;
+        selDest.appendChild(opt);
+      });
+      if (prevDest && openCounters.some((c) => c.id === prevDest)) {
+        selDest.value = prevDest;
+      }
+    }
+
+    if (selRuleCounter && state.agencyCounters) {
+      const prevRuleC = selRuleCounter.value;
+      selRuleCounter.innerHTML = "";
+      state.agencyCounters.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        const statusTxt = c.isOpen ? "Aberto" : "Fechado";
+        opt.textContent = `${c.id} (${c.attendant} • ${statusTxt}) — Regra atual: ${c.rule}`;
+        selRuleCounter.appendChild(opt);
+      });
+      if (prevRuleC && state.agencyCounters.some((c) => c.id === prevRuleC)) {
+        selRuleCounter.value = prevRuleC;
+      }
+    }
+  }
+
+  const formTransferirFila = $("#form-transferir-fila");
+  if (formTransferirFila) {
+    formTransferirFila.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const code = $("#select-senha-intervencao").value;
+      const destId = $("#select-guiche-destino").value;
+      if (!code || !destId) return;
+
+      const ticket = state.releasedQueue.find((t) => t.code === code);
+      const destCounter = state.agencyCounters.find((c) => c.id === destId);
+      if (!ticket || !destCounter) return;
+
+      const prevGuiche = ticket.guiche || "G-02";
+      ticket.guiche = destCounter.id;
+
+      const histEntry = state.history.find((h) => h.code === ticket.code);
+      if (histEntry) {
+        histEntry.outcomeLabel = `⇄ Transferido na Recepção (${prevGuiche} → ${destCounter.id} • ${destCounter.attendant})`;
+      }
+
+      const banner = $("#intervention-feedback-banner");
+      if (banner) {
+        banner.innerHTML = `
+          <div class="instant-meta"><span class="status-dot"></span><span>Transferência Imediata Executada pela Recepção</span></div>
+          <p class="instant-text">A senha <strong>${ticket.code} (${ticket.name} • ${ticket.demand})</strong> foi transferida de <strong>${prevGuiche}</strong> para o guichê <strong>${destCounter.id} (${destCounter.attendant})</strong> com prioridade na fila!</p>
+        `;
+        banner.classList.remove("hidden");
+      }
+
+      addGamificationPoints(
+        20,
+        `⇄ <strong>Intervenção Ágil na Fila (+20 pts):</strong> Você redistribuiu a senha <strong>${ticket.code}</strong> de <strong>${prevGuiche}</strong> para <strong>${destCounter.id} (${destCounter.attendant})</strong>, equilibrando a espera na agência!`
+      );
+
+      renderReleasedQueue();
+      renderHistoryTable();
+    });
+  }
+
+  const formRedistribuirGuiche = $("#form-redistribuir-guiche");
+  if (formRedistribuirGuiche) {
+    formRedistribuirGuiche.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const counterId = $("#select-guiche-regra").value;
+      const newRule = $("#select-nova-regra").value;
+      if (!counterId || !newRule) return;
+
+      const counter = state.agencyCounters.find((c) => c.id === counterId);
+      if (!counter) return;
+
+      const wasClosed = !counter.isOpen;
+      counter.isOpen = true;
+      counter.rule = newRule;
+      if (wasClosed) {
+        counter.newlyOpened = true;
+      }
+
+      const numPart = counter.id.replace("G-", "");
+      const guicheLabel = `Guichê ${numPart}`;
+      const liveMatch = state.liveCounters.find((lc) => lc.guiche === guicheLabel);
+      if (liveMatch) {
+        liveMatch.type = newRule;
+      } else if (wasClosed) {
+        state.liveCounters.push({
+          guiche: guicheLabel,
+          ticket: "LIVRE",
+          type: newRule,
+        });
+      }
+
+      const banner = $("#intervention-feedback-banner");
+      if (banner) {
+        banner.innerHTML = `
+          <div class="instant-meta"><span class="status-dot"></span><span>${wasClosed ? "Novo Guichê de Reforço Aberto e Configurado" : "Regra de Atendimento Atualizada no Guichê"}</span></div>
+          <p class="instant-text">O guichê <strong>${counter.id} (${counter.attendant})</strong> agora opera com a regra <strong>"${newRule}"</strong>${wasClosed ? " e já está disponível na lista de guichês abertos para receber transferências imediatas!" : " e a distribuição automática de senhas foi reequilibrada!"}</p>
+        `;
+        banner.classList.remove("hidden");
+      }
+
+      addGamificationPoints(
+        25,
+        `⚡ <strong>Atuação Direta na Agência (+25 pts):</strong> ${wasClosed ? `Guichê de reforço <strong>${counter.id}</strong> aberto` : `Guichê <strong>${counter.id}</strong> reconfigurado`} com a regra <strong>${newRule}</strong>!`
+      );
+
+      populateReceptionInterventionSelects();
+      const selDest = $("#select-guiche-destino");
+      if (selDest) selDest.value = counter.id;
+      renderLiveCounters();
     });
   }
 
@@ -867,7 +1176,7 @@
   $("#btn-copy-code").addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText($("#inv-code").textContent);
-    } catch (_) {}
+    } catch (_) { }
     $("#copy-feedback").classList.remove("hidden");
   });
 
@@ -1158,6 +1467,7 @@
         arrival: currentHHMM,
         checkinRec: currentHHMM,
         waitSeconds: 55,
+        guiche: prio === "normal" ? "G-02" : "G-01",
       });
       state.history.unshift({
         code,
@@ -1204,6 +1514,19 @@
       <div class="instant-meta"><span class="status-dot"></span><span>Senha Emitida: ${code} (${chosen.label})</span></div>
       <p class="instant-text">Cidadão: <strong>${name}</strong> • Caso: <strong>${caseName}</strong> • Status: <strong>${releaseImmediately ? "Check-in confirmado e liberado para o Guichê!" : "Adicionado à Fila de Conferência da Recepção (Aba 1)"}</strong></p>
     `;
+
+    state.lastGeneratedTicket = {
+      code,
+      categoryLabel: chosen.label,
+      name,
+      doc,
+      matricula: mat,
+      unit: "Central Rebouças",
+      datetime: `Hoje • Emitida às ${currentHHMM}`,
+      subject: caseName,
+    };
+    const printBox = $("#ticket-print-simulation");
+    if (printBox) printBox.classList.add("hidden");
   }
 
   $("#btn-gerar-senha-checkin-fila").addEventListener("click", () => createWalkinTicket(false));
@@ -1293,17 +1616,86 @@
     const code = `AG-${state.nextTicketNum + 80}`;
     state.nextTicketNum += 1;
     const name = inputNome.value.trim() || "Cidadão Presencial";
+    const doc = inputDoc.value.trim() || "Não informado";
+    const mat = inputMatricula.value.trim() || "104892-3";
+    const caseName = state.walkinTriage ? state.walkinTriage.docsCaseName : "Atendimento Geral SANEPAR";
     const fb = $("#walkin-ticket-feedback");
     fb.classList.remove("hidden");
     fb.innerHTML = `
       <div class="instant-meta"><span class="status-dot"></span><span>Agendamento Confirmado: Senha ${code}</span></div>
       <p class="instant-text">Agendado para <strong>${name}</strong> em <strong>${state.walkinSelectedDate} às ${state.walkinSelectedSlot}</strong> (fora dos dias de pico do início do mês).</p>
     `;
+
+    state.lastGeneratedTicket = {
+      code,
+      categoryLabel: "Atendimento Agendado",
+      name,
+      doc,
+      matricula: mat,
+      unit: "Central Rebouças",
+      datetime: `${state.walkinSelectedDate} às ${state.walkinSelectedSlot}`,
+      subject: caseName,
+    };
+    const printBox = $("#ticket-print-simulation");
+    if (printBox) printBox.classList.add("hidden");
+
     addGamificationPoints(
       15,
       `📅 <strong>Agendamento Inteligente (+15 pts):</strong> Você agendou o atendimento de <strong>${name}</strong> em um dia de baixa procura (${state.walkinSelectedDate}), ajudando a suavizar os picos de demanda!`
     );
   });
+
+  // Simulação de impressão da senha gerada na Aba 2 (como foi feito na TelaCidadao.html)
+  function simulateWalkinTicketPrint() {
+    if (!state.lastGeneratedTicket) {
+      createWalkinTicket(false);
+    }
+    const tk = state.lastGeneratedTicket;
+    const printBox = $("#ticket-print-simulation");
+    const statusBar = $("#print-sim-status-bar");
+    const statusText = $("#print-sim-status-text");
+    if (!printBox || !tk) return;
+
+    $("#print-ticket-code").textContent = tk.code;
+    $("#print-ticket-category").textContent = tk.categoryLabel;
+    $("#print-ticket-citizen").textContent = tk.name;
+    $("#print-ticket-doc").textContent = tk.doc || "Não informado";
+    $("#print-ticket-matricula").textContent = tk.matricula || "104892-3";
+    $("#print-ticket-unit").textContent = tk.unit || "Central Rebouças";
+    $("#print-ticket-datetime").textContent = tk.datetime;
+    $("#print-ticket-subject").textContent = tk.subject;
+    $("#print-ticket-timestamp").textContent = `${new Date().toLocaleDateString("pt-BR")} às ${nowHHMMSS()}`;
+    $("#print-ticket-qr").innerHTML = generateQrSvg(`REC-PRINT-${tk.code}-${tk.matricula}`);
+
+    printBox.classList.remove("hidden");
+    statusBar.classList.add("printing");
+    statusText.textContent = `🖨️ Imprimindo comprovante da senha ${tk.code}... aguarde`;
+    printBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    setTimeout(() => {
+      statusBar.classList.remove("printing");
+      statusText.textContent = `✓ Senha ${tk.code} impressa com sucesso! Retire seu comprovante.`;
+    }, 850);
+
+    syncPrintOnlyMount("#ticket-print-simulation");
+  }
+
+  const btnImprimirSenha = $("#btn-imprimir-senha");
+  if (btnImprimirSenha) {
+    btnImprimirSenha.addEventListener("click", simulateWalkinTicketPrint);
+  }
+
+  const btnBrowserPrint = $("#btn-browser-print");
+  if (btnBrowserPrint) {
+    btnBrowserPrint.addEventListener("click", () => printOnlyThermalTicket("#ticket-print-simulation"));
+  }
+
+  const btnClosePrintSim = $("#btn-close-print-sim");
+  if (btnClosePrintSim) {
+    btnClosePrintSim.addEventListener("click", () => {
+      $("#ticket-print-simulation").classList.add("hidden");
+    });
+  }
 
   // =========================================================================
   // MÓDULO 3: PAINEL DE GUICHÊS AO VIVO & PESQUISA DE SATISFAÇÃO COM VALIDAÇÃO DE SENHA
@@ -1357,196 +1749,11 @@
     state.recentCalls.unshift(nextCode);
     renderLiveCounters();
     renderHistoryTable();
-    renderRatingEligibleChips();
   });
-
-  // Ajuste 5: Validação da senha antes de liberar a Pesquisa de Satisfação
-  // Só permite avaliar se a senha já teve seu atendimento ENCERRADO ou CANCELADO
-  function findEligibleTicketForRating(rawCode) {
-    const code = (rawCode || "").trim().toUpperCase();
-    if (!code) return null;
-
-    // 1. Verifica se ainda está aguardando conferência na recepção (não encerrado)
-    const inPending = state.pendingQueue.find((t) => t.code.toUpperCase() === code);
-    if (inPending) {
-      return {
-        eligible: false,
-        errorMsg: `✕ A senha ${inPending.code} (${inPending.name}) ainda aguarda conferência na recepção. A avaliação só é liberada para senhas com atendimento já encerrado ou cancelado.`,
-      };
-    }
-
-    // 2. Verifica se ainda aguarda chamada no guichê pós-conferência (não encerrado)
-    const inReleased = state.releasedQueue.find((r) => r.code.toUpperCase() === code);
-    if (inReleased) {
-      return {
-        eligible: false,
-        errorMsg: `✕ A senha ${inReleased.code} (${inReleased.name}) ainda aguarda atendimento no guichê. A avaliação só é permitida após o atendimento ser encerrado ou cancelado.`,
-      };
-    }
-
-    // 3. Verifica se está em atendimento ativo no guichê neste momento (não encerrado)
-    const inCounter = state.liveCounters.find((c) => c.ticket.toUpperCase() === code);
-    if (inCounter) {
-      return {
-        eligible: false,
-        errorMsg: `✕ A senha ${inCounter.ticket} ainda está em atendimento no ${inCounter.guiche}. A avaliação só é liberada após o encerramento ou cancelamento do atendimento.`,
-      };
-    }
-
-    // 4. Verifica no histórico se o atendimento já foi ENCERRADO (na recepção ou no guichê) ou CANCELADO
-    const inHistory = state.history.find((h) => h.code.toUpperCase() === code);
-    if (inHistory) {
-      if (inHistory.outcomeType === "avoided") {
-        return {
-          eligible: true,
-          code: inHistory.code,
-          statusDesc: `Atendimento encerrado na recepção (${inHistory.citizen})`,
-        };
-      }
-      if (inHistory.outcomeType === "finished") {
-        return {
-          eligible: true,
-          code: inHistory.code,
-          statusDesc: `Atendimento encerrado no guichê (${inHistory.citizen})`,
-        };
-      }
-      if (inHistory.outcomeType === "canceled") {
-        return {
-          eligible: true,
-          code: inHistory.code,
-          statusDesc: `Atendimento cancelado (${inHistory.citizen})`,
-        };
-      }
-    }
-
-    return {
-      eligible: false,
-      errorMsg:
-        "✕ Senha não localizada ou ainda sem atendimento encerrado/cancelado. Informe uma senha cujo atendimento já tenha sido encerrado ou cancelado.",
-    };
-  }
 
   function renderRatingEligibleChips() {
-    const wrap = $("#rating-valid-chips");
-    if (!wrap) return;
-    wrap.innerHTML = "";
-
-    // Lista apenas senhas cujo atendimento já foi encerrado ("avoided" ou "finished") ou cancelado ("canceled")
-    const eligibleItems = state.history.filter(
-      (h) => h.outcomeType === "avoided" || h.outcomeType === "finished" || h.outcomeType === "canceled"
-    );
-
-    const seen = new Set();
-    eligibleItems.forEach((item) => {
-      if (seen.has(item.code) || seen.size >= 6) return;
-      seen.add(item.code);
-
-      const statusShort = item.outcomeType === "canceled" ? "Cancelado" : "Encerrado";
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "chip";
-      btn.textContent = `${item.code} (${statusShort})`;
-      btn.addEventListener("click", () => {
-        $("#input-senha-avaliacao").value = item.code;
-        validateTicketForRating();
-      });
-      wrap.appendChild(btn);
-    });
+    // Sessão "Pesquisa de Satisfação" removida da TelaRecepcao.html (realizada em TelaAvaliacaoCidadao.html / TelaCidadao.html)
   }
-
-  function validateTicketForRating() {
-    const val = $("#input-senha-avaliacao").value;
-    const res = findEligibleTicketForRating(val);
-    const fb = $("#rating-validation-feedback");
-    const questionsWrap = $("#rating-questions-wrap");
-
-    fb.classList.remove("hidden", "ok", "err");
-
-    if (res && res.eligible) {
-      state.rating.validatedTicket = res.code;
-      fb.classList.add("ok");
-      fb.textContent = `✓ Senha ${res.code} validada — ${res.statusDesc}. Avaliação liberada abaixo!`;
-      questionsWrap.classList.remove("rating-locked");
-      updateRatingSubmitButton();
-    } else {
-      state.rating.validatedTicket = null;
-      fb.classList.add("err");
-      fb.textContent = res
-        ? res.errorMsg
-        : "✕ Informe uma senha cujo atendimento já tenha sido encerrado ou cancelado.";
-      questionsWrap.classList.add("rating-locked");
-      updateRatingSubmitButton();
-    }
-  }
-
-  $("#form-validar-senha-avaliacao").addEventListener("submit", (e) => {
-    e.preventDefault();
-    validateTicketForRating();
-  });
-
-  function updateRatingSubmitButton() {
-    const ready =
-      Boolean(state.rating.validatedTicket) &&
-      state.rating.nps !== null &&
-      state.rating.stars > 0;
-    $("#btn-enviar-avaliacao").disabled = !ready;
-  }
-
-  function buildNps() {
-    const container = $("#nps-scale");
-    container.innerHTML = "";
-    for (let i = 0; i <= 10; i++) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      const cls = i <= 6 ? "detractor" : i <= 8 ? "passive" : "promoter";
-      btn.className = `nps-btn ${cls}`;
-      btn.textContent = i;
-      btn.addEventListener("click", () => {
-        $$(".nps-btn").forEach((b) => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        state.rating.nps = i;
-        const zone = i <= 6 ? "Detrator" : i <= 8 ? "Neutro" : "Promotor";
-        $("#nps-selected-label").textContent = `Nota ${i} (${zone})`;
-        updateRatingSubmitButton();
-      });
-      container.appendChild(btn);
-    }
-  }
-
-  $$(".star").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const val = Number(btn.dataset.star);
-      state.rating.stars = val;
-      $$(".star").forEach((s) => s.classList.toggle("active", Number(s.dataset.star) <= val));
-      $("#star-label").textContent = `${val} de 5 estrelas`;
-      updateRatingSubmitButton();
-    });
-  });
-
-  $("#btn-enviar-avaliacao").addEventListener("click", () => {
-    if (!state.rating.validatedTicket) return;
-    $("#rating-form-card").classList.add("hidden");
-    $("#rating-thanks-card").classList.remove("hidden");
-    $("#thanks-summary").textContent = `Senha avaliada: ${state.rating.validatedTicket} • NPS: ${state.rating.nps}/10 • Avaliação Geral: ${state.rating.stars}/5 estrelas.`;
-  });
-
-  function resetRatingForm() {
-    state.rating = { validatedTicket: null, nps: null, stars: 0 };
-    $("#input-senha-avaliacao").value = "";
-    $("#rating-validation-feedback").classList.add("hidden");
-    $("#rating-questions-wrap").classList.add("rating-locked");
-    $("#nps-selected-label").textContent = "";
-    $("#star-label").textContent = "Selecione de 1 a 5 estrelas";
-    $("#input-comentario").value = "";
-    $("#btn-enviar-avaliacao").disabled = true;
-    $$(".star").forEach((s) => s.classList.remove("active"));
-    buildNps();
-    renderRatingEligibleChips();
-    $("#rating-thanks-card").classList.add("hidden");
-    $("#rating-form-card").classList.remove("hidden");
-  }
-
-  $("#btn-nova-avaliacao").addEventListener("click", resetRatingForm);
 
   // Restaurar dados de demonstração
   $("#btn-reset-demo").addEventListener("click", () => {
@@ -1557,8 +1764,17 @@
     state.completedWaitSeconds = [95, 112, 130, 88, 145, 102, 118, 84, 134];
     state.pendingQueue = initialPendingQueue();
     state.releasedQueue = initialReleasedQueue();
+    state.agencyCounters = initialAgencyCounters();
     state.selectedTicketCode = "N-128";
     state.history = initialHistory();
+    state.lastGeneratedTicket = null;
+    state.printedInspTicketCode = null;
+    const intBanner = $("#intervention-feedback-banner");
+    if (intBanner) intBanner.classList.add("hidden");
+    const walkinPrintBox = $("#ticket-print-simulation");
+    if (walkinPrintBox) walkinPrintBox.classList.add("hidden");
+    const inspPrintBox = $("#insp-print-simulation");
+    if (inspPrintBox) inspPrintBox.classList.add("hidden");
     $("#mascot-speech").innerHTML =
       "💬 <strong>Dica do Aqualino:</strong> Mantenha o tempo entre a chegada do cidadão e o seu check-in abaixo de <strong>03m 00s</strong> (+30 pts) ou resolva a demanda direto na recepção para evitar fila no guichê (+50 pts)!";
     renderDashboardKpis();
@@ -1566,7 +1782,6 @@
     renderInspectionDesk();
     renderReleasedQueue();
     renderHistoryTable();
-    resetRatingForm();
     switchTab("tab-conferencia");
   });
 
@@ -1578,6 +1793,4 @@
   renderHistoryTable();
   renderWalkinDocs();
   renderLiveCounters();
-  buildNps();
-  renderRatingEligibleChips();
 })();

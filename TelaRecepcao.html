@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="recepcao.css" />
 </head>
+
 <body>
   <div class="reception-shell">
     <!-- CABEÇALHO CLEAN (MESMA IDENTIDADE DE TelaCidadao.html) -->
@@ -27,8 +29,13 @@
         <div class="unit-badge">
           <span>📍 Central Rebouças</span>
         </div>
-        <a href="TelaCidadao.html" class="btn-icon" title="Abrir Tela do Cidadão">
-          📱 Ver Tela Cidadão
+        <a href="index.html" id="btn-voltar-index" class="btn-icon btn-home-link"
+          title="Voltar para a tela inicial (Index.html)">
+          🏠 Início
+        </a>
+        <a href="TelaGameVitrine2.html" id="btn-abrir-vitrine-game" class="btn-icon btn-vitrine-link"
+          title="Abrir Vitrine de Prêmios e Ranking da Gamificação">
+          🏆 Vitrine de Prêmios
         </a>
         <button type="button" id="btn-reset-demo" class="btn-icon" title="Restaurar dados de demonstração">
           ↺ Restaurar Demo
@@ -59,7 +66,9 @@
 
           <!-- Balão Motivacional Dinâmico -->
           <div id="mascot-speech" class="mascot-bubble" aria-live="polite">
-            💬 <strong>Dica do Aqualino:</strong> Mantenha o tempo entre a chegada do cidadão e o seu check-in abaixo de <strong>03m 00s</strong> (+30 pts) ou resolva a demanda direto na recepção para evitar fila no guichê (+50 pts)!
+            💬 <strong>Dica do Aqualino:</strong> Mantenha o tempo entre a chegada do cidadão e o seu check-in abaixo de
+            <strong>03m 00s</strong> (+30 pts) ou resolva a demanda direto na recepção para evitar fila no guichê (+50
+            pts)!
           </div>
 
           <!-- Barra de Progresso e Medalhas -->
@@ -75,8 +84,10 @@
             </div>
 
             <div class="badges-row">
-              <span class="badge-medal earned" id="medal-tempo" title="Média de espera abaixo do objetivo de 3 min">⚡ Ágil (&lt; 3 min)</span>
-              <span class="badge-medal earned" id="medal-resolvedor" title="Demandas resolvidas na própria recepção">🛡️ Evita-Filas</span>
+              <span class="badge-medal earned" id="medal-tempo" title="Média de espera abaixo do objetivo de 3 min">⚡
+                Ágil (&lt; 3 min)</span>
+              <span class="badge-medal earned" id="medal-resolvedor" title="Demandas resolvidas na própria recepção">🛡️
+                Evita-Filas</span>
               <span class="badge-medal" id="medal-ouro" title="Alcançar 500 pontos no dia">🏆 Recepção Ouro</span>
             </div>
           </div>
@@ -147,7 +158,7 @@
       </button>
       <button type="button" class="tab-btn" data-tab="tab-painel-nps">
         <span class="tab-icon">📺</span>
-        <span>3. Painel de Guichês ao Vivo &amp; Avaliação (NPS 0–10)</span>
+        <span>3. Painel de Guichês ao Vivo</span>
       </button>
     </nav>
 
@@ -163,7 +174,8 @@
               <div>
                 <span class="tag tag-blue">Aguardando Recepção</span>
                 <h2>Senhas com Check-in de Chegada</h2>
-                <p class="text-muted">Selecione a senha ou digite o número para conferir documentos, liberar para o guichê, resolver na recepção ou cancelar.</p>
+                <p class="text-muted">Selecione a senha ou digite o número para conferir documentos, liberar para o
+                  guichê, resolver na recepção ou cancelar.</p>
               </div>
               <button type="button" id="btn-simular-chegada" class="btn btn-secondary btn-sm">
                 + Simular Chegada de Cidadão
@@ -172,7 +184,8 @@
 
             <!-- Busca / Check-in rápido pelo número da senha -->
             <form id="form-busca-senha" class="quick-search-bar">
-              <input id="input-busca-senha" type="text" placeholder="Digite o nº da senha (ex: N-128, P-043, AG-205)..." />
+              <input id="input-busca-senha" type="text"
+                placeholder="Digite o nº da senha (ex: N-128, P-043, AG-205)..." />
               <button type="submit" class="btn btn-primary btn-sm">Localizar Senha</button>
             </form>
 
@@ -183,7 +196,8 @@
           <!-- Coluna Direita: Mesa de Conferência da Senha Selecionada -->
           <div class="card" id="inspection-card">
             <div id="inspection-empty" class="empty-state hidden">
-              <p>Todas as senhas da fila de chegada foram conferidas! Clique em <strong>+ Simular Chegada de Cidadão</strong> ou cadastre um cidadão sem celular na Aba 2.</p>
+              <p>Todas as senhas da fila de chegada foram conferidas! Clique em <strong>+ Simular Chegada de
+                  Cidadão</strong> ou cadastre um cidadão sem celular na Aba 2.</p>
             </div>
 
             <div id="inspection-content" class="inspection-body">
@@ -220,7 +234,8 @@
                   <strong>📄 Conferência de Documentos Requeridos</strong>
                   <button type="button" id="btn-marcar-todos-docs" class="btn-link">Marcar todos</button>
                 </div>
-                <p class="text-muted small-note">Verifique se o cidadão trouxe os documentos originais/cópia antes de liberar para o guichê:</p>
+                <p class="text-muted small-note">Verifique se o cidadão trouxe os documentos originais/cópia antes de
+                  liberar para o guichê:</p>
                 <ul id="insp-docs-list" class="doc-checklist"></ul>
               </div>
 
@@ -240,6 +255,52 @@
                   <button type="button" id="btn-abrir-cancelamento" class="btn btn-danger-outline btn-block">
                     ✕ Cancelar Atendimento da Senha (Exige Justificativa)
                   </button>
+
+                  <button type="button" id="btn-imprimir-senha-insp" class="btn btn-secondary btn-block">
+                    🖨️ Imprimir Senha Gerada
+                  </button>
+                </div>
+
+                <!-- Simulação Visual de Impressão da Senha na Mesa de Conferência (Aba 1) -->
+                <div id="insp-print-simulation" class="print-sim-box hidden" aria-live="polite">
+                  <div id="insp-print-status-bar" class="print-sim-status">
+                    <span class="status-dot"></span>
+                    <span id="insp-print-status-text">✓ Comprovante da senha impresso com sucesso!</span>
+                  </div>
+
+                  <div class="thermal-ticket-paper">
+                    <div class="thermal-head">
+                      <strong>SANEPAR • CURITIBA</strong>
+                      <small>Comprovante de Senha de Atendimento — Recepção</small>
+                    </div>
+                    <div class="thermal-code-box">
+                      <small>SENHA</small>
+                      <strong id="insp-print-code">N-128</strong>
+                      <span id="insp-print-category">Senha Normal</span>
+                    </div>
+                    <div class="thermal-details">
+                      <div><span>Cliente:</span><strong id="insp-print-citizen">Carlos Eduardo Lima</strong></div>
+                      <div><span>CPF/CNPJ:</span><strong id="insp-print-doc">341.892.109-20</strong></div>
+                      <div><span>Matrícula:</span><strong id="insp-print-matricula">409182-1</strong></div>
+                      <div><span>Unidade:</span><strong>Central Rebouças</strong></div>
+                      <div><span>Quando:</span><strong id="insp-print-datetime">Hoje • Chegada 16:10</strong></div>
+                      <div><span>Serviço:</span><strong id="insp-print-subject">Troca de Titularidade</strong></div>
+                      <div><span>Emissão:</span><strong id="insp-print-timestamp">Agora</strong></div>
+                    </div>
+                    <div class="thermal-qr-wrap">
+                      <div id="insp-print-qr" class="thermal-qr-box" aria-hidden="true"></div>
+                      <small>Apresente este comprovante no guichê de atendimento</small>
+                    </div>
+                  </div>
+
+                  <div class="btn-row">
+                    <button type="button" id="btn-insp-browser-print" class="btn btn-primary btn-sm flex-1">
+                      🖨️ Enviar p/ Impressora
+                    </button>
+                    <button type="button" id="btn-insp-close-print" class="btn btn-secondary btn-sm flex-1">
+                      Fechar Comprovante
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Painel de Justificativa de Cancelamento (pré-definida) -->
@@ -247,15 +308,22 @@
                   <label for="select-cancel-reason"><strong>Selecione a justificativa do cancelamento:</strong></label>
                   <select id="select-cancel-reason">
                     <option value="">-- Escolha um motivo pré-definido --</option>
-                    <option value="Cidadão não trouxe os documentos obrigatórios requeridos">Cidadão não trouxe os documentos obrigatórios requeridos</option>
-                    <option value="Ausência de procuração ou comprovação de vínculo com o imóvel">Ausência de procuração ou comprovação de vínculo com o imóvel</option>
-                    <option value="Demanda pertence a outra instituição (Prefeitura 156 / COPEL)">Demanda pertence a outra instituição (Prefeitura 156 / COPEL)</option>
-                    <option value="Desistência voluntária do cidadão na recepção">Desistência voluntária do cidadão na recepção</option>
-                    <option value="Cidadão optou por agendar para outra data">Cidadão optou por agendar para outra data</option>
+                    <option value="Cidadão não trouxe os documentos obrigatórios requeridos">Cidadão não trouxe os
+                      documentos obrigatórios requeridos</option>
+                    <option value="Ausência de procuração ou comprovação de vínculo com o imóvel">Ausência de procuração
+                      ou comprovação de vínculo com o imóvel</option>
+                    <option value="Demanda pertence a outra instituição (Prefeitura 156 / COPEL)">Demanda pertence a
+                      outra instituição (Prefeitura 156 / COPEL)</option>
+                    <option value="Desistência voluntária do cidadão na recepção">Desistência voluntária do cidadão na
+                      recepção</option>
+                    <option value="Cidadão optou por agendar para outra data">Cidadão optou por agendar para outra data
+                    </option>
                   </select>
                   <div class="btn-row">
-                    <button type="button" id="btn-fechar-cancelamento" class="btn btn-secondary btn-sm flex-1">Voltar</button>
-                    <button type="button" id="btn-confirmar-cancelamento" class="btn btn-danger btn-sm flex-1">Confirmar Cancelamento</button>
+                    <button type="button" id="btn-fechar-cancelamento"
+                      class="btn btn-secondary btn-sm flex-1">Voltar</button>
+                    <button type="button" id="btn-confirmar-cancelamento" class="btn btn-danger btn-sm flex-1">Confirmar
+                      Cancelamento</button>
                   </div>
                 </div>
               </div>
@@ -269,11 +337,75 @@
             <div>
               <span class="tag tag-blue">Gestão Pós-Conferência</span>
               <h3>Senhas Liberadas pela Recepção (Aguardando Atendimento no Guichê)</h3>
-              <p class="text-muted">Caso necessário após o check-in da recepção, altere a fila da senha (ex.: de Normal para Preferencial) ou cancele a senha mediante justificativa (ex.: desistência do cidadão).</p>
+              <p class="text-muted">Caso necessário após o check-in da recepção, altere a fila da senha (ex.: de Normal
+                para Preferencial) ou cancele a senha mediante justificativa (ex.: desistência do cidadão).</p>
             </div>
           </div>
 
           <div id="released-tickets-list" class="released-list"></div>
+        </div>
+
+        <!-- Atuação Direta sobre a Agência — Intervenções Ágeis na Distribuição de Filas (Mesmo Layout de TelaSupervisorLocal.html) -->
+        <div class="card" id="reception-agile-interventions-card">
+          <div class="card-head">
+            <span class="tag tag-teal">Atuação Direta sobre a Agência</span>
+            <h2>Intervenções Ágeis na Distribuição de Filas</h2>
+            <p class="text-muted">Transfira senhas em espera entre guichês, redistribua categorias de atendimento ou
+              priorize guichês imediatamente.</p>
+          </div>
+
+          <!-- Intervenção 1: Transferir senha de uma fila sobrecarregada para outro guichê -->
+          <form id="form-transferir-fila" class="intervention-box">
+            <h4>1. Transferir Senha em Espera / Sobrecarga para Outro Guichê</h4>
+            <div class="form-row-3">
+              <div class="field">
+                <label for="select-senha-intervencao">Senha Aguardando</label>
+                <select id="select-senha-intervencao"></select>
+              </div>
+              <div class="field">
+                <label for="select-guiche-destino">Guichê de Destino (Todos os Guichês Abertos)</label>
+                <select id="select-guiche-destino"></select>
+              </div>
+              <div class="field field-btn-align">
+                <button type="submit" class="btn btn-primary btn-block">
+                  ⇄ Transferir Senha
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Intervenção 2: Alterar regra de atendimento de um guichê ou abrir guichê extra -->
+          <form id="form-redistribuir-guiche" class="intervention-box">
+            <h4>2. Redistribuir Categoria de Fila ou Abrir Guichê de Reforço</h4>
+            <div class="form-row-3">
+              <div class="field">
+                <label for="select-guiche-regra">Selecionar Guichê da Agência</label>
+                <select id="select-guiche-regra"></select>
+              </div>
+              <div class="field">
+                <label for="select-nova-regra">Nova Regra de Atendimento Imediata</label>
+                <select id="select-nova-regra">
+                  <option value="Apoio Prioritário • Fila Normal + Agendados">Apoio Prioritário • Fila Normal +
+                    Agendados</option>
+                  <option value="Exclusivo Preferencial Legal (Idoso / PcD / Gestante)">Exclusivo Preferencial Legal
+                    (Idoso / PcD / Gestante)</option>
+                  <option value="Força-Tarefa • Negociação e Parcelamento de Débitos">Força-Tarefa • Negociação e
+                    Parcelamento de Débitos</option>
+                  <option value="Atendimento Rápido (Até 5 min • 2ª Via e Religação)">Atendimento Rápido (Até 5 min • 2ª
+                    Via e Religação)</option>
+                  <option value="Atendimento Universal (Todas as Filas)">Atendimento Universal (Todas as Filas)</option>
+                </select>
+              </div>
+              <div class="field field-btn-align">
+                <button type="submit" class="btn btn-teal btn-block">
+                  ⚡ Aplicar Regra
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Feedback da intervenção aplicada -->
+          <div id="intervention-feedback-banner" class="instant-response hidden" aria-live="polite"></div>
         </div>
 
         <!-- Histórico de Senhas Processadas na Recepção Hoje (com tempos de espera) -->
@@ -283,7 +415,8 @@
               <span class="tag tag-teal">Auditoria de Tempo e Resolução</span>
               <h3>Histórico de Atendimentos da Recepção Hoje</h3>
             </div>
-            <span class="text-muted small-note">Meta de espera (Chegada → Check-in Recepção): <strong>≤ 03m 00s</strong></span>
+            <span class="text-muted small-note">Meta de espera (Chegada → Check-in Recepção): <strong>≤ 03m
+                00s</strong></span>
           </div>
 
           <div class="table-responsive">
@@ -322,13 +455,16 @@
             <div class="preset-group">
               <span class="preset-caption">Exemplos rápidos de cidadãos no balcão:</span>
               <div class="chips-wrap">
-                <button type="button" class="chip chip-preset" data-doc="123.456.789-00" data-matricula="104892-3" data-name="Maria Clara Oliveira">
+                <button type="button" class="chip chip-preset" data-doc="123.456.789-00" data-matricula="104892-3"
+                  data-name="Maria Clara Oliveira">
                   Fatura vence hoje (Dona Maria)
                 </button>
-                <button type="button" class="chip chip-preset" data-doc="45.678.912/0001-34" data-matricula="339014-7" data-name="Padaria Pão Quente Ltda">
+                <button type="button" class="chip chip-preset" data-doc="45.678.912/0001-34" data-matricula="339014-7"
+                  data-name="Padaria Pão Quente Ltda">
                   CNPJ Comercial (Padaria)
                 </button>
-                <button type="button" class="chip chip-preset" data-doc="987.654.321-11" data-matricula="882310-5" data-name="Sr. João Pedro Santos">
+                <button type="button" class="chip chip-preset" data-doc="987.654.321-11" data-matricula="882310-5"
+                  data-name="Sr. João Pedro Santos">
                   Idoso • Contas em dia (Sr. João)
                 </button>
               </div>
@@ -382,7 +518,8 @@
                 <small>Código de Barras / PIX</small>
                 <code id="inv-code">82690000001-5 48900091202-4 61116104892-1 30000000001-8</code>
                 <div class="btn-row">
-                  <button type="button" id="btn-copy-code" class="btn btn-secondary btn-sm flex-1">Imprimir / Copiar 2ª Via</button>
+                  <button type="button" id="btn-copy-code" class="btn btn-secondary btn-sm flex-1">Imprimir / Copiar 2ª
+                    Via</button>
                   <button type="button" id="btn-confirm-fatura-resolvida" class="btn btn-teal btn-sm flex-1">
                     ⚡ Entregue na Recepção (Atendimento Evitado • +50 pts)
                   </button>
@@ -411,18 +548,29 @@
                 <button type="button" id="btn-voice-sim-stop" class="btn-voice-done">Concluir fala</button>
               </div>
 
-              <textarea id="input-problema" rows="3" placeholder="Descreva a demanda relatada pelo cidadão ou use os atalhos abaixo..."></textarea>
+              <textarea id="input-problema" rows="3"
+                placeholder="Descreva a demanda relatada pelo cidadão ou use os atalhos abaixo..."></textarea>
             </div>
 
             <div class="preset-group">
               <span class="preset-caption">Assuntos frequentes na recepção:</span>
               <div class="chips-wrap">
-                <button type="button" class="chip chip-topic" data-text="Preciso fazer a troca de titularidade da conta de água para o meu nome">Troca de titularidade</button>
-                <button type="button" class="chip chip-topic" data-text="Quero negociar e parcelar faturas atrasadas da minha matrícula">Parcelamento de débitos</button>
-                <button type="button" class="chip chip-topic" data-text="Tem um bueiro de água da chuva entupido e buraco no asfalto na minha rua">Bueiro / Asfalto (Prefeitura 156)</button>
-                <button type="button" class="chip chip-topic" data-text="Estou com problema na conta de energia elétrica e poste de luz da Copel">Conta de luz / Poste (COPEL)</button>
-                <button type="button" class="chip chip-topic" data-text="Quero solicitar inclusão na Tarifa Social Água Solidária">Tarifa Social</button>
-                <button type="button" class="chip chip-topic" data-text="Preciso pedir religação de água após pagamento">Religação de água</button>
+                <button type="button" class="chip chip-topic"
+                  data-text="Preciso fazer a troca de titularidade da conta de água para o meu nome">Troca de
+                  titularidade</button>
+                <button type="button" class="chip chip-topic"
+                  data-text="Quero negociar e parcelar faturas atrasadas da minha matrícula">Parcelamento de
+                  débitos</button>
+                <button type="button" class="chip chip-topic"
+                  data-text="Tem um bueiro de água da chuva entupido e buraco no asfalto na minha rua">Bueiro / Asfalto
+                  (Prefeitura 156)</button>
+                <button type="button" class="chip chip-topic"
+                  data-text="Estou com problema na conta de energia elétrica e poste de luz da Copel">Conta de luz /
+                  Poste (COPEL)</button>
+                <button type="button" class="chip chip-topic"
+                  data-text="Quero solicitar inclusão na Tarifa Social Água Solidária">Tarifa Social</button>
+                <button type="button" class="chip chip-topic"
+                  data-text="Preciso pedir religação de água após pagamento">Religação de água</button>
               </div>
             </div>
 
@@ -438,7 +586,8 @@
               <div id="triage-external-box" class="redirect-box hidden"></div>
 
               <div class="presencial-question">
-                <h4>O cidadão ainda deseja atendimento nos guichês da SANEPAR ou a demanda já foi resolvida aqui na recepção?</h4>
+                <h4>O cidadão ainda deseja atendimento nos guichês da SANEPAR ou a demanda já foi resolvida aqui na
+                  recepção?</h4>
                 <div class="btn-row">
                   <button type="button" id="btn-nao-presencial" class="btn btn-teal flex-1">
                     ⚡ Resolvido na Recepção (+50 pts • Evitar Fila)
@@ -456,7 +605,8 @@
             <div class="card-head">
               <span class="tag tag-blue">Emissão de Senha ou Agendamento</span>
               <h2>2. Documentos, Tipo de Senha e Data</h2>
-              <p class="text-muted">Confira os documentos do cidadão e gere a senha para hoje (com check-in imediato) ou agende para outro dia.</p>
+              <p class="text-muted">Confira os documentos do cidadão e gere a senha para hoje (com check-in imediato) ou
+                agende para outro dia.</p>
             </div>
 
             <div class="docs-panel">
@@ -531,7 +681,8 @@
             <div id="subflow-agendar" class="sub-panel hidden">
               <h3>Agendamento com Suavização de Picos de Demanda</h3>
               <div class="smoothing-banner">
-                <strong>Suavização ativa:</strong> Os <strong>primeiros dias do mês (1 a 5)</strong> concentram historicamente o maior volume de atendimentos não agendados e ficam bloqueados para novos agendamentos.
+                <strong>Suavização ativa:</strong> Os <strong>primeiros dias do mês (1 a 5)</strong> concentram
+                historicamente o maior volume de atendimentos não agendados e ficam bloqueados para novos agendamentos.
               </div>
 
               <div class="demand-legend">
@@ -554,105 +705,81 @@
 
             <!-- Comprovante de Senha Emitida na Recepção -->
             <div id="walkin-ticket-feedback" class="instant-response hidden" aria-live="polite"></div>
+
+            <!-- Botão para Imprimir a Senha Gerada e Simulação Visual de Impressão (Igual à TelaCidadao.html) -->
+            <div class="ticket-print-actions">
+              <button type="button" id="btn-imprimir-senha" class="btn btn-secondary btn-block">
+                🖨️ Imprimir Senha Gerada
+              </button>
+            </div>
+
+            <div id="ticket-print-simulation" class="print-sim-box hidden" aria-live="polite">
+              <div id="print-sim-status-bar" class="print-sim-status">
+                <span class="status-dot"></span>
+                <span id="print-sim-status-text">✓ Comprovante da senha impresso com sucesso!</span>
+              </div>
+
+              <div class="thermal-ticket-paper">
+                <div class="thermal-head">
+                  <strong>SANEPAR • CURITIBA</strong>
+                  <small>Comprovante de Senha de Atendimento — Recepção</small>
+                </div>
+                <div class="thermal-code-box">
+                  <small>SENHA</small>
+                  <strong id="print-ticket-code">N-129</strong>
+                  <span id="print-ticket-category">Senha Normal (Convencional)</span>
+                </div>
+                <div class="thermal-details">
+                  <div><span>Cliente:</span><strong id="print-ticket-citizen">Cidadão Presencial</strong></div>
+                  <div><span>CPF/CNPJ:</span><strong id="print-ticket-doc">Não informado</strong></div>
+                  <div><span>Matrícula:</span><strong id="print-ticket-matricula">104892-3</strong></div>
+                  <div><span>Unidade:</span><strong id="print-ticket-unit">Central Rebouças</strong></div>
+                  <div><span>Quando:</span><strong id="print-ticket-datetime">Hoje • Fila Presencial</strong></div>
+                  <div><span>Serviço:</span><strong id="print-ticket-subject">Atendimento Geral SANEPAR</strong></div>
+                  <div><span>Emissão:</span><strong id="print-ticket-timestamp">Agora</strong></div>
+                </div>
+                <div class="thermal-qr-wrap">
+                  <div id="print-ticket-qr" class="thermal-qr-box" aria-hidden="true"></div>
+                  <small>Apresente este comprovante no guichê de atendimento</small>
+                </div>
+              </div>
+
+              <div class="btn-row">
+                <button type="button" id="btn-browser-print" class="btn btn-primary btn-sm flex-1">
+                  🖨️ Enviar p/ Impressora
+                </button>
+                <button type="button" id="btn-close-print-sim" class="btn btn-secondary btn-sm flex-1">
+                  Fechar Comprovante
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- =================================================================
-           MÓDULO 3: PAINEL DE SENHAS EM ATENDIMENTO & AVALIAÇÃO (NPS 0-10)
+           MÓDULO 3: PAINEL DE SENHAS EM ATENDIMENTO NOS GUICHÊS
            ================================================================= -->
       <section id="tab-painel-nps" class="tab-pane hidden">
-        <div class="conferencia-layout">
-          <!-- Painel ao Vivo de Senhas sendo atendidas no momento -->
-          <div class="card">
-            <div class="card-head-row">
-              <div>
-                <span class="tag tag-teal">Fila Digital • Tempo Real</span>
-                <h2>Senhas Sendo Atendidas nos Guichês</h2>
-                <p class="text-muted">Acompanhe as chamadas em andamento na unidade para orientar os cidadãos na recepção.</p>
-              </div>
-              <button type="button" id="btn-simular-avanco" class="btn btn-secondary btn-sm">
-                ▶ Simular Chamada no Painel
-              </button>
+        <!-- Painel ao Vivo de Senhas sendo atendidas no momento -->
+        <div class="card">
+          <div class="card-head-row">
+            <div>
+              <span class="tag tag-teal">Fila Digital • Tempo Real</span>
+              <h2>Senhas Sendo Atendidas nos Guichês</h2>
+              <p class="text-muted">Acompanhe as chamadas em andamento na unidade para orientar os cidadãos na
+                recepção.</p>
             </div>
-
-            <div id="live-counters" class="guiches-grid"></div>
-
-            <div class="history-bar">
-              <small>Últimas senhas chamadas:</small>
-              <div id="recent-calls-list" class="history-pills"></div>
-            </div>
+            <button type="button" id="btn-simular-avanco" class="btn btn-secondary btn-sm">
+              ▶ Simular Chamada no Painel
+            </button>
           </div>
 
-          <!-- Avaliação do Atendimento e NPS (0-10) para Cidadão na Recepção -->
-          <div class="card">
-            <div id="rating-form-card">
-              <div class="card-head">
-                <span class="tag tag-blue">Pesquisa de Satisfação</span>
-                <h2>Avaliação do Atendimento (NPS 0–10)</h2>
-                <p class="text-muted">Informe a senha do cidadão. A avaliação só é liberada após validar que a senha já teve seu atendimento encerrado ou cancelado.</p>
-              </div>
+          <div id="live-counters" class="guiches-grid"></div>
 
-              <!-- Validação Obrigatória da Senha antes de liberar a Avaliação -->
-              <div class="ticket-validation-box mt-14">
-                <form id="form-validar-senha-avaliacao" class="quick-search-bar">
-                  <input id="input-senha-avaliacao" type="text" placeholder="Indique a senha encerrada ou cancelada (ex: N-126, N-127, N-123)..." />
-                  <button type="submit" id="btn-validar-senha-avaliacao" class="btn btn-primary btn-sm">Validar Senha</button>
-                </form>
-
-                <div class="preset-group">
-                  <span class="preset-caption">Senhas com atendimento encerrado ou cancelado (toque para preencher):</span>
-                  <div id="rating-valid-chips" class="chips-wrap"></div>
-                </div>
-
-                <div id="rating-validation-feedback" class="validation-banner hidden" aria-live="polite"></div>
-              </div>
-
-              <!-- Perguntas de Avaliação (bloqueadas até validar uma senha elegível) -->
-              <div id="rating-questions-wrap" class="rating-locked">
-                <div class="rating-section mt-14">
-                  <label class="section-label">
-                    1. Em uma escala de <strong>0 a 10</strong>, o quanto você recomendaria o atendimento da SANEPAR a um amigo ou familiar? <span class="tag tag-teal">NPS</span>
-                  </label>
-                  <div id="nps-scale" class="nps-row" role="radiogroup" aria-label="Escala NPS de 0 a 10"></div>
-                  <div class="nps-legend">
-                    <span>0 • Nada provável</span>
-                    <strong id="nps-selected-label"></strong>
-                    <span>10 • Extremamente provável</span>
-                  </div>
-                </div>
-
-                <div class="rating-section mt-14">
-                  <label class="section-label">2. Avaliação geral do atendimento:</label>
-                  <div id="star-rating" class="stars-bar" role="radiogroup" aria-label="Avaliação geral de 1 a 5 estrelas">
-                    <button type="button" class="star" data-star="1">★</button>
-                    <button type="button" class="star" data-star="2">★</button>
-                    <button type="button" class="star" data-star="3">★</button>
-                    <button type="button" class="star" data-star="4">★</button>
-                    <button type="button" class="star" data-star="5">★</button>
-                  </div>
-                  <small id="star-label" class="text-muted">Selecione de 1 a 5 estrelas</small>
-                </div>
-
-                <div class="field mt-14">
-                  <label for="input-comentario">Comentário do cidadão (opcional)</label>
-                  <textarea id="input-comentario" rows="2" placeholder="Observação sobre o atendimento..."></textarea>
-                </div>
-
-                <button type="button" id="btn-enviar-avaliacao" class="btn btn-primary btn-block mt-14" disabled>
-                  Registrar Avaliação do Cidadão
-                </button>
-              </div>
-            </div>
-
-            <div id="rating-thanks-card" class="resolved-box hidden">
-              <div class="icon-badge-ok">★</div>
-              <h3>Avaliação registrada com sucesso!</h3>
-              <p id="thanks-summary" class="text-muted"></p>
-              <button type="button" id="btn-nova-avaliacao" class="btn btn-primary btn-sm">
-                Registrar Nova Avaliação
-              </button>
-            </div>
+          <div class="history-bar">
+            <small>Últimas senhas chamadas:</small>
+            <div id="recent-calls-list" class="history-pills"></div>
           </div>
         </div>
       </section>
@@ -663,6 +790,10 @@
     </footer>
   </div>
 
+  <!-- Área dedicada exclusivamente à impressão do Comprovante de Senha de Atendimento -->
+  <div id="print-only-mount" class="print-only-mount" aria-hidden="true"></div>
+
   <script src="recepcao.js"></script>
 </body>
+
 </html>

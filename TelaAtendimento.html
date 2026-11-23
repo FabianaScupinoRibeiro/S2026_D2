@@ -26,7 +26,7 @@
       <!-- Controle de Jornada do Atendente (Início do dia, Pausas, Fim do dia) -->
       <div class="shift-controls" aria-label="Controle de jornada do atendente">
         <span id="shift-status-badge" class="tag tag-green">● Jornada Ativa (Disponível)</span>
-        <button type="button" id="btn-iniciar-dia" class="btn-shift hidden" title="Iniciar expediente do dia">
+        <button type="button" id="btn-iniciar-dia" class="btn-shift" title="Iniciar expediente do dia e zerar indicadores diários">
           ▶ Iniciar Dia
         </button>
         <div class="pause-group" id="pause-controls-group">
@@ -46,8 +46,8 @@
       </div>
 
       <div class="topbar-links">
-        <a href="TelaCidadao.html" class="btn-icon">📱 Tela Cidadão</a>
-        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Tela Recepção</a>
+        <a href="index.html" id="btn-voltar-index" class="btn-icon btn-home-link" title="Voltar para a tela inicial (Index.html)">🏠 Início</a>
+        <a href="TelaGameVitrine2.html" id="btn-abrir-vitrine-game" class="btn-icon btn-vitrine-link" title="Abrir Vitrine de Prêmios e Ranking da Gamificação">🏆 Vitrine de Prêmios</a>
         <button type="button" id="btn-reset-demo" class="btn-icon">↺ Restaurar Demo</button>
       </div>
     </header>

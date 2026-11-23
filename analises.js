@@ -1841,8 +1841,10 @@
     setTimeout(() => $("#input-ask-aqualino-exec").focus(), 250);
   }
 
-  $("#btn-falar-aqualino-top").addEventListener("click", focusAqualinoExecInput);
-  $("#btn-floating-aqualino-exec").addEventListener("click", focusAqualinoExecInput);
+  const btnFloatingAqualinoExec = $("#btn-floating-aqualino-exec");
+  if (btnFloatingAqualinoExec) {
+    btnFloatingAqualinoExec.addEventListener("click", focusAqualinoExecInput);
+  }
 
   // Restaurar visão macro estadual
   $("#btn-reset-exec").addEventListener("click", () => {

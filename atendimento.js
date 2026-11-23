@@ -238,7 +238,7 @@
       badge.textContent = state.inService
         ? "● Em Atendimento no Guichê"
         : "● Jornada Ativa (Disponível)";
-      btnStart.classList.add("hidden");
+      btnStart.classList.remove("hidden");
       pauseGroup.classList.remove("hidden");
       btnEnd.classList.remove("hidden");
       btnPause.textContent = "⏸ Iniciar Pausa";
@@ -253,7 +253,7 @@
     } else if (state.shiftState === "paused") {
       badge.className = "tag tag-amber";
       badge.textContent = `⏸ Em ${state.pauseReason}`;
-      btnStart.classList.add("hidden");
+      btnStart.classList.remove("hidden");
       pauseGroup.classList.remove("hidden");
       btnPause.textContent = "▶ Retomar Atividades";
       idleBadge.className = "tag tag-amber";
@@ -271,11 +271,33 @@
 
   $("#btn-iniciar-dia").addEventListener("click", () => {
     state.shiftState = "active";
+    state.inService = false;
+    state.activeTicket = null;
+    state.callCount = 0;
+
+    // Zera os 4 indicadores abaixo da sessão do Aqualino:
+    // 1) Satisfação dos Cidadãos
+    state.satisfactionScores = [];
+    state.npsScores = [];
+    // 2) Tempo de Atendimento
+    state.serviceDurationsSec = [];
+    state.currentServiceSeconds = 0;
+    // 3) Tempo Ocioso Acumulado
+    state.idleSeconds = 0;
+    // 4) Resolvidos vs. Não Resolvidos
+    state.resolvedCount = 0;
+    state.unresolvedCount = 0;
+
+    $("#desk-active-card").classList.add("hidden");
+    $("#desk-empty-card").classList.remove("hidden");
+    $("#desk-service-timer").textContent = "00m 00s";
+
     updateAqualino(
       0,
-      "☀️ <strong>Bom trabalho!</strong> Sua jornada foi iniciada. Clique em <strong>Chamar Próxima Senha</strong> para atender o próximo cidadão!"
+      "☀️ <strong>Bom trabalho!</strong> Sua jornada foi iniciada e os indicadores do dia (Satisfação dos Cidadãos, Tempo de Atendimento, Tempo Ocioso Acumulado e Resolvidos vs. Não Resolvidos) foram zerados. Clique em <strong>Chamar Próxima Senha</strong> para atender o próximo cidadão!"
     );
     updateShiftUI();
+    renderDayQueue();
   });
 
   $("#btn-pausar-retomar").addEventListener("click", () => {
@@ -335,9 +357,13 @@
     $("#xp-fill").style.width = `${pct}%`;
     $("#xp-progress-label").textContent = `${state.points} / 800 pts`;
 
-    const avgStars =
-      state.satisfactionScores.reduce((a, b) => a + b, 0) / state.satisfactionScores.length;
-    const avgNps = state.npsScores.reduce((a, b) => a + b, 0) / state.npsScores.length;
+    const hasEval = state.satisfactionScores.length > 0;
+    const avgStars = hasEval
+      ? state.satisfactionScores.reduce((a, b) => a + b, 0) / state.satisfactionScores.length
+      : 0;
+    const avgNps = state.npsScores.length > 0
+      ? state.npsScores.reduce((a, b) => a + b, 0) / state.npsScores.length
+      : 0;
 
     $("#kpi-satisfaction").textContent = `${avgStars.toFixed(1).replace(".", ",")} ★`;
     $("#kpi-nps-avg").textContent = avgNps.toFixed(1).replace(".", ",");
@@ -350,15 +376,17 @@
       $("#mascot-level").textContent = "Nível 4 • Especialista";
     }
 
-    const avgSec = Math.round(
-      state.serviceDurationsSec.reduce((a, b) => a + b, 0) / state.serviceDurationsSec.length
-    );
+    const avgSec = state.serviceDurationsSec.length > 0
+      ? Math.round(
+          state.serviceDurationsSec.reduce((a, b) => a + b, 0) / state.serviceDurationsSec.length
+        )
+      : 0;
     $("#kpi-avg-service-time").textContent = formatSeconds(avgSec);
     $("#kpi-current-timer-badge").textContent = `Atual: ${formatSeconds(state.currentServiceSeconds)}`;
     $("#kpi-idle-time").textContent = formatSeconds(state.idleSeconds);
 
     const totalCases = state.resolvedCount + state.unresolvedCount;
-    const resPct = totalCases > 0 ? Math.round((state.resolvedCount / totalCases) * 100) : 100;
+    const resPct = totalCases > 0 ? Math.round((state.resolvedCount / totalCases) * 100) : 0;
     $("#kpi-resolved-ratio").textContent = `${state.resolvedCount} / ${state.unresolvedCount}`;
     $("#kpi-resolved-pct").textContent = `${resPct}%`;
     $("#kpi-resolved-num").textContent = state.resolvedCount;
