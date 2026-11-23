@@ -112,6 +112,15 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-home-link {
+  background: var(--primary-light);
+  border-color: #93c5fd;
+  color: var(--primary);
 }
 
 .btn-icon:hover {

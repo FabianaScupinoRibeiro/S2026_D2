@@ -1404,10 +1404,14 @@
     }
 
     if (/(prêmio|premio|simulador|simular|ouro|prata|faixa|catálogo|catalogo)/i.test(q)) {
-      return `No <strong>Bloco 3</strong>, à esquerda você parametriza as <strong>Faixas de Pontuação Mínima (Ouro e Prata)</strong> exigidas para Recepcionistas, Atendentes, Supervisores e Equipe da Unidade (a definição dos itens de prêmio fica em outra tela dedicada). À direita, no <strong>Simulador Estratégico</strong>, você testa em tempo real a pontuação final e verifica qual faixa (Ouro ou Prata) seria alcançada!`;
+      return `No <strong>Bloco 3</strong>, à esquerda você parametriza as <strong>Faixas de Pontuação Mínima (Ouro e Prata)</strong> exigidas para Recepcionistas, Atendentes, Supervisores e Equipe da Unidade. À direita, no <strong>Simulador Estratégico</strong>, você testa em tempo real a pontuação final e verifica qual faixa (Ouro ou Prata) seria alcançada! E na seção <strong>2. Gestão de Patrocinadores & Vínculo de Itens Doados</strong> abaixo, você vincula os itens doados pelos patrocinadores a cada categoria!`;
     }
 
-    return `Estou aqui para ajudar você a utilizar a <strong>Tela de Parametrização de Gamificação (TelaGameParam)</strong>! Você pode: <strong>1)</strong> Criar, ativar, encerrar ou apagar ciclos ainda não ativados; <strong>2)</strong> Visualizar ciclos com <em>Histórico Encerrado</em> em modo somente leitura; <strong>3)</strong> Habilitar <em>Recepcionistas, Atendentes e Supervisores Locais</em> e ajustar o peso entre <em>Mérito Individual e Mérito do Grupo</em>; e <strong>4)</strong> Parametrizar as faixas de pontuação Ouro e Prata e simular notas em tempo real.`;
+    if (/(patrocinador|item|doado|estoque|doação|doacao|positivo|ifood|vincular|vínculo|vinculo)/i.test(q)) {
+      return `Na seção <strong>2. Gestão de Patrocinadores & Vínculo de Itens Doados</strong> desta tela: no <strong>Passo 1</strong> você cadastra novos patrocinadores (como <em>Positivo Informática</em>, <em>iFood</em>, etc.); no <strong>Passo 2</strong> você registra os itens doados no estoque; e no <strong>Passo 3</strong> você vincula esses itens aos prêmios de cada categoria (Recepcionistas, Atendentes, Supervisores ou Equipe) e faixa (Ouro ou Prata) do ciclo em andamento!`;
+    }
+
+    return `Estou aqui para ajudar você a utilizar a <strong>Tela de Parametrização de Gamificação (TelaGameParam)</strong>! Você pode: <strong>1)</strong> Criar, ativar, encerrar ou apagar ciclos ainda não ativados; <strong>2)</strong> Habilitar <em>Recepcionistas, Atendentes e Supervisores Locais</em> e ajustar o peso entre <em>Mérito Individual e Mérito do Grupo</em>; <strong>3)</strong> Parametrizar as faixas Ouro e Prata e simular notas; e <strong>4)</strong> Cadastrar patrocinadores, itens doados e vinculá-los aos prêmios de cada categoria do ciclo vigente!`;
   }
 
   function askAqualinoGame(questionText) {
@@ -1501,9 +1505,621 @@
 
   $("#btn-floating-aqualino-game").addEventListener("click", focusAqualinoGameInput);
 
+  // =========================================================================
+  // SESSÃO 2: GESTÃO DE PATROCINADORES, ITENS DOADOS E VÍNCULO AO CICLO VIGENTE
+  // (Movida de TelaGameVitrine2.html com todas as suas funcionalidades)
+  // =========================================================================
+  function getInitialSponsorsDb() {
+    return {
+      sponsors: [
+        {
+          id: "SP_POSITIVO",
+          name: "Positivo Informática",
+          icon: "💻",
+          segment: "Tecnologia & Periféricos",
+          agreement: "Termo Doação #2026/01 (Custo Zero SANEPAR)",
+        },
+        {
+          id: "SP_IFOOD",
+          name: "iFood",
+          icon: "🍔",
+          segment: "Alimentação & Vouchers",
+          agreement: "Convênio Parceria #2026/04 (Custo Zero SANEPAR)",
+        },
+        {
+          id: "SP_SESC",
+          name: "SESC Paraná",
+          icon: "🏖️",
+          segment: "Lazer, Hotelaria & Cultura",
+          agreement: "Acordo Cooperação #2026/07",
+        },
+        {
+          id: "SP_FUNDACAO",
+          name: "Fundação Sanepar & Senac",
+          icon: "🎓",
+          segment: "Educação & Certificações",
+          agreement: "Programa Institucional #2026/09",
+        },
+      ],
+      donatedItems: [
+        {
+          id: "DI_1",
+          sponsorId: "SP_POSITIVO",
+          name: "Kit Mouse & Teclado Sem Fio Ergonômico Positivo",
+          totalQty: 60,
+          linkedQty: 42,
+        },
+        {
+          id: "DI_2",
+          sponsorId: "SP_POSITIVO",
+          name: "Notebook Positivo Vision C15 + Mochila Executiva",
+          totalQty: 20,
+          linkedQty: 15,
+        },
+        {
+          id: "DI_3",
+          sponsorId: "SP_POSITIVO",
+          name: "Headset USB Noise Cancelling Positivo",
+          totalQty: 45,
+          linkedQty: 22,
+        },
+        {
+          id: "DI_4",
+          sponsorId: "SP_POSITIVO",
+          name: "Tablet Positivo Tab Q10 + Capa Teclado Bluetooth",
+          totalQty: 20,
+          linkedQty: 12,
+        },
+        {
+          id: "DI_5",
+          sponsorId: "SP_IFOOD",
+          name: "Voucher iFood Benefícios R$ 500 (Cartão Digital)",
+          totalQty: 50,
+          linkedQty: 35,
+        },
+        {
+          id: "DI_6",
+          sponsorId: "SP_IFOOD",
+          name: "Voucher iFood Benefícios R$ 350 (Cartão Digital)",
+          totalQty: 60,
+          linkedQty: 44,
+        },
+        {
+          id: "DI_7",
+          sponsorId: "SP_IFOOD",
+          name: "Experiência Gastronômica Coletiva iFood R$ 2.500 (Equipe)",
+          totalQty: 10,
+          linkedQty: 6,
+        },
+        {
+          id: "DI_8",
+          sponsorId: "SP_SESC",
+          name: "Fim de Semana Hotel SESC Caiobá ou Foz (c/ Acompanhante)",
+          totalQty: 15,
+          linkedQty: 10,
+        },
+        {
+          id: "DI_9",
+          sponsorId: "SP_FUNDACAO",
+          name: "Bolsa Certificação Executiva Senac + Troféu Aqualino",
+          totalQty: 20,
+          linkedQty: 12,
+        },
+      ],
+      activeCyclePrizeBuckets: [
+        {
+          category: "RECEPCAO",
+          tier: "OURO",
+          minPts: 1100,
+          items: [
+            { linkId: "L1", itemId: "DI_1", sponsorName: "Positivo Informática", sponsorIcon: "💻", itemName: "Kit Mouse & Teclado Sem Fio Ergonômico Positivo", qty: 22 },
+            { linkId: "L2", itemId: "DI_3", sponsorName: "Positivo Informática", sponsorIcon: "💻", itemName: "Headset USB Noise Cancelling Positivo", qty: 22 },
+          ],
+        },
+        {
+          category: "RECEPCAO",
+          tier: "PRATA",
+          minPts: 850,
+          items: [
+            { linkId: "L3", itemId: "DI_6", sponsorName: "iFood", sponsorIcon: "🍔", itemName: "Voucher iFood Benefícios R$ 350 (Cartão Digital)", qty: 44 },
+          ],
+        },
+        {
+          category: "ATENDENTE",
+          tier: "OURO",
+          minPts: 1250,
+          items: [
+            { linkId: "L4", itemId: "DI_2", sponsorName: "Positivo Informática", sponsorIcon: "💻", itemName: "Notebook Positivo Vision C15 + Mochila Executiva", qty: 15 },
+          ],
+        },
+        {
+          category: "ATENDENTE",
+          tier: "PRATA",
+          minPts: 950,
+          items: [
+            { linkId: "L5", itemId: "DI_5", sponsorName: "iFood", sponsorIcon: "🍔", itemName: "Voucher iFood Benefícios R$ 500 (Cartão Digital)", qty: 35 },
+          ],
+        },
+        {
+          category: "SUPERVISOR",
+          tier: "OURO",
+          minPts: 1200,
+          items: [
+            { linkId: "L6", itemId: "DI_8", sponsorName: "SESC Paraná", sponsorIcon: "🏖️", itemName: "Fim de Semana Hotel SESC Caiobá ou Foz (c/ Acompanhante)", qty: 10 },
+          ],
+        },
+        {
+          category: "SUPERVISOR",
+          tier: "PRATA",
+          minPts: 920,
+          items: [
+            { linkId: "L7", itemId: "DI_4", sponsorName: "Positivo Informática", sponsorIcon: "💻", itemName: "Tablet Positivo Tab Q10 + Capa Teclado Bluetooth", qty: 12 },
+          ],
+        },
+        {
+          category: "GRUPO",
+          tier: "OURO",
+          minPts: 1050,
+          items: [
+            { linkId: "L8", itemId: "DI_7", sponsorName: "iFood", sponsorIcon: "🍔", itemName: "Experiência Gastronômica Coletiva iFood R$ 2.500 (Equipe)", qty: 6 },
+          ],
+        },
+        {
+          category: "GRUPO",
+          tier: "PRATA",
+          minPts: 820,
+          items: [
+            { linkId: "L9", itemId: "DI_9", sponsorName: "Fundação Sanepar & Senac", sponsorIcon: "🎓", itemName: "Bolsa Certificação Executiva Senac + Troféu Aqualino", qty: 12 },
+          ],
+        },
+      ],
+    };
+  }
+
+  let sponsorsDb = getInitialSponsorsDb();
+  state.adminStockSponsorFilter = "ALL";
+
+  function saveSharedSponsorsData() {
+    try {
+      localStorage.setItem(
+        "sanepar_gamification_sponsors_stock_v1",
+        JSON.stringify(sponsorsDb)
+      );
+    } catch (_) {}
+  }
+
+  function loadSharedSponsorsData() {
+    try {
+      const raw = localStorage.getItem("sanepar_gamification_sponsors_stock_v1");
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (
+        parsed &&
+        Array.isArray(parsed.sponsors) &&
+        Array.isArray(parsed.donatedItems) &&
+        Array.isArray(parsed.activeCyclePrizeBuckets)
+      ) {
+        sponsorsDb = parsed;
+      }
+    } catch (_) {}
+  }
+
+  loadSharedSponsorsData();
+
+  $$(".main-tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      $$(".main-tab-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const targetId = btn.dataset.scrollTarget;
+      const targetEl = targetId ? $(`#${targetId}`) : null;
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+
+  function showAdminFeedback(htmlMsg) {
+    const fb = $("#admin-feedback-banner");
+    if (!fb) return;
+    fb.innerHTML = htmlMsg;
+    fb.classList.remove("hidden");
+  }
+
+  function renderAdminSponsorsAndDropdowns() {
+    const countTag = $("#admin-sponsors-count-tag");
+    if (!countTag) return;
+    countTag.textContent = `${sponsorsDb.sponsors.length} Patrocinadores`;
+
+    const listEl = $("#admin-sponsors-list");
+    listEl.innerHTML = "";
+    sponsorsDb.sponsors.forEach((sp) => {
+      const itemsCount = sponsorsDb.donatedItems.filter((it) => it.sponsorId === sp.id).length;
+      const isFiltered = state.adminStockSponsorFilter === sp.id;
+
+      const chip = document.createElement("div");
+      chip.className = `sponsor-chip-card${isFiltered ? " active" : ""}`;
+      chip.innerHTML = `
+        <strong>${sp.icon} ${sp.name} (${itemsCount} itens)</strong>
+        <span class="text-muted">${sp.segment} • ${sp.agreement}</span>
+      `;
+      chip.addEventListener("click", () => {
+        state.adminStockSponsorFilter =
+          state.adminStockSponsorFilter === sp.id ? "ALL" : sp.id;
+        $("#filter-stock-sponsor").value = state.adminStockSponsorFilter;
+        renderAdminSponsorsAndDropdowns();
+        renderAdminDonatedItemsStock();
+      });
+      listEl.appendChild(chip);
+    });
+
+    const selItemSponsor = $("#sel-item-sponsor");
+    selItemSponsor.innerHTML = "";
+    sponsorsDb.sponsors.forEach((sp) => {
+      const opt = document.createElement("option");
+      opt.value = sp.id;
+      opt.textContent = `${sp.icon} ${sp.name}`;
+      selItemSponsor.appendChild(opt);
+    });
+
+    const selFilterStock = $("#filter-stock-sponsor");
+    selFilterStock.innerHTML = `<option value="ALL">Todos os Patrocinadores (${sponsorsDb.sponsors.length})</option>`;
+    sponsorsDb.sponsors.forEach((sp) => {
+      const opt = document.createElement("option");
+      opt.value = sp.id;
+      opt.textContent = `${sp.icon} ${sp.name}`;
+      selFilterStock.appendChild(opt);
+    });
+    selFilterStock.value = state.adminStockSponsorFilter;
+  }
+
+  function renderAdminDonatedItemsStock() {
+    const tbody = $("#donated-items-tbody");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const filtered = sponsorsDb.donatedItems.filter(
+      (it) =>
+        state.adminStockSponsorFilter === "ALL" ||
+        it.sponsorId === state.adminStockSponsorFilter
+    );
+
+    filtered.forEach((it) => {
+      const sp = sponsorsDb.sponsors.find((s) => s.id === it.sponsorId) || sponsorsDb.sponsors[0];
+      const available = Math.max(0, it.totalQty - it.linkedQty);
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><strong>${sp.icon} ${sp.name}</strong></td>
+        <td><strong>${it.name}</strong></td>
+        <td>${it.totalQty} unid.</td>
+        <td>${it.linkedQty} unid.</td>
+        <td>
+          <span class="tag ${available > 0 ? "tag-green" : "tag-amber"}">
+            ${available} disponíveis
+          </span>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const selLinkItem = $("#sel-link-donated-item");
+    const prevSelected = selLinkItem.value;
+    selLinkItem.innerHTML = "";
+    sponsorsDb.donatedItems.forEach((it) => {
+      const sp = sponsorsDb.sponsors.find((s) => s.id === it.sponsorId) || sponsorsDb.sponsors[0];
+      const available = Math.max(0, it.totalQty - it.linkedQty);
+      if (available > 0) {
+        const opt = document.createElement("option");
+        opt.value = it.id;
+        opt.textContent = `${sp.icon} ${sp.name} — ${it.name} (Saldo: ${available} unid.)`;
+        selLinkItem.appendChild(opt);
+      }
+    });
+    if (prevSelected && Array.from(selLinkItem.options).some((o) => o.value === prevSelected)) {
+      selLinkItem.value = prevSelected;
+    }
+    syncLinkQtyMaxWithSelectedStock();
+  }
+
+  function syncLinkQtyMaxWithSelectedStock() {
+    const selLinkItem = $("#sel-link-donated-item");
+    const inpQty = $("#inp-link-qty");
+    const lblMax = $("#lbl-max-link-qty");
+    const btnSubmit = $("#btn-submit-link-prize");
+    const errBanner = $("#link-qty-error-msg");
+    if (!selLinkItem || !inpQty) return;
+
+    const stockItem = sponsorsDb.donatedItems.find((d) => d.id === selLinkItem.value);
+    if (!stockItem) {
+      if (lblMax) lblMax.textContent = "0";
+      inpQty.value = "0";
+      inpQty.max = "0";
+      inpQty.disabled = true;
+      if (btnSubmit) btnSubmit.disabled = true;
+      return;
+    }
+
+    const available = Math.max(0, stockItem.totalQty - stockItem.linkedQty);
+    inpQty.disabled = false;
+    if (btnSubmit) btnSubmit.disabled = false;
+    inpQty.max = String(available);
+    if (lblMax) lblMax.textContent = String(available);
+
+    const currentVal = Number(inpQty.value) || 1;
+    if (currentVal > available) {
+      inpQty.value = String(available);
+    } else if (currentVal < 1) {
+      inpQty.value = "1";
+    }
+    if (errBanner) errBanner.classList.add("hidden");
+  }
+
+  function renderAdminActiveCycleLinks() {
+    const grid = $("#active-cycle-prize-links-grid");
+    if (!grid) return;
+    grid.innerHTML = "";
+
+    const categoriesOrder = ["RECEPCAO", "ATENDENTE", "SUPERVISOR", "GRUPO"];
+
+    categoriesOrder.forEach((catKey) => {
+      const catMeta = ROLE_BADGE_MAP[catKey];
+      const ouroBucket = sponsorsDb.activeCyclePrizeBuckets.find(
+        (b) => b.category === catKey && b.tier === "OURO"
+      );
+      const prataBucket = sponsorsDb.activeCyclePrizeBuckets.find(
+        (b) => b.category === catKey && b.tier === "PRATA"
+      );
+
+      const card = document.createElement("div");
+      card.className = "linked-cat-card";
+
+      const renderBucketRows = (bucket, tierLabel, tierBadgeCls) => {
+        if (!bucket || bucket.items.length === 0) {
+          return `
+            <div class="linked-item-row">
+              <span class="text-muted">${tierLabel}: Nenhum item doado vinculado.</span>
+            </div>
+          `;
+        }
+        return bucket.items
+          .map(
+            (link) => `
+            <div class="linked-item-row">
+              <div>
+                <span class="tag ${tierBadgeCls}" style="margin-right:5px;">${tierLabel}</span>
+                <strong>${link.itemName}</strong>
+                <span class="text-muted">(${link.sponsorIcon} ${link.sponsorName} • ${link.qty} cotas)</span>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm btn-unlink-item" data-cat="${catKey}" data-tier="${bucket.tier}" data-link-id="${link.linkId}">
+                ✕ Desvincular
+              </button>
+            </div>
+          `
+          )
+          .join("");
+      };
+
+      card.innerHTML = `
+        <div class="linked-cat-head">
+          <strong>${catMeta.label}</strong>
+          <span class="tag ${catMeta.cls}">Ciclo 2026.4 (Vigente)</span>
+        </div>
+        ${renderBucketRows(ouroBucket, "🥇 Ouro", "tag-amber")}
+        ${renderBucketRows(prataBucket, "🥈 Prata", "tag-blue")}
+      `;
+
+      card.querySelectorAll(".btn-unlink-item").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tCat = btn.dataset.cat;
+          const tTier = btn.dataset.tier;
+          const tLinkId = btn.dataset.linkId;
+
+          const targetBucket = sponsorsDb.activeCyclePrizeBuckets.find(
+            (b) => b.category === tCat && b.tier === tTier
+          );
+          if (!targetBucket) return;
+
+          const foundLink = targetBucket.items.find((x) => x.linkId === tLinkId);
+          if (foundLink) {
+            const stockItem = sponsorsDb.donatedItems.find((d) => d.id === foundLink.itemId);
+            if (stockItem) {
+              stockItem.linkedQty = Math.max(0, stockItem.linkedQty - foundLink.qty);
+            }
+            targetBucket.items = targetBucket.items.filter((x) => x.linkId !== tLinkId);
+            saveSharedSponsorsData();
+            showAdminFeedback(
+              `↺ Item <strong>"${foundLink.itemName}"</strong> desvinculado de <strong>${catMeta.label} (${tTier})</strong>. As ${foundLink.qty} cotas retornaram ao saldo do patrocinador!`
+            );
+            renderAdminSponsorsAndDropdowns();
+            renderAdminDonatedItemsStock();
+            renderAdminActiveCycleLinks();
+          }
+        });
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  // Passo 1: Cadastrar Novo Patrocinador
+  const formNewSponsor = $("#form-new-sponsor");
+  if (formNewSponsor) {
+    formNewSponsor.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = $("#inp-sp-name").value.trim();
+      const segment = $("#sel-sp-segment").value;
+      const agreement = $("#inp-sp-agreement").value.trim();
+      if (!name || !agreement) return;
+
+      const iconMap = {
+        "Tecnologia & Periféricos": "💻",
+        "Alimentação & Vouchers": "🍔",
+        "Lazer, Hotelaria & Cultura": "🏖️",
+        "Educação & Certificações": "🎓",
+      };
+
+      const newSp = {
+        id: `SP_${Date.now()}`,
+        name,
+        icon: iconMap[segment] || "🤝",
+        segment,
+        agreement,
+      };
+
+      sponsorsDb.sponsors.push(newSp);
+      $("#inp-sp-name").value = "";
+      $("#inp-sp-agreement").value = "";
+      saveSharedSponsorsData();
+
+      showAdminFeedback(
+        `✅ <strong>Novo patrocinador cadastrado com sucesso:</strong> ${newSp.icon} <strong>${newSp.name}</strong> (${newSp.segment}). Agora você já pode registrar itens doados por ele no Passo 2!`
+      );
+      renderAdminSponsorsAndDropdowns();
+      renderAdminDonatedItemsStock();
+      renderAdminActiveCycleLinks();
+      $("#sel-item-sponsor").value = newSp.id;
+    });
+  }
+
+  // Passo 2: Cadastrar Novo Item Doado
+  const formNewDonatedItem = $("#form-new-donated-item");
+  if (formNewDonatedItem) {
+    formNewDonatedItem.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const sponsorId = $("#sel-item-sponsor").value;
+      const name = $("#inp-item-name").value.trim();
+      const totalQty = Number($("#inp-item-qty").value) || 10;
+      if (!sponsorId || !name) return;
+
+      const sp = sponsorsDb.sponsors.find((s) => s.id === sponsorId) || sponsorsDb.sponsors[0];
+      const newItem = {
+        id: `DI_${Date.now()}`,
+        sponsorId,
+        name,
+        totalQty,
+        linkedQty: 0,
+      };
+
+      sponsorsDb.donatedItems.unshift(newItem);
+      $("#inp-item-name").value = "";
+      saveSharedSponsorsData();
+
+      showAdminFeedback(
+        `📦 <strong>Item doado registrado no estoque:</strong> <em>"${newItem.name}"</em> (${newItem.totalQty} unidades doadas por <strong>${sp.icon} ${sp.name}</strong>). Disponível para vínculo no Passo 3!`
+      );
+      renderAdminSponsorsAndDropdowns();
+      renderAdminDonatedItemsStock();
+      renderAdminActiveCycleLinks();
+      $("#sel-link-donated-item").value = newItem.id;
+      syncLinkQtyMaxWithSelectedStock();
+    });
+  }
+
+  const filterStockSponsor = $("#filter-stock-sponsor");
+  if (filterStockSponsor) {
+    filterStockSponsor.addEventListener("change", (e) => {
+      state.adminStockSponsorFilter = e.target.value;
+      renderAdminSponsorsAndDropdowns();
+      renderAdminDonatedItemsStock();
+    });
+  }
+
+  const selLinkDonatedItem = $("#sel-link-donated-item");
+  if (selLinkDonatedItem) {
+    selLinkDonatedItem.addEventListener("change", () => {
+      syncLinkQtyMaxWithSelectedStock();
+    });
+  }
+
+  const inpLinkQty = $("#inp-link-qty");
+  if (inpLinkQty) {
+    inpLinkQty.addEventListener("input", () => {
+      const itemId = $("#sel-link-donated-item").value;
+      const stockItem = sponsorsDb.donatedItems.find((d) => d.id === itemId);
+      const errBanner = $("#link-qty-error-msg");
+      if (!stockItem || !errBanner) return;
+
+      const available = Math.max(0, stockItem.totalQty - stockItem.linkedQty);
+      const val = Number($("#inp-link-qty").value);
+
+      if (val > available) {
+        errBanner.innerHTML = `⚠️ <strong>Quantidade acima do saldo disponível:</strong> O item <strong>"${stockItem.name}"</strong> possui apenas <strong>${available} unidade(s)</strong> de saldo. Informe no máximo <strong>${available}</strong>.`;
+        errBanner.classList.remove("hidden");
+      } else {
+        errBanner.classList.add("hidden");
+      }
+    });
+  }
+
+  // Passo 3: Vincular Item Doado ao Prêmio de uma Categoria do Ciclo em Andamento
+  const formLinkItemToPrize = $("#form-link-item-to-prize");
+  if (formLinkItemToPrize) {
+    formLinkItemToPrize.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const category = $("#sel-link-category").value;
+      const tier = $("#sel-link-tier").value;
+      const itemId = $("#sel-link-donated-item").value;
+      const qtyToLink = Number($("#inp-link-qty").value);
+      const errBanner = $("#link-qty-error-msg");
+
+      const stockItem = sponsorsDb.donatedItems.find((d) => d.id === itemId);
+      if (!stockItem) return;
+
+      const available = Math.max(0, stockItem.totalQty - stockItem.linkedQty);
+
+      if (!qtyToLink || qtyToLink < 1 || qtyToLink > available) {
+        if (errBanner) {
+          errBanner.innerHTML = `⚠️ <strong>Operação bloqueada:</strong> Não é permitido vincular <strong>${qtyToLink || 0} cotas</strong>, pois o saldo disponível do item <strong>"${stockItem.name}"</strong> é de apenas <strong>${available} unidade(s)</strong>.`;
+          errBanner.classList.remove("hidden");
+        }
+        return;
+      }
+
+      if (errBanner) errBanner.classList.add("hidden");
+
+      const sp = sponsorsDb.sponsors.find((s) => s.id === stockItem.sponsorId) || sponsorsDb.sponsors[0];
+
+      let bucket = sponsorsDb.activeCyclePrizeBuckets.find(
+        (b) => b.category === category && b.tier === tier
+      );
+      if (!bucket) {
+        bucket = {
+          category,
+          tier,
+          minPts: tier === "OURO" ? 1100 : 850,
+          items: [],
+        };
+        sponsorsDb.activeCyclePrizeBuckets.push(bucket);
+      }
+
+      bucket.items.push({
+        linkId: `L_${Date.now()}`,
+        itemId: stockItem.id,
+        sponsorName: sp.name,
+        sponsorIcon: sp.icon,
+        itemName: stockItem.name,
+        qty: qtyToLink,
+      });
+
+      stockItem.linkedQty += qtyToLink;
+      saveSharedSponsorsData();
+
+      const catLabel = ROLE_BADGE_MAP[category]?.label || category;
+      showAdminFeedback(
+        `🔗 <strong>Vínculo realizado com sucesso no Ciclo 2026.4 (Vigente)!</strong> O item <strong>"${stockItem.name}"</strong> (${sp.icon} ${sp.name} • ${qtyToLink} cotas) foi vinculado ao prêmio de <strong>${catLabel} (${tier})</strong> e já está sincronizado com a Vitrine de Prêmios (TelaGameVitrine2)!`
+      );
+
+      renderAdminSponsorsAndDropdowns();
+      renderAdminDonatedItemsStock();
+      renderAdminActiveCycleLinks();
+    });
+  }
+
   // Restaurar padrão inicial
   $("#btn-reset-gameparam").addEventListener("click", () => {
+    localStorage.removeItem("sanepar_gamification_sponsors_stock_v1");
     cyclesDb = getInitialCyclesDb();
+    sponsorsDb = getInitialSponsorsDb();
     state.activeCycleId = "C_2026_4";
     state.roleFilter = "ALL";
     state.snapshotCycleId = null;
@@ -1511,6 +2127,7 @@
     state.simIndPct = 88;
     state.simGrpPct = 92;
     state.simCollectiveHit = true;
+    state.adminStockSponsorFilter = "ALL";
 
     $$("#rules-category-tabs .chip").forEach((b) => {
       b.classList.toggle("active", b.dataset.roleFilter === "ALL");
@@ -1523,6 +2140,8 @@
     $("#aqualino-game-bubble").classList.remove("answering");
     $("#cycle-save-feedback").classList.add("hidden");
     $("#cycle-snapshot-drawer").classList.add("hidden");
+    const adminFb = $("#admin-feedback-banner");
+    if (adminFb) adminFb.classList.add("hidden");
 
     refreshAll();
   });
@@ -1535,6 +2154,9 @@
     renderPrizesCatalog();
     renderSimulator();
     renderHistoryTable();
+    renderAdminSponsorsAndDropdowns();
+    renderAdminDonatedItemsStock();
+    renderAdminActiveCycleLinks();
   }
 
   // Inicialização

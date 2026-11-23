@@ -20,7 +20,7 @@
         <div>
           <h1 class="brand-name">SANEPAR • Parametrização Estratégica de Gamificação</h1>
           <p class="brand-subtitle">
-            Gestão de Regras por Ciclo • <strong>Mérito Individual &amp; Mérito do Grupo</strong> • Recepcionistas, Atendentes e Supervisores Locais
+            Gestão de Regras por Ciclo • <strong>Mérito Individual &amp; Mérito do Grupo</strong> • Recepcionistas, Atendentes e Supervisores Locais • <strong>Gestão de Patrocinadores &amp; Prêmios</strong>
           </p>
         </div>
       </div>
@@ -35,18 +35,33 @@
       </div>
 
       <div class="topbar-links">
-        <a href="TelaCidadao.html" class="btn-icon">📱 Cidadão</a>
-        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Recepção</a>
-        <a href="TelaAtendimento.html" class="btn-icon">🎧 Guichê</a>
-        <a href="TelaSupervisorLocal.html" class="btn-icon">📊 Supervisor Local</a>
-        <a href="TelaAnalisesDashboards.html" class="btn-icon">📈 Dashboards</a>
-        <a href="TelaGameVitrine.html" class="btn-icon">🎁 Vitrine de Prêmios</a>
+        <a href="index.html" id="btn-voltar-index" class="btn-icon btn-home-link" title="Voltar para a tela inicial (Index.html)">🏠 Início</a>
+        <a href="TelaGameVitrine2.html" class="btn-icon">🏆 Vitrine de Prêmios</a>
         <button type="button" id="btn-reset-gameparam" class="btn-icon">↺ Restaurar Padrão</button>
       </div>
     </header>
 
+    <!-- NAVEGAÇÃO RÁPIDA ENTRE MÓDULOS DE GESTÃO DA GAMIFICAÇÃO -->
+    <nav class="main-tabs-nav" aria-label="Módulos de Parametrização e Gestão de Patrocínios">
+      <button type="button" class="main-tab-btn active" id="tab-btn-rules-cycles" data-scroll-target="cycle-bar-section">
+        <span class="tab-icon">⚙️</span>
+        <div>
+          <strong>1. Parametrização de Regras, Pesos, Faixas &amp; Ciclos</strong>
+          <small>Governança de Ciclos, Perfis Concorrentes, Mérito Individual × Grupo, Motor de Regras e Simulador</small>
+        </div>
+      </button>
+
+      <button type="button" class="main-tab-btn" id="tab-btn-sponsors-mgmt" data-scroll-target="view-admin-management">
+        <span class="tab-icon">🔐</span>
+        <div>
+          <strong>2. Gestão de Patrocinadores &amp; Vínculo de Itens Doados</strong>
+          <small>Exclusivo Time de Gestão SANEPAR • Cadastrar Patrocinadores, Doações e Vincular ao Ciclo Vigente</small>
+        </div>
+      </button>
+    </nav>
+
     <!-- BARRA DE GESTÃO DO CICLO ATUAL (SELEÇÃO, CRIAÇÃO, VIGÊNCIA, ATIVAÇÃO/ENCERRAMENTO/EXCLUSÃO E GRAVAÇÃO NO HISTÓRICO) -->
-    <section class="cycle-bar" aria-label="Seleção e Configuração de Ciclo de Gamificação">
+    <section class="cycle-bar" id="cycle-bar-section" aria-label="Seleção e Configuração de Ciclo de Gamificação">
       <div class="cycle-bar-header">
         <div>
           <span class="section-tag">Governança de Ciclos Independentes • Cada Ciclo Possui Suas Próprias Regras</span>
@@ -159,6 +174,9 @@
               </button>
               <button type="button" class="chip-ask-game" data-q="Como usar o simulador para testar a pontuação e os prêmios de um profissional e sua unidade?">
                 🧮 Simulador de Prêmios
+              </button>
+              <button type="button" class="chip-ask-game" data-q="Como cadastrar novos patrocinadores, registrar itens doados e vincular aos prêmios das categorias do ciclo em andamento?">
+                🤝 Patrocinadores &amp; Vínculo de Itens Doados
               </button>
             </div>
           </div>
@@ -606,6 +624,174 @@
         <div id="cycle-snapshot-drawer" class="cycle-snapshot-drawer hidden" aria-live="polite"></div>
       </section>
     </main>
+
+    <!-- ===================================================================== -->
+    <!-- SESSÃO 2. GESTÃO DE PATROCINADORES & VÍNCULO DE ITENS DOADOS          -->
+    <!-- (MOVIDA DE TelaGameVitrine2.html COM TODAS AS SUAS FUNCIONALIDADES)   -->
+    <!-- ===================================================================== -->
+    <section id="view-admin-management" class="sponsors-mgmt-section" aria-label="2. Gestão de Patrocinadores e Vínculo de Itens Doados">
+      <div class="card span-12 sponsors-section-header-card">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">2. Gestão de Patrocinadores &amp; Vínculo de Itens Doados</span>
+            <h2>Cadastro de Patrocinadores, Estoque de Itens Doados e Vínculo às Categorias do Ciclo em Andamento</h2>
+          </div>
+          <span class="tag tag-green">Sincronização Imediata com a Vitrine de Prêmios (TelaGameVitrine2)</span>
+        </div>
+        <p class="section-desc">
+          Cadastre empresas parceiras patrocinadoras (custo zero para a SANEPAR), registre os itens doados no estoque e vincule as cotas aos prêmios de cada categoria e faixa (Ouro/Prata) do ciclo vigente.
+        </p>
+      </div>
+
+      <div id="admin-feedback-banner" class="save-feedback-banner hidden" role="status" aria-live="polite"></div>
+
+      <!-- PASSO 1 E PASSO 2 LADO A LADO (CADASTRO DE PATROCINADORES + CADASTRO DE ITENS DOADOS) -->
+      <div class="admin-top-grid">
+        <!-- PASSO 1: CADASTRAR NOVO PATROCINADOR -->
+        <section class="card span-5">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Passo 1 • Empresas Parceiras</span>
+              <h2>Cadastrar Novo Patrocinador</h2>
+            </div>
+            <span class="tag tag-blue" id="admin-sponsors-count-tag">4 Patrocinadores</span>
+          </div>
+
+          <form id="form-new-sponsor" class="clean-form-grid">
+            <div class="field-box">
+              <label for="inp-sp-name">Nome do Patrocinador:</label>
+              <input type="text" id="inp-sp-name" placeholder="Ex.: Positivo Informática, iFood, Kalunga..." required />
+            </div>
+
+            <div class="field-box">
+              <label for="sel-sp-segment">Segmento / Especialidade:</label>
+              <select id="sel-sp-segment">
+                <option value="Tecnologia & Periféricos">💻 Tecnologia &amp; Periféricos</option>
+                <option value="Alimentação & Vouchers">🍔 Alimentação &amp; Vouchers</option>
+                <option value="Lazer, Hotelaria & Cultura">🏖️ Lazer, Hotelaria &amp; Cultura</option>
+                <option value="Educação & Certificações">🎓 Educação &amp; Certificações</option>
+              </select>
+            </div>
+
+            <div class="field-box">
+              <label for="inp-sp-agreement">Nº do Termo de Doação / Convênio:</label>
+              <input type="text" id="inp-sp-agreement" placeholder="Ex.: Termo Doação #2026/14 (Custo Zero SANEPAR)" required />
+            </div>
+
+            <div class="field-box btn-align-end">
+              <button type="submit" class="btn btn-primary">➕ Cadastrar Patrocinador</button>
+            </div>
+          </form>
+
+          <div class="sub-list-title">Patrocinadores Homologados (Clique para filtrar o estoque ao lado):</div>
+          <div id="admin-sponsors-list" class="sponsors-chips-wrap"></div>
+        </section>
+
+        <!-- PASSO 2: CADASTRAR ITENS DOADOS PELOS PATROCINADORES -->
+        <section class="card span-7">
+          <div class="card-header-flex">
+            <div>
+              <span class="section-tag">Passo 2 • Estoque de Doações</span>
+              <h2>Cadastrar Itens Doados pelos Patrocinadores</h2>
+            </div>
+            <div class="field-box-inline">
+              <label for="filter-stock-sponsor">Filtrar Patrocinador:</label>
+              <select id="filter-stock-sponsor"></select>
+            </div>
+          </div>
+
+          <form id="form-new-donated-item" class="donated-item-form-grid">
+            <div class="field-box">
+              <label for="sel-item-sponsor">Patrocinador Doador:</label>
+              <select id="sel-item-sponsor" required></select>
+            </div>
+
+            <div class="field-box">
+              <label for="inp-item-name">Item Doado (Prêmio):</label>
+              <input type="text" id="inp-item-name" placeholder="Ex.: Kit Mouse e Teclado Sem Fio ou Voucher R$ 400" required />
+            </div>
+
+            <div class="field-box">
+              <label for="inp-item-qty">Qtd. Doada:</label>
+              <input type="number" id="inp-item-qty" min="1" max="500" value="20" required />
+            </div>
+
+            <div class="field-box btn-align-end">
+              <button type="submit" class="btn btn-teal">📦 Registrar Item Doado</button>
+            </div>
+          </form>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Patrocinador</th>
+                  <th>Item Doado</th>
+                  <th>Total Doado</th>
+                  <th>Vinculado a Ciclos</th>
+                  <th>Saldo Disponível</th>
+                </tr>
+              </thead>
+              <tbody id="donated-items-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- PASSO 3: VINCULAR ITENS DOADOS AOS PRÊMIOS DE CADA CATEGORIA DO CICLO EM ANDAMENTO -->
+      <section class="card span-12">
+        <div class="card-header-flex">
+          <div>
+            <span class="section-tag">Passo 3 • Composição da Vitrine do Ciclo em Andamento</span>
+            <h2>Vincular Itens Doados aos Prêmios de Cada Categoria — Ciclo 2026.4 (Vigente)</h2>
+          </div>
+          <span class="tag tag-green">Sincronização Imediata com a Vitrine do Time (TelaGameVitrine2)</span>
+        </div>
+
+        <p class="section-desc">
+          Selecione uma categoria de premiação do ciclo em andamento, escolha a faixa (Ouro ou Prata) e vincule um ou mais itens doados do estoque de patrocinadores:
+        </p>
+
+        <form id="form-link-item-to-prize" class="link-prize-form-grid">
+          <div class="field-box">
+            <label for="sel-link-category">1. Categoria do Ciclo em Andamento:</label>
+            <select id="sel-link-category">
+              <option value="RECEPCAO">🛎️ Recepcionistas</option>
+              <option value="ATENDENTE">🎧 Atendentes de Guichê</option>
+              <option value="SUPERVISOR">📊 Supervisores Locais</option>
+              <option value="GRUPO">🤝 Equipe da Unidade (Mérito do Grupo)</option>
+            </select>
+          </div>
+
+          <div class="field-box">
+            <label for="sel-link-tier">2. Faixa de Premiação:</label>
+            <select id="sel-link-tier">
+              <option value="OURO">🥇 Faixa Ouro (1º Nível)</option>
+              <option value="PRATA">🥈 Faixa Prata (2º Nível)</option>
+            </select>
+          </div>
+
+          <div class="field-box">
+            <label for="sel-link-donated-item">3. Item Doado Disponível no Estoque (Patrocinador):</label>
+            <select id="sel-link-donated-item" required></select>
+          </div>
+
+          <div class="field-box">
+            <label for="inp-link-qty">4. Cotas a Vincular (Saldo máx: <span id="lbl-max-link-qty">18</span>):</label>
+            <input type="number" id="inp-link-qty" min="1" value="5" required />
+          </div>
+
+          <div class="field-box btn-align-end">
+            <button type="submit" id="btn-submit-link-prize" class="btn btn-primary">🔗 Vincular Item ao Prêmio da Categoria</button>
+          </div>
+        </form>
+
+        <div id="link-qty-error-msg" class="error-feedback-banner hidden" role="alert" aria-live="assertive"></div>
+
+        <!-- Grade Clean das 4 Categorias do Ciclo em Andamento mostrando os itens doados vinculados -->
+        <div id="active-cycle-prize-links-grid" class="linked-categories-grid"></div>
+      </section>
+    </section>
 
     <!-- BOTÃO FLUTUANTE DO AQUALINO -->
     <button

@@ -18,20 +18,15 @@
           <img src="Sanepar_logo.png" alt="Logo SANEPAR" class="brand-logo-img" />
         </div>
         <div>
-          <h1 class="brand-name">SANEPAR • Vitrine de Premiações &amp; Gestão de Patrocínios</h1>
+          <h1 class="brand-name">SANEPAR • Vitrine de Premiações &amp; Ranking por Unidade</h1>
           <p class="brand-subtitle">
-            Visão Colaboradores (Prêmios &amp; Ranking c/ Drill-Down por Unidade) • <strong>Visão Gestão (Patrocinadores &amp; Vínculo de Itens Doados)</strong>
+            Visão Colaboradores • <strong>Catálogo de Prêmios por Categoria &amp; Ranking com Drill-Down por Unidade</strong>
           </p>
         </div>
       </div>
 
       <div class="topbar-links">
-        <a href="TelaCidadao.html" class="btn-icon">📱 Cidadão</a>
-        <a href="TelaRecepcao.html" class="btn-icon">🛎️ Recepção</a>
-        <a href="TelaAtendimento.html" class="btn-icon">🎧 Guichê</a>
-        <a href="TelaSupervisorLocal.html" class="btn-icon">📊 Supervisor Local</a>
-        <a href="TelaAnalisesDashboards.html" class="btn-icon">📈 Dashboards</a>
-        <a href="TelaGameParam.html" class="btn-icon">⚙️ Regras</a>
+        <a href="index.html" id="btn-voltar-index" class="btn-icon btn-home-link" title="Voltar para a tela inicial (Index.html)">🏠 Início</a>
         <button type="button" id="btn-reset-v2" class="btn-icon">↺ Restaurar Padrão</button>
       </div>
     </header>
@@ -44,11 +39,11 @@
           <div class="aqualino-bar-head">
             <span class="tag tag-teal">💧 Aqualino • Assistente da Tela</span>
             <span class="text-muted" id="aqualino-context-hint">
-              Alterne entre a <strong>Aba 1 (Time SANEPAR)</strong> e a <strong>Aba 2 (Time de Gestão)</strong> abaixo ou tire dúvidas comigo.
+              Consulte os prêmios por categoria e o ranking por Unidade (com drill-down e histórico de ciclos) ou tire dúvidas comigo.
             </span>
           </div>
           <div id="aqualino-v2-bubble" class="aqualino-clean-bubble" aria-live="polite">
-            Olá! Na <strong>Aba 1</strong> todo o time da SANEPAR consulta os prêmios e o ranking por Unidade (com drill-down e histórico de ciclos). Na <strong>Aba 2</strong> o time de gestão cadastra patrocinadores, itens doados e vincula aos prêmios do ciclo em andamento!
+            Olá! Nesta vitrine todo o time da SANEPAR consulta os prêmios patrocinados disponíveis para cada categoria e acompanha o ranking por Unidade de Atendimento (com drill-down e histórico de ciclos anteriores)!
           </div>
         </div>
         <button type="button" id="btn-toggle-aqualino-qa" class="btn btn-secondary btn-sm">
@@ -62,7 +57,7 @@
           <input
             id="input-ask-aqualino-v2"
             type="text"
-            placeholder="Digite sua dúvida sobre como usar esta tela (ex.: como fazer drill-down na unidade, como vincular item doado)..."
+            placeholder="Digite sua dúvida sobre como usar esta tela (ex.: como fazer drill-down na unidade, como ver ciclos anteriores)..."
           />
           <button type="button" id="btn-voice-aqualino-v2" class="btn-mic-sup" title="Perguntar por voz">
             🎤 Voz
@@ -77,37 +72,15 @@
           <button type="button" class="chip-ask-v2" data-q="Como visualizar os prêmios e o ranking dos ciclos anteriores?">
             🗂️ Ciclos Anteriores
           </button>
-          <button type="button" class="chip-ask-v2" data-q="Como cadastrar novos patrocinadores e seus itens doados na aba de Gestão?">
-            🤝 Cadastrar Patrocinador e Itens Doados
-          </button>
-          <button type="button" class="chip-ask-v2" data-q="Como vincular os itens doados aos prêmios de cada categoria do ciclo em andamento?">
-            🔗 Vincular Itens aos Prêmios do Ciclo
+          <button type="button" class="chip-ask-v2" data-q="Onde é feito o cadastro de patrocinadores e o vínculo de itens doados?">
+            🤝 Gestão de Patrocinadores (TelaGameParam)
           </button>
         </div>
       </div>
     </section>
 
-    <!-- NAVEGAÇÃO PRINCIPAL EM 2 ABAS CLEAN (PARTE 1: TIME SANEPAR | PARTE 2: TIME DE GESTÃO) -->
-    <nav class="main-tabs-nav" aria-label="Alternar entre Visão do Time e Visão da Gestão">
-      <button type="button" class="main-tab-btn active" id="tab-btn-public" data-target="view-public-team">
-        <span class="tab-icon">🏆</span>
-        <div>
-          <strong>1. Vitrine de Prêmios &amp; Ranking por Unidade</strong>
-          <small>Aberto a todo o Time SANEPAR • Ciclo Atual e Ciclos Anteriores com Drill-Down</small>
-        </div>
-      </button>
-
-      <button type="button" class="main-tab-btn" id="tab-btn-admin" data-target="view-admin-management">
-        <span class="tab-icon">🔐</span>
-        <div>
-          <strong>2. Gestão de Patrocinadores &amp; Vínculo de Itens Doados</strong>
-          <small>Exclusivo Time de Gestão SANEPAR • Cadastrar Patrocinadores, Doações e Vincular ao Ciclo Vigente</small>
-        </div>
-      </button>
-    </nav>
-
     <!-- ===================================================================== -->
-    <!-- ABA 1: VISÃO DE TODO O TIME SANEPAR (VITRINE + RANKING POR UNIDADE)   -->
+    <!-- VISÃO DE TODO O TIME SANEPAR (VITRINE + RANKING POR UNIDADE)          -->
     <!-- ===================================================================== -->
     <main id="view-public-team" class="tab-view">
       <!-- Barra Clean de Filtros (Ciclo, Unidade de Atendimento e Categoria) -->
@@ -123,9 +96,9 @@
           </div>
 
           <div class="field-box">
-            <label for="sel-public-unit">2. Unidade de Atendimento (Drill-Down):</label>
+            <label for="sel-public-unit">2. Unidade de Atendimento (Filtro / Drill-Down):</label>
             <select id="sel-public-unit">
-              <option value="ALL">🏛️ Todas as Unidades (Comparativo Geral entre Unidades)</option>
+              <option value="ALL">🏛️ Todas as Unidades (Ranking Geral de Todos os Profissionais e Equipes)</option>
               <option value="U_BOAVISTA">Posto Boa Vista — Rua da Cidadania (Curitiba)</option>
               <option value="U_MARINGA">Central Maringá Brasil (Maringá)</option>
               <option value="U_REBOUCAS">Central Rebouças — Matriz (Curitiba)</option>
@@ -157,8 +130,8 @@
             <strong id="pub-kpi-prizes" class="text-teal">8 Categorias/Faixas Premadas</strong>
           </div>
           <div class="mini-kpi">
-            <span>Unidade Líder no Ciclo</span>
-            <strong id="pub-kpi-leader" class="text-blue">Posto Boa Vista (Curitiba)</strong>
+            <span>Líder do Ranking no Ciclo</span>
+            <strong id="pub-kpi-leader" class="text-blue">Ana Paula Ribeiro (1.410 pts)</strong>
           </div>
         </div>
       </section>
@@ -210,161 +183,6 @@
           </div>
         </section>
       </div>
-    </main>
-
-    <!-- ===================================================================== -->
-    <!-- ABA 2: VISÃO EXCLUSIVA DO TIME DE GESTÃO SANEPAR                      -->
-    <!-- (CADASTRO DE PATROCINADORES, ITENS DOADOS E VÍNCULO AO CICLO ATUAL)   -->
-    <!-- ===================================================================== -->
-    <main id="view-admin-management" class="tab-view hidden">
-      <div id="admin-feedback-banner" class="save-feedback-banner hidden" role="status" aria-live="polite"></div>
-
-      <!-- PASSO 1 E PASSO 2 LADO A LADO (CADASTRO DE PATROCINADORES + CADASTRO DE ITENS DOADOS) -->
-      <div class="admin-top-grid">
-        <!-- PASSO 1: CADASTRAR NOVO PATROCINADOR -->
-        <section class="card span-5">
-          <div class="card-header-flex">
-            <div>
-              <span class="section-tag">Passo 1 • Empresas Parceiras</span>
-              <h2>Cadastrar Novo Patrocinador</h2>
-            </div>
-            <span class="tag tag-blue" id="admin-sponsors-count-tag">4 Patrocinadores</span>
-          </div>
-
-          <form id="form-new-sponsor" class="clean-form-grid">
-            <div class="field-box">
-              <label for="inp-sp-name">Nome do Patrocinador:</label>
-              <input type="text" id="inp-sp-name" placeholder="Ex.: Positivo Informática, iFood, Kalunga..." required />
-            </div>
-
-            <div class="field-box">
-              <label for="sel-sp-segment">Segmento / Especialidade:</label>
-              <select id="sel-sp-segment">
-                <option value="Tecnologia & Periféricos">💻 Tecnologia &amp; Periféricos</option>
-                <option value="Alimentação & Vouchers">🍔 Alimentação &amp; Vouchers</option>
-                <option value="Lazer, Hotelaria & Cultura">🏖️ Lazer, Hotelaria &amp; Cultura</option>
-                <option value="Educação & Certificações">🎓 Educação &amp; Certificações</option>
-              </select>
-            </div>
-
-            <div class="field-box">
-              <label for="inp-sp-agreement">Nº do Termo de Doação / Convênio:</label>
-              <input type="text" id="inp-sp-agreement" placeholder="Ex.: Termo Doação #2026/14 (Custo Zero SANEPAR)" required />
-            </div>
-
-            <div class="field-box btn-align-end">
-              <button type="submit" class="btn btn-primary">➕ Cadastrar Patrocinador</button>
-            </div>
-          </form>
-
-          <div class="sub-list-title">Patrocinadores Homologados (Clique para filtrar o estoque ao lado):</div>
-          <div id="admin-sponsors-list" class="sponsors-chips-wrap"></div>
-        </section>
-
-        <!-- PASSO 2: CADASTRAR ITENS DOADOS PELOS PATROCINADORES -->
-        <section class="card span-7">
-          <div class="card-header-flex">
-            <div>
-              <span class="section-tag">Passo 2 • Estoque de Doações</span>
-              <h2>Cadastrar Itens Doados pelos Patrocinadores</h2>
-            </div>
-            <div class="field-box-inline">
-              <label for="filter-stock-sponsor">Filtrar Patrocinador:</label>
-              <select id="filter-stock-sponsor"></select>
-            </div>
-          </div>
-
-          <form id="form-new-donated-item" class="donated-item-form-grid">
-            <div class="field-box">
-              <label for="sel-item-sponsor">Patrocinador Doador:</label>
-              <select id="sel-item-sponsor" required></select>
-            </div>
-
-            <div class="field-box">
-              <label for="inp-item-name">Item Doado (Prêmio):</label>
-              <input type="text" id="inp-item-name" placeholder="Ex.: Kit Mouse e Teclado Sem Fio ou Voucher R$ 400" required />
-            </div>
-
-            <div class="field-box">
-              <label for="inp-item-qty">Qtd. Doada:</label>
-              <input type="number" id="inp-item-qty" min="1" max="500" value="20" required />
-            </div>
-
-            <div class="field-box btn-align-end">
-              <button type="submit" class="btn btn-teal">📦 Registrar Item Doado</button>
-            </div>
-          </form>
-
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Patrocinador</th>
-                  <th>Item Doado</th>
-                  <th>Total Doado</th>
-                  <th>Vinculado a Ciclos</th>
-                  <th>Saldo Disponível</th>
-                </tr>
-              </thead>
-              <tbody id="donated-items-tbody"></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-
-      <!-- PASSO 3: VINCULAR ITENS DOADOS AOS PRÊMIOS DE CADA CATEGORIA DO CICLO EM ANDAMENTO -->
-      <section class="card span-12">
-        <div class="card-header-flex">
-          <div>
-            <span class="section-tag">Passo 3 • Composição da Vitrine do Ciclo em Andamento</span>
-            <h2>Vincular Itens Doados aos Prêmios de Cada Categoria — Ciclo 2026.4 (Vigente)</h2>
-          </div>
-          <span class="tag tag-green">Sincronização Imediata com a Aba 1 (Vitrine do Time)</span>
-        </div>
-
-        <p class="section-desc">
-          Selecione uma categoria de premiação do ciclo em andamento, escolha a faixa (Ouro ou Prata) e vincule um ou mais itens doados do estoque de patrocinadores:
-        </p>
-
-        <form id="form-link-item-to-prize" class="link-prize-form-grid">
-          <div class="field-box">
-            <label for="sel-link-category">1. Categoria do Ciclo em Andamento:</label>
-            <select id="sel-link-category">
-              <option value="RECEPCAO">🛎️ Recepcionistas</option>
-              <option value="ATENDENTE">🎧 Atendentes de Guichê</option>
-              <option value="SUPERVISOR">📊 Supervisores Locais</option>
-              <option value="GRUPO">🤝 Equipe da Unidade (Mérito do Grupo)</option>
-            </select>
-          </div>
-
-          <div class="field-box">
-            <label for="sel-link-tier">2. Faixa de Premiação:</label>
-            <select id="sel-link-tier">
-              <option value="OURO">🥇 Faixa Ouro (1º Nível)</option>
-              <option value="PRATA">🥈 Faixa Prata (2º Nível)</option>
-            </select>
-          </div>
-
-          <div class="field-box">
-            <label for="sel-link-donated-item">3. Item Doado Disponível no Estoque (Patrocinador):</label>
-            <select id="sel-link-donated-item" required></select>
-          </div>
-
-          <div class="field-box">
-            <label for="inp-link-qty">4. Cotas a Vincular (Saldo máx: <span id="lbl-max-link-qty">18</span>):</label>
-            <input type="number" id="inp-link-qty" min="1" value="5" required />
-          </div>
-
-          <div class="field-box btn-align-end">
-            <button type="submit" id="btn-submit-link-prize" class="btn btn-primary">🔗 Vincular Item ao Prêmio da Categoria</button>
-          </div>
-        </form>
-
-        <div id="link-qty-error-msg" class="error-feedback-banner hidden" role="alert" aria-live="assertive"></div>
-
-        <!-- Grade Clean das 4 Categorias do Ciclo em Andamento mostrando os itens doados vinculados -->
-        <div id="active-cycle-prize-links-grid" class="linked-categories-grid"></div>
-      </section>
     </main>
 
     <!-- BOTÃO FLUTUANTE DO AQUALINO -->

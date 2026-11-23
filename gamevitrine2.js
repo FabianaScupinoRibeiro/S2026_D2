@@ -180,7 +180,7 @@
               ],
             },
           ],
-          // Ranking por Unidade de Atendimento (com lista de membros para Drill-Down)
+          // Ranking por Unidade de Atendimento (com nomes dos profissionais e equipes)
           unitsRanking: [
             {
               unitId: "U_BOAVISTA",
@@ -191,11 +191,11 @@
               collectivePts: 1298,
               tier: "OURO",
               members: [
-                { code: "Equipe Boa Vista (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1298, totalPts: 1298, tier: "OURO" },
-                { code: "Supervisor Local #S-03", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 810, grpPts: 440, totalPts: 1375, tier: "OURO" },
-                { code: "Atendente #501 • Guichê 01", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 790, grpPts: 410, totalPts: 1320, tier: "OURO" },
-                { code: "Recepcionista #R-312", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 695, grpPts: 390, totalPts: 1193, tier: "OURO" },
-                { code: "Atendente #502 • Guichê 02", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 640, grpPts: 390, totalPts: 1120, tier: "PRATA" },
+                { code: "Carlos Henrique Almeida", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 810, grpPts: 440, totalPts: 1375, tier: "OURO" },
+                { code: "Beatriz Nogueira", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 790, grpPts: 410, totalPts: 1320, tier: "OURO" },
+                { code: "Equipe Posto Boa Vista (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1298, totalPts: 1298, tier: "OURO" },
+                { code: "Fernanda Cristina Lopes", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 695, grpPts: 390, totalPts: 1193, tier: "OURO" },
+                { code: "Gustavo Henrique Prado", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 640, grpPts: 390, totalPts: 1120, tier: "PRATA" },
               ],
             },
             {
@@ -207,10 +207,10 @@
               collectivePts: 1265,
               tier: "OURO",
               members: [
-                { code: "Atendente #701 • Guichê 01", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 820, grpPts: 425, totalPts: 1370, tier: "OURO" },
-                { code: "Supervisor Local #S-07", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 790, grpPts: 430, totalPts: 1342, tier: "OURO" },
-                { code: "Equipe Maringá Brasil (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1265, totalPts: 1265, tier: "OURO" },
-                { code: "Recepcionista #R-209", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 740, grpPts: 410, totalPts: 1265, tier: "OURO" },
+                { code: "Leonardo Silveira", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 820, grpPts: 425, totalPts: 1370, tier: "OURO" },
+                { code: "Juliana Barros", category: "SUPERVISOR", roleLabel: "📊 Supervisora Local", indPts: 790, grpPts: 430, totalPts: 1342, tier: "OURO" },
+                { code: "Amanda Cavalcanti", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 740, grpPts: 410, totalPts: 1268, tier: "OURO" },
+                { code: "Equipe Central Maringá Brasil (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1265, totalPts: 1265, tier: "OURO" },
               ],
             },
             {
@@ -222,11 +222,11 @@
               collectivePts: 1111,
               tier: "OURO",
               members: [
-                { code: "Atendente #101 • Guichê 01", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 850, grpPts: 430, totalPts: 1410, tier: "OURO" },
-                { code: "Recepcionista #R-104", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 760, grpPts: 420, totalPts: 1298, tier: "OURO" },
-                { code: "Supervisor Local #S-01", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 720, grpPts: 390, totalPts: 1221, tier: "OURO" },
-                { code: "Equipe Rebouças (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1111, totalPts: 1111, tier: "OURO" },
-                { code: "Atendente #104 • Guichê 04", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 625, grpPts: 360, totalPts: 1083, tier: "PRATA" },
+                { code: "Ana Paula Ribeiro", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 850, grpPts: 430, totalPts: 1410, tier: "OURO" },
+                { code: "Mariana Costa", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 760, grpPts: 420, totalPts: 1298, tier: "OURO" },
+                { code: "Ricardo Tavares", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 720, grpPts: 390, totalPts: 1221, tier: "OURO" },
+                { code: "Equipe Central Rebouças (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1111, totalPts: 1111, tier: "OURO" },
+                { code: "Marcos Oliveira", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 625, grpPts: 360, totalPts: 1083, tier: "PRATA" },
               ],
             },
             {
@@ -238,10 +238,10 @@
               collectivePts: 1012,
               tier: "PRATA",
               members: [
-                { code: "Atendente #601 • Guichê 01", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 710, grpPts: 375, totalPts: 1194, tier: "PRATA" },
-                { code: "Supervisor Local #S-06", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 650, grpPts: 365, totalPts: 1116, tier: "PRATA" },
-                { code: "Recepcionista #R-118", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 615, grpPts: 350, totalPts: 1061, tier: "PRATA" },
-                { code: "Equipe Londrina Centro (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1012, totalPts: 1012, tier: "PRATA" },
+                { code: "Thiago Moreira", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 710, grpPts: 375, totalPts: 1194, tier: "PRATA" },
+                { code: "Renata Vasconcelos", category: "SUPERVISOR", roleLabel: "📊 Supervisora Local", indPts: 650, grpPts: 365, totalPts: 1116, tier: "PRATA" },
+                { code: "Camila Teixeira", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 615, grpPts: 350, totalPts: 1061, tier: "PRATA" },
+                { code: "Equipe Central Londrina Centro (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1012, totalPts: 1012, tier: "PRATA" },
               ],
             },
             {
@@ -253,10 +253,10 @@
               collectivePts: 957,
               tier: "PRATA",
               members: [
-                { code: "Atendente #303 • Guichê 03", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 660, grpPts: 355, totalPts: 1116, tier: "PRATA" },
-                { code: "Recepcionista #R-405", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 570, grpPts: 330, totalPts: 990, tier: "PRATA" },
-                { code: "Equipe Pinheirinho (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 957, totalPts: 957, tier: "PRATA" },
-                { code: "Supervisor Local #S-02", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 580, grpPts: 330, totalPts: 945, tier: "PRATA" },
+                { code: "Rafael Souza", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 660, grpPts: 355, totalPts: 1116, tier: "PRATA" },
+                { code: "Patrícia Lima", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 570, grpPts: 330, totalPts: 990, tier: "PRATA" },
+                { code: "Equipe Posto Pinheirinho (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 957, totalPts: 957, tier: "PRATA" },
+                { code: "Eduardo Martins", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 580, grpPts: 330, totalPts: 945, tier: "PRATA" },
               ],
             },
           ],
@@ -320,9 +320,9 @@
               collectivePts: 1144,
               tier: "OURO",
               members: [
-                { code: "Atendente #701 • Guichê 01", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 810, grpPts: 340, totalPts: 1265, tier: "OURO" },
-                { code: "Equipe Maringá Brasil (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1144, totalPts: 1144, tier: "OURO" },
-                { code: "Recepcionista #R-209", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 620, grpPts: 240, totalPts: 945, tier: "PRATA" },
+                { code: "Leonardo Silveira", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 810, grpPts: 340, totalPts: 1265, tier: "OURO" },
+                { code: "Equipe Central Maringá Brasil (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1144, totalPts: 1144, tier: "OURO" },
+                { code: "Amanda Cavalcanti", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 620, grpPts: 240, totalPts: 945, tier: "PRATA" },
               ],
             },
             {
@@ -334,9 +334,9 @@
               collectivePts: 1095,
               tier: "OURO",
               members: [
-                { code: "Atendente #101 • Guichê 01", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 795, grpPts: 335, totalPts: 1243, tier: "OURO" },
-                { code: "Recepcionista #R-104", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 730, grpPts: 310, totalPts: 1144, tier: "OURO" },
-                { code: "Equipe Rebouças (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1095, totalPts: 1095, tier: "OURO" },
+                { code: "Ana Paula Ribeiro", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 795, grpPts: 335, totalPts: 1243, tier: "OURO" },
+                { code: "Mariana Costa", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 730, grpPts: 310, totalPts: 1144, tier: "OURO" },
+                { code: "Equipe Central Rebouças (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1095, totalPts: 1095, tier: "OURO" },
               ],
             },
             {
@@ -348,8 +348,8 @@
               collectivePts: 1060,
               tier: "OURO",
               members: [
-                { code: "Recepcionista #R-312", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 690, grpPts: 300, totalPts: 1089, tier: "OURO" },
-                { code: "Equipe Boa Vista (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1060, totalPts: 1060, tier: "OURO" },
+                { code: "Fernanda Cristina Lopes", category: "RECEPCAO", roleLabel: "🛎️ Recepcionista", indPts: 690, grpPts: 300, totalPts: 1089, tier: "OURO" },
+                { code: "Equipe Posto Boa Vista (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1060, totalPts: 1060, tier: "OURO" },
               ],
             },
           ],
@@ -397,8 +397,8 @@
               collectivePts: 1090,
               tier: "OURO",
               members: [
-                { code: "Atendente #501 • Guichê 01", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 780, grpPts: 260, totalPts: 1185, tier: "OURO" },
-                { code: "Equipe Boa Vista (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1090, totalPts: 1090, tier: "OURO" },
+                { code: "Beatriz Nogueira", category: "ATENDENTE", roleLabel: "🎧 Atendente de Guichê", indPts: 780, grpPts: 260, totalPts: 1185, tier: "OURO" },
+                { code: "Equipe Posto Boa Vista (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1090, totalPts: 1090, tier: "OURO" },
               ],
             },
             {
@@ -410,8 +410,8 @@
               collectivePts: 1040,
               tier: "OURO",
               members: [
-                { code: "Supervisor Local #S-01", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 800, grpPts: 280, totalPts: 1210, tier: "OURO" },
-                { code: "Equipe Rebouças (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1040, totalPts: 1040, tier: "OURO" },
+                { code: "Ricardo Tavares", category: "SUPERVISOR", roleLabel: "📊 Supervisor Local", indPts: 800, grpPts: 280, totalPts: 1210, tier: "OURO" },
+                { code: "Equipe Central Rebouças (Coletivo)", category: "GRUPO", roleLabel: "🤝 Equipe da Unidade", indPts: 0, grpPts: 1040, totalPts: 1040, tier: "OURO" },
               ],
             },
           ],
@@ -421,6 +421,23 @@
   }
 
   let db = getInitialData();
+
+  function loadSharedSponsorsDataIntoDb() {
+    try {
+      const raw = localStorage.getItem("sanepar_gamification_sponsors_stock_v1");
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.sponsors) && Array.isArray(parsed.donatedItems)) {
+        db.sponsors = parsed.sponsors;
+        db.donatedItems = parsed.donatedItems;
+      }
+      if (parsed && Array.isArray(parsed.activeCyclePrizeBuckets) && db.cycles.C_2026_4) {
+        db.cycles.C_2026_4.prizeBuckets = parsed.activeCyclePrizeBuckets;
+      }
+    } catch (_) {}
+  }
+
+  loadSharedSponsorsDataIntoDb();
 
   const state = {
     activeTab: "view-public-team",
@@ -462,31 +479,35 @@
   }
 
   // =========================================================================
-  // NAVEGAÇÃO ENTRE AS 2 ABAS PRINCIPAIS (TIME SANEPAR vs. TIME DE GESTÃO)
+  // RENDERIZAÇÃO DA VITRINE CLEAN E RANKING POR UNIDADE (COM DRILL-DOWN)
   // =========================================================================
-  $$(".main-tab-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      $$(".main-tab-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      state.activeTab = btn.dataset.target;
-
-      $("#view-public-team").classList.toggle("hidden", state.activeTab !== "view-public-team");
-      $("#view-admin-management").classList.toggle("hidden", state.activeTab !== "view-admin-management");
+  function getAllRankedMembers(cyc) {
+    const all = [];
+    cyc.unitsRanking.forEach((u) => {
+      u.members.forEach((m) => {
+        all.push({
+          ...m,
+          unitId: u.unitId,
+          unitName: u.unitName,
+          coord: u.coord,
+          unitTme: u.tme,
+          unitNps: u.nps,
+        });
+      });
     });
-  });
+    return all.sort((a, b) => b.totalPts - a.totalPts);
+  }
 
-  // =========================================================================
-  // ABA 1: RENDERIZAÇÃO DA VITRINE CLEAN E RANKING POR UNIDADE (COM DRILL-DOWN)
-  // =========================================================================
   function renderPublicMiniKpis() {
     const cyc = getPublicCycle();
     const totalLinkedItems = cyc.prizeBuckets.reduce((acc, b) => acc + b.items.length, 0);
-    const leaderUnit = cyc.unitsRanking[0];
+    const allRanked = getAllRankedMembers(cyc);
+    const topMember = allRanked[0];
 
     $("#pub-kpi-cycle").textContent = cyc.label;
     $("#pub-kpi-prizes").textContent = `${totalLinkedItems} Prêmio(s) Patrocinado(s) Ativo(s)`;
-    $("#pub-kpi-leader").textContent = leaderUnit
-      ? `🥇 ${leaderUnit.unitName} (${formatNum(leaderUnit.collectivePts)} pts)`
+    $("#pub-kpi-leader").textContent = topMember
+      ? `🥇 ${topMember.code} (${formatNum(topMember.totalPts)} pts)`
       : "—";
   }
 
@@ -568,95 +589,46 @@
     tbody.innerHTML = "";
 
     const isClosed = cyc.status === "ENCERRADO";
+    const allRanked = getAllRankedMembers(cyc);
 
-    // NÍVEL 1 DO DRILL-DOWN: VISÃO CONSOLIDADA POR UNIDADE DE ATENDIMENTO
-    if (state.publicUnitId === "ALL") {
+    const isAllUnits = state.publicUnitId === "ALL";
+    const selectedUnitObj = !isAllUnits
+      ? cyc.unitsRanking.find((u) => u.unitId === state.publicUnitId) || cyc.unitsRanking[0]
+      : null;
+
+    if (isAllUnits) {
       btnBack.classList.add("hidden");
       $("#pub-ranking-level-tag").textContent = isClosed
-        ? `Histórico Homologado • Ranking Final por Unidade (${cyc.code})`
-        : `Visão Geral • Ranking Atual por Unidade de Atendimento (${cyc.code})`;
-      $("#pub-ranking-title").textContent = `Ranking por Unidade de Atendimento — ${cyc.code} (Clique na Unidade p/ Drill-Down)`;
+        ? `Histórico Homologado • Ranking Geral de Profissionais e Equipes (${cyc.code})`
+        : `Classificação Geral por Pontuação • Todos os Profissionais e Equipes (${cyc.code})`;
+      $("#pub-ranking-title").textContent = `Ranking de Profissionais e Equipes — ${cyc.code}`;
 
       breadcrumb.innerHTML = `
-        <span class="drill-crumb active">🏛️ Todas as Unidades de Atendimento (${cyc.unitsRanking.length} Unidades no Ranking)</span>
-        <span class="text-muted">• Clique em uma unidade abaixo para abrir os profissionais e prêmios daquela unidade</span>
+        <span class="drill-crumb active">🏆 Todos os Profissionais e Equipes (${allRanked.length} participantes ranqueados do maior para o menor nº de pontos)</span>
+        <span class="text-muted">• Clique no nome da unidade ou use os filtros acima para focar em uma unidade ou categoria</span>
+      `;
+    } else {
+      btnBack.classList.remove("hidden");
+      $("#pub-ranking-level-tag").textContent = `Filtro por Unidade • ${selectedUnitObj.coord}`;
+      $("#pub-ranking-title").textContent = `Ranking de Profissionais e Equipes: ${selectedUnitObj.unitName} — ${cyc.code}`;
+
+      breadcrumb.innerHTML = `
+        <span class="drill-crumb" id="crumb-back-all-units">🏛️ Todas as Unidades</span>
+        <span>›</span>
+        <span class="drill-crumb active">📍 ${selectedUnitObj.unitName} (TME ${selectedUnitObj.tme} • NPS ${selectedUnitObj.nps})</span>
       `;
 
-      thead.innerHTML = `
-        <tr>
-          <th>Posição</th>
-          <th>Unidade de Atendimento</th>
-          <th>Indicadores (TME / NPS)</th>
-          <th>Pontuação da Unidade</th>
-          <th>Prêmio Coletivo da Unidade</th>
-          <th>Drill-Down</th>
-        </tr>
-      `;
-
-      cyc.unitsRanking.forEach((u, idx) => {
-        const pos = idx + 1;
-        const medal = pos === 1 ? "🥇 1º" : pos === 2 ? "🥈 2º" : pos === 3 ? "🥉 3º" : `${pos}º`;
-        const groupPrizeText = getPrizeSummaryForCategoryTier(cyc, "GRUPO", u.tier);
-
-        const tr = document.createElement("tr");
-        tr.className = "drillable-unit-row";
-        tr.innerHTML = `
-          <td><strong>${medal}</strong></td>
-          <td>
-            <strong>${u.unitName}</strong>
-            <div class="text-muted" style="font-size:0.74rem;">${u.coord}</div>
-          </td>
-          <td>
-            <span class="tag tag-green">TME ${u.tme}</span>
-            <span class="tag tag-blue">NPS ${u.nps}</span>
-          </td>
-          <td>
-            <strong>${formatNum(u.collectivePts)} pts</strong>
-            <div><span class="tag ${u.tier === "OURO" ? "tag-amber" : "tag-blue"}">${u.tier === "OURO" ? "🥇 Faixa Ouro" : "🥈 Faixa Prata"}</span></div>
-          </td>
-          <td style="max-width:250px;font-size:0.77rem;">${groupPrizeText}</td>
-          <td>
-            <button type="button" class="btn btn-primary btn-sm">
-              🔍 Ver Ranking da Unidade →
-            </button>
-          </td>
-        `;
-
-        tr.addEventListener("click", () => {
-          state.publicUnitId = u.unitId;
-          $("#sel-public-unit").value = u.unitId;
-          renderPublicRanking();
-        });
-
-        tbody.appendChild(tr);
+      $("#crumb-back-all-units").addEventListener("click", () => {
+        state.publicUnitId = "ALL";
+        $("#sel-public-unit").value = "ALL";
+        renderPublicRanking();
       });
-      return;
     }
-
-    // NÍVEL 2 DO DRILL-DOWN: RANKING INTERNO DA UNIDADE DE ATENDIMENTO SELECIONADA
-    const unitObj =
-      cyc.unitsRanking.find((u) => u.unitId === state.publicUnitId) || cyc.unitsRanking[0];
-
-    btnBack.classList.remove("hidden");
-    $("#pub-ranking-level-tag").textContent = `Drill-Down da Unidade • ${unitObj.coord}`;
-    $("#pub-ranking-title").textContent = `Ranking Interno: ${unitObj.unitName} — ${cyc.code}`;
-
-    breadcrumb.innerHTML = `
-      <span class="drill-crumb" id="crumb-back-all-units">🏛️ Todas as Unidades</span>
-      <span>›</span>
-      <span class="drill-crumb active">📍 ${unitObj.unitName} (TME ${unitObj.tme} • NPS ${unitObj.nps})</span>
-    `;
-
-    $("#crumb-back-all-units").addEventListener("click", () => {
-      state.publicUnitId = "ALL";
-      $("#sel-public-unit").value = "ALL";
-      renderPublicRanking();
-    });
 
     thead.innerHTML = `
       <tr>
         <th>Pos.</th>
-        <th>Profissional / Equipe (LGPD)</th>
+        <th>Profissional/Equipe</th>
         <th>Categoria</th>
         <th>Pontuação (Ind. + Grupo)</th>
         <th>Faixa</th>
@@ -664,15 +636,17 @@
       </tr>
     `;
 
-    const filteredMembers = unitObj.members.filter(
-      (m) => state.publicCategory === "ALL" || m.category === state.publicCategory
-    );
+    // Filtra por unidade (se selecionada) e por categoria (se selecionada), mantendo ordenação decrescente por totalPts
+    const filteredMembers = allRanked
+      .filter((m) => isAllUnits || m.unitId === state.publicUnitId)
+      .filter((m) => state.publicCategory === "ALL" || m.category === state.publicCategory)
+      .sort((a, b) => b.totalPts - a.totalPts);
 
     if (filteredMembers.length === 0) {
       tbody.innerHTML = `
         <tr>
           <td colspan="6" style="text-align:center;padding:16px;" class="text-muted">
-            Nenhum participante desta categoria registrado nesta unidade para o filtro selecionado.
+            Nenhum profissional ou equipe encontrado para o filtro selecionado neste ciclo.
           </td>
         </tr>
       `;
@@ -688,7 +662,12 @@
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td><strong>${medal}</strong></td>
-        <td><strong>${m.code}</strong></td>
+        <td>
+          <strong>${m.code}</strong>
+          <div class="text-muted drill-crumb" data-unit-id="${m.unitId}" style="font-size:0.73rem;" title="Clique para filtrar os profissionais desta unidade">
+            📍 ${m.unitName}
+          </div>
+        </td>
         <td><span class="tag ${catMeta.cls}">${m.roleLabel}</span></td>
         <td>
           <strong>${formatNum(m.totalPts)} pts</strong>
@@ -708,6 +687,16 @@
           </div>
         </td>
       `;
+
+      const unitLink = tr.querySelector("[data-unit-id]");
+      if (unitLink) {
+        unitLink.addEventListener("click", () => {
+          state.publicUnitId = m.unitId;
+          $("#sel-public-unit").value = m.unitId;
+          renderPublicRanking();
+        });
+      }
+
       tbody.appendChild(tr);
     });
   }
@@ -755,398 +744,24 @@
   });
 
   // =========================================================================
-  // ABA 2: GESTÃO DE PATROCINADORES, ITENS DOADOS E VÍNCULO AO CICLO VIGENTE
-  // =========================================================================
-  function showAdminFeedback(htmlMsg) {
-    const fb = $("#admin-feedback-banner");
-    fb.innerHTML = htmlMsg;
-    fb.classList.remove("hidden");
-  }
-
-  function renderAdminSponsorsAndDropdowns() {
-    $("#admin-sponsors-count-tag").textContent = `${db.sponsors.length} Patrocinadores`;
-
-    // Lista de cartões de patrocinadores no Passo 1
-    const listEl = $("#admin-sponsors-list");
-    listEl.innerHTML = "";
-    db.sponsors.forEach((sp) => {
-      const itemsCount = db.donatedItems.filter((it) => it.sponsorId === sp.id).length;
-      const isFiltered = state.adminStockSponsorFilter === sp.id;
-
-      const chip = document.createElement("div");
-      chip.className = `sponsor-chip-card${isFiltered ? " active" : ""}`;
-      chip.innerHTML = `
-        <strong>${sp.icon} ${sp.name} (${itemsCount} itens)</strong>
-        <span class="text-muted">${sp.segment} • ${sp.agreement}</span>
-      `;
-      chip.addEventListener("click", () => {
-        state.adminStockSponsorFilter =
-          state.adminStockSponsorFilter === sp.id ? "ALL" : sp.id;
-        $("#filter-stock-sponsor").value = state.adminStockSponsorFilter;
-        renderAdminSponsorsAndDropdowns();
-        renderAdminDonatedItemsStock();
-      });
-      listEl.appendChild(chip);
-    });
-
-    // Dropdown de patrocinador no formulário do Passo 2
-    const selItemSponsor = $("#sel-item-sponsor");
-    selItemSponsor.innerHTML = "";
-    db.sponsors.forEach((sp) => {
-      const opt = document.createElement("option");
-      opt.value = sp.id;
-      opt.textContent = `${sp.icon} ${sp.name}`;
-      selItemSponsor.appendChild(opt);
-    });
-
-    // Dropdown de filtro de estoque por patrocinador no Passo 2
-    const selFilterStock = $("#filter-stock-sponsor");
-    selFilterStock.innerHTML = `<option value="ALL">Todos os Patrocinadores (${db.sponsors.length})</option>`;
-    db.sponsors.forEach((sp) => {
-      const opt = document.createElement("option");
-      opt.value = sp.id;
-      opt.textContent = `${sp.icon} ${sp.name}`;
-      selFilterStock.appendChild(opt);
-    });
-    selFilterStock.value = state.adminStockSponsorFilter;
-  }
-
-  function renderAdminDonatedItemsStock() {
-    const tbody = $("#donated-items-tbody");
-    tbody.innerHTML = "";
-
-    const filtered = db.donatedItems.filter(
-      (it) =>
-        state.adminStockSponsorFilter === "ALL" ||
-        it.sponsorId === state.adminStockSponsorFilter
-    );
-
-    filtered.forEach((it) => {
-      const sp = db.sponsors.find((s) => s.id === it.sponsorId) || db.sponsors[0];
-      const available = Math.max(0, it.totalQty - it.linkedQty);
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><strong>${sp.icon} ${sp.name}</strong></td>
-        <td><strong>${it.name}</strong></td>
-        <td>${it.totalQty} unid.</td>
-        <td>${it.linkedQty} unid.</td>
-        <td>
-          <span class="tag ${available > 0 ? "tag-green" : "tag-amber"}">
-            ${available} disponíveis
-          </span>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    // Atualiza o dropdown de itens disponíveis para vínculo no Passo 3
-    const selLinkItem = $("#sel-link-donated-item");
-    const prevSelected = selLinkItem.value;
-    selLinkItem.innerHTML = "";
-    db.donatedItems.forEach((it) => {
-      const sp = db.sponsors.find((s) => s.id === it.sponsorId) || db.sponsors[0];
-      const available = Math.max(0, it.totalQty - it.linkedQty);
-      if (available > 0) {
-        const opt = document.createElement("option");
-        opt.value = it.id;
-        opt.textContent = `${sp.icon} ${sp.name} — ${it.name} (Saldo: ${available} unid.)`;
-        selLinkItem.appendChild(opt);
-      }
-    });
-    if (prevSelected && Array.from(selLinkItem.options).some((o) => o.value === prevSelected)) {
-      selLinkItem.value = prevSelected;
-    }
-    syncLinkQtyMaxWithSelectedStock();
-  }
-
-  function syncLinkQtyMaxWithSelectedStock() {
-    const selLinkItem = $("#sel-link-donated-item");
-    const inpQty = $("#inp-link-qty");
-    const lblMax = $("#lbl-max-link-qty");
-    const btnSubmit = $("#btn-submit-link-prize");
-    const errBanner = $("#link-qty-error-msg");
-
-    const stockItem = db.donatedItems.find((d) => d.id === selLinkItem.value);
-    if (!stockItem) {
-      if (lblMax) lblMax.textContent = "0";
-      inpQty.value = "0";
-      inpQty.max = "0";
-      inpQty.disabled = true;
-      if (btnSubmit) btnSubmit.disabled = true;
-      return;
-    }
-
-    const available = Math.max(0, stockItem.totalQty - stockItem.linkedQty);
-    inpQty.disabled = false;
-    if (btnSubmit) btnSubmit.disabled = false;
-    inpQty.max = String(available);
-    if (lblMax) lblMax.textContent = String(available);
-
-    const currentVal = Number(inpQty.value) || 1;
-    if (currentVal > available) {
-      inpQty.value = String(available);
-    } else if (currentVal < 1) {
-      inpQty.value = "1";
-    }
-    if (errBanner) errBanner.classList.add("hidden");
-  }
-
-  function renderAdminActiveCycleLinks() {
-    const activeCycle = db.cycles.C_2026_4;
-    const grid = $("#active-cycle-prize-links-grid");
-    grid.innerHTML = "";
-
-    const categoriesOrder = ["RECEPCAO", "ATENDENTE", "SUPERVISOR", "GRUPO"];
-
-    categoriesOrder.forEach((catKey) => {
-      const catMeta = CATEGORY_META[catKey];
-      const ouroBucket = activeCycle.prizeBuckets.find(
-        (b) => b.category === catKey && b.tier === "OURO"
-      );
-      const prataBucket = activeCycle.prizeBuckets.find(
-        (b) => b.category === catKey && b.tier === "PRATA"
-      );
-
-      const card = document.createElement("div");
-      card.className = "linked-cat-card";
-
-      const renderBucketRows = (bucket, tierLabel, tierBadgeCls) => {
-        if (!bucket || bucket.items.length === 0) {
-          return `
-            <div class="linked-item-row">
-              <span class="text-muted">${tierLabel}: Nenhum item doado vinculado.</span>
-            </div>
-          `;
-        }
-        return bucket.items
-          .map(
-            (link) => `
-            <div class="linked-item-row">
-              <div>
-                <span class="tag ${tierBadgeCls}" style="margin-right:5px;">${tierLabel}</span>
-                <strong>${link.itemName}</strong>
-                <span class="text-muted">(${link.sponsorIcon} ${link.sponsorName} • ${link.qty} cotas)</span>
-              </div>
-              <button type="button" class="btn btn-secondary btn-sm btn-unlink-item" data-cat="${catKey}" data-tier="${bucket.tier}" data-link-id="${link.linkId}">
-                ✕ Desvincular
-              </button>
-            </div>
-          `
-          )
-          .join("");
-      };
-
-      card.innerHTML = `
-        <div class="linked-cat-head">
-          <strong>${catMeta.label}</strong>
-          <span class="tag ${catMeta.cls}">Ciclo 2026.4 (Vigente)</span>
-        </div>
-        ${renderBucketRows(ouroBucket, "🥇 Ouro", "tag-amber")}
-        ${renderBucketRows(prataBucket, "🥈 Prata", "tag-blue")}
-      `;
-
-      card.querySelectorAll(".btn-unlink-item").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const tCat = btn.dataset.cat;
-          const tTier = btn.dataset.tier;
-          const tLinkId = btn.dataset.linkId;
-
-          const targetBucket = activeCycle.prizeBuckets.find(
-            (b) => b.category === tCat && b.tier === tTier
-          );
-          if (!targetBucket) return;
-
-          const foundLink = targetBucket.items.find((x) => x.linkId === tLinkId);
-          if (foundLink) {
-            const stockItem = db.donatedItems.find((d) => d.id === foundLink.itemId);
-            if (stockItem) {
-              stockItem.linkedQty = Math.max(0, stockItem.linkedQty - foundLink.qty);
-            }
-            targetBucket.items = targetBucket.items.filter((x) => x.linkId !== tLinkId);
-            showAdminFeedback(
-              `↺ Item <strong>"${foundLink.itemName}"</strong> desvinculado de <strong>${catMeta.label} (${tTier})</strong>. As ${foundLink.qty} cotas retornaram ao saldo do patrocinador!`
-            );
-            refreshAll();
-          }
-        });
-      });
-
-      grid.appendChild(card);
-    });
-  }
-
-  // Passo 1: Cadastrar Novo Patrocinador
-  $("#form-new-sponsor").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const name = $("#inp-sp-name").value.trim();
-    const segment = $("#sel-sp-segment").value;
-    const agreement = $("#inp-sp-agreement").value.trim();
-    if (!name || !agreement) return;
-
-    const iconMap = {
-      "Tecnologia & Periféricos": "💻",
-      "Alimentação & Vouchers": "🍔",
-      "Lazer, Hotelaria & Cultura": "🏖️",
-      "Educação & Certificações": "🎓",
-    };
-
-    const newSp = {
-      id: `SP_${Date.now()}`,
-      name,
-      icon: iconMap[segment] || "🤝",
-      segment,
-      agreement,
-    };
-
-    db.sponsors.push(newSp);
-    $("#inp-sp-name").value = "";
-    $("#inp-sp-agreement").value = "";
-
-    showAdminFeedback(
-      `✅ <strong>Novo patrocinador cadastrado com sucesso:</strong> ${newSp.icon} <strong>${newSp.name}</strong> (${newSp.segment}). Agora você já pode registrar itens doados por ele no Passo 2!`
-    );
-    refreshAll();
-    $("#sel-item-sponsor").value = newSp.id;
-  });
-
-  // Passo 2: Cadastrar Novo Item Doado
-  $("#form-new-donated-item").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const sponsorId = $("#sel-item-sponsor").value;
-    const name = $("#inp-item-name").value.trim();
-    const totalQty = Number($("#inp-item-qty").value) || 10;
-    if (!sponsorId || !name) return;
-
-    const sp = db.sponsors.find((s) => s.id === sponsorId) || db.sponsors[0];
-    const newItem = {
-      id: `DI_${Date.now()}`,
-      sponsorId,
-      name,
-      totalQty,
-      linkedQty: 0,
-    };
-
-    db.donatedItems.unshift(newItem);
-    $("#inp-item-name").value = "";
-
-    showAdminFeedback(
-      `📦 <strong>Item doado registrado no estoque:</strong> <em>"${newItem.name}"</em> (${newItem.totalQty} unidades doadas por <strong>${sp.icon} ${sp.name}</strong>). Disponível para vínculo no Passo 3!`
-    );
-    refreshAll();
-    $("#sel-link-donated-item").value = newItem.id;
-  });
-
-  $("#filter-stock-sponsor").addEventListener("change", (e) => {
-    state.adminStockSponsorFilter = e.target.value;
-    renderAdminSponsorsAndDropdowns();
-    renderAdminDonatedItemsStock();
-  });
-
-  $("#sel-link-donated-item").addEventListener("change", () => {
-    syncLinkQtyMaxWithSelectedStock();
-  });
-
-  $("#inp-link-qty").addEventListener("input", () => {
-    const itemId = $("#sel-link-donated-item").value;
-    const stockItem = db.donatedItems.find((d) => d.id === itemId);
-    const errBanner = $("#link-qty-error-msg");
-    if (!stockItem || !errBanner) return;
-
-    const available = Math.max(0, stockItem.totalQty - stockItem.linkedQty);
-    const val = Number($("#inp-link-qty").value);
-
-    if (val > available) {
-      errBanner.innerHTML = `⚠️ <strong>Quantidade acima do saldo disponível:</strong> O item <strong>"${stockItem.name}"</strong> possui apenas <strong>${available} unidade(s)</strong> de saldo. Informe no máximo <strong>${available}</strong>.`;
-      errBanner.classList.remove("hidden");
-    } else {
-      errBanner.classList.add("hidden");
-    }
-  });
-
-  // Passo 3: Vincular Item Doado ao Prêmio de uma Categoria do Ciclo em Andamento
-  $("#form-link-item-to-prize").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const category = $("#sel-link-category").value;
-    const tier = $("#sel-link-tier").value;
-    const itemId = $("#sel-link-donated-item").value;
-    const qtyToLink = Number($("#inp-link-qty").value);
-    const errBanner = $("#link-qty-error-msg");
-
-    const stockItem = db.donatedItems.find((d) => d.id === itemId);
-    if (!stockItem) return;
-
-    const available = Math.max(0, stockItem.totalQty - stockItem.linkedQty);
-
-    // Ajuste 2: Bloqueia o vínculo caso a quantidade informada seja maior do que o saldo disponível no item
-    if (!qtyToLink || qtyToLink < 1 || qtyToLink > available) {
-      if (errBanner) {
-        errBanner.innerHTML = `⚠️ <strong>Operação bloqueada:</strong> Não é permitido vincular <strong>${qtyToLink || 0} cotas</strong>, pois o saldo disponível do item <strong>"${stockItem.name}"</strong> é de apenas <strong>${available} unidade(s)</strong>.`;
-        errBanner.classList.remove("hidden");
-      }
-      return;
-    }
-
-    if (errBanner) errBanner.classList.add("hidden");
-
-    const sp = db.sponsors.find((s) => s.id === stockItem.sponsorId) || db.sponsors[0];
-    const activeCycle = db.cycles.C_2026_4;
-
-    let bucket = activeCycle.prizeBuckets.find(
-      (b) => b.category === category && b.tier === tier
-    );
-    if (!bucket) {
-      bucket = {
-        category,
-        tier,
-        minPts: tier === "OURO" ? 1100 : 850,
-        items: [],
-      };
-      activeCycle.prizeBuckets.push(bucket);
-    }
-
-    bucket.items.push({
-      linkId: `L_${Date.now()}`,
-      itemId: stockItem.id,
-      sponsorName: sp.name,
-      sponsorIcon: sp.icon,
-      itemName: stockItem.name,
-      qty: qtyToLink,
-    });
-
-    stockItem.linkedQty += qtyToLink;
-
-    const catLabel = CATEGORY_META[category]?.label || category;
-    showAdminFeedback(
-      `🔗 <strong>Vínculo realizado com sucesso no Ciclo 2026.4 (Vigente)!</strong> O item <strong>"${stockItem.name}"</strong> (${sp.icon} ${sp.name} • ${qtyToLink} cotas) foi vinculado ao prêmio de <strong>${catLabel} (${tier})</strong> e já está visível para todo o time na Aba 1!`
-    );
-
-    refreshAll();
-  });
-
-  // =========================================================================
   // MASCOTE AQUALINO RESPONDENDO DÚVIDAS DE UTILIZAÇÃO DA TELA
   // =========================================================================
   function generateAqualinoV2Answer(rawQuestion) {
     const q = (rawQuestion || "").toLowerCase();
 
     if (/(drill|unidade|ranking|equipe|profissiona|atendente|recepcionista|supervisor)/i.test(q)) {
-      return `Na <strong>Aba 1 (Vitrine & Ranking por Unidade)</strong>, a tabela da direita inicia mostrando o <strong>Ranking Geral das Unidades de Atendimento</strong> para evitar poluição visual. Basta clicar em qualquer linha de unidade (ex.: <em>Posto Boa Vista</em>, <em>Central Rebouças</em> ou <em>Central Maringá</em>) ou escolher a unidade no filtro <strong>"2. Unidade de Atendimento"</strong> para fazer o <strong>Drill-Down</strong> e ver o ranking individual dos Recepcionistas, Atendentes e Supervisor daquela unidade!`;
+      return `Na <strong>Vitrine & Ranking por Unidade</strong>, a tabela da direita inicia mostrando o <strong>Ranking Geral das Unidades de Atendimento</strong> para evitar poluição visual. Basta clicar em qualquer linha de unidade (ex.: <em>Posto Boa Vista</em>, <em>Central Rebouças</em> ou <em>Central Maringá</em>) ou escolher a unidade no filtro <strong>"2. Unidade de Atendimento"</strong> para fazer o <strong>Drill-Down</strong> e ver o ranking individual dos Recepcionistas, Atendentes e Supervisor daquela unidade!`;
     }
 
     if (/(anterior|ciclo|histórico|historico|2026\.3|2026\.2)/i.test(q)) {
-      return `Para consultar o <strong>ranking e os prêmios dos ciclos anteriores</strong>, selecione o ciclo desejado no campo <strong>"1. Ciclo de Gamificação (Atual ou Anteriores)"</strong> na Aba 1 (como o <em>Ciclo 2026.3</em> ou o <em>Ciclo 2026.2</em>). Tanto a vitrine de prêmios à esquerda quanto o ranking por unidade à direita atualizarão imediatamente com os dados homologados daquele ciclo!`;
+      return `Para consultar o <strong>ranking e os prêmios dos ciclos anteriores</strong>, selecione o ciclo desejado no campo <strong>"1. Ciclo de Gamificação (Atual ou Anteriores)"</strong> (como o <em>Ciclo 2026.3</em> ou o <em>Ciclo 2026.2</em>). Tanto a vitrine de prêmios à esquerda quanto o ranking por unidade à direita atualizarão imediatamente com os dados homologados daquele ciclo!`;
     }
 
-    if (/(patrocinador|item|doado|estoque|doação|doacao|positivo|ifood)/i.test(q)) {
-      return `Clique na <strong>Aba 2 (2. Gestão de Patrocinadores & Vínculo de Itens Doados)</strong>, exclusiva do time de gestão. No <strong>Passo 1</strong> você cadastra novos patrocinadores (como <em>Positivo Informática</em>, <em>iFood</em>, etc.); e no <strong>Passo 2</strong> você registra os itens doados por cada patrocinador e acompanha o saldo disponível no estoque!`;
+    if (/(patrocinador|item|doado|estoque|doação|doacao|positivo|ifood|vincular|vínculo|vinculo)/i.test(q)) {
+      return `A <strong>Gestão de Patrocinadores & Vínculo de Itens Doados</strong> agora fica na tela <strong>TelaGameParam.html</strong> (acessível pelo botão <em>⚙️ Regras & Patrocínios</em> no topo), onde o time de gestão cadastra novos patrocinadores, registra itens doados no estoque e vincula os prêmios às categorias do ciclo vigente!`;
     }
 
-    if (/(vincular|vínculo|vinculo|prêmio|premio|categoria|ouro|prata)/i.test(q)) {
-      return `Na <strong>Aba 2</strong>, vá ao <strong>Passo 3 (Vincular Itens Doados aos Prêmios de Cada Categoria — Ciclo 2026.4)</strong>: escolha a Categoria (<em>Recepcionistas, Atendentes, Supervisores ou Equipe da Unidade</em>), a Faixa (<em>Ouro ou Prata</em>), o Item Doado disponível no estoque e clique em <strong>"🔗 Vincular Item ao Prêmio da Categoria"</strong>. O prêmio aparece na mesma hora na Aba 1 para todo o time da SANEPAR!`;
-    }
-
-    return `Esta tela foi dividida em <strong>2 abas limpas</strong> para evitar qualquer poluição visual: na <strong>Aba 1</strong>, todo o time da SANEPAR consulta os prêmios e o ranking por Unidade de Atendimento (com drill-down clicando na unidade e consulta a ciclos anteriores); na <strong>Aba 2</strong>, o time de gestão cadastra patrocinadores, registra itens doados e vincula esses itens aos prêmios de cada categoria do ciclo em andamento!`;
+    return `Nesta tela todo o time da SANEPAR consulta os prêmios patrocinados disponíveis por categoria e o ranking por Unidade de Atendimento (com drill-down clicando na unidade e consulta a ciclos anteriores). O cadastro de patrocinadores e vínculo de itens doados é realizado na tela <strong>TelaGameParam.html</strong>!`;
   }
 
   function askAqualinoV2(questionText) {
@@ -1217,7 +832,7 @@
           isListeningV2 = false;
           btnVoiceV2.classList.remove("listening");
           btnVoiceV2.textContent = "🎤 Voz";
-          const sample = "Como vincular os itens doados aos prêmios de cada categoria do ciclo em andamento?";
+          const sample = "Como consultar o ranking por unidade de atendimento e usar o drill-down para ver os profissionais da unidade?";
           $("#input-ask-aqualino-v2").value = sample;
           askAqualinoV2(sample);
         };
@@ -1226,7 +841,7 @@
       } catch (_) {}
     }
 
-    const sample = "Como vincular os itens doados aos prêmios de cada categoria do ciclo em andamento?";
+    const sample = "Como consultar o ranking por unidade de atendimento e usar o drill-down para ver os profissionais da unidade?";
     $("#input-ask-aqualino-v2").value = sample;
     askAqualinoV2(sample);
   });
@@ -1239,12 +854,12 @@
 
   // Restaurar Padrão
   $("#btn-reset-v2").addEventListener("click", () => {
+    localStorage.removeItem("sanepar_gamification_sponsors_stock_v1");
     db = getInitialData();
     state.publicCycleId = "C_2026_4";
     state.publicUnitId = "ALL";
     state.publicCategory = "ALL";
     state.publicTier = "ALL";
-    state.adminStockSponsorFilter = "ALL";
 
     $("#sel-public-cycle").value = "C_2026_4";
     $("#sel-public-unit").value = "ALL";
@@ -1253,10 +868,9 @@
       c.classList.toggle("active", c.dataset.tier === "ALL");
     });
 
-    $("#admin-feedback-banner").classList.add("hidden");
     $("#aqualino-v2-bubble").classList.remove("answering");
     $("#aqualino-v2-bubble").innerHTML =
-      "Olá! Na <strong>Aba 1</strong> todo o time da SANEPAR consulta os prêmios e o ranking por Unidade (com drill-down e histórico de ciclos). Na <strong>Aba 2</strong> o time de gestão cadastra patrocinadores, itens doados e vincula aos prêmios do ciclo em andamento!";
+      "Olá! Nesta vitrine todo o time da SANEPAR consulta os prêmios patrocinados disponíveis para cada categoria e acompanha o ranking por Unidade de Atendimento (com drill-down e histórico de ciclos anteriores)!";
 
     refreshAll();
   });
@@ -1265,9 +879,6 @@
     renderPublicMiniKpis();
     renderPublicPrizesList();
     renderPublicRanking();
-    renderAdminSponsorsAndDropdowns();
-    renderAdminDonatedItemsStock();
-    renderAdminActiveCycleLinks();
   }
 
   refreshAll();
