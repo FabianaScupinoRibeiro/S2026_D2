@@ -911,6 +911,24 @@
       statusBar.classList.remove("printing");
       statusText.textContent = `✓ Senha ${tk.code} impressa com sucesso! Retire seu comprovante.`;
     }, 850);
+
+    syncPrintOnlyMount();
+  }
+
+  function syncPrintOnlyMount() {
+    const mount = $("#print-only-mount");
+    const simBox = $("#ticket-print-simulation");
+    if (!mount || !simBox) return;
+    const paper = simBox.querySelector(".thermal-ticket-paper");
+    if (paper) {
+      mount.innerHTML = "";
+      mount.appendChild(paper.cloneNode(true));
+    }
+  }
+
+  function printOnlyThermalTicket() {
+    syncPrintOnlyMount();
+    window.print();
   }
 
   const btnImprimirSenha = $("#btn-imprimir-senha");
@@ -920,9 +938,7 @@
 
   const btnBrowserPrint = $("#btn-browser-print");
   if (btnBrowserPrint) {
-    btnBrowserPrint.addEventListener("click", () => {
-      window.print();
-    });
+    btnBrowserPrint.addEventListener("click", printOnlyThermalTicket);
   }
 
   const btnClosePrintSim = $("#btn-close-print-sim");

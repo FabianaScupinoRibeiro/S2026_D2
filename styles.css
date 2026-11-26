@@ -1716,3 +1716,40 @@ body {
   font-size: 0.68rem;
   color: var(--text-muted);
 }
+
+.print-only-mount {
+  display: none;
+}
+
+@media print {
+  @page {
+    margin: 10mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .phone-shell {
+    display: none !important;
+  }
+
+  .print-only-mount {
+    display: flex !important;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 12px 0;
+  }
+
+  .print-only-mount .thermal-ticket-paper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
