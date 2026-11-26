@@ -1203,7 +1203,51 @@ body {
   border-radius: 6px;
 }
 
-/* INDICADORES DE TME E TMA DA UNIDADE SELECIONADA (STEP 2 & STEP 3) */
+/* LEGENDA DE ACESSIBILIDADE DAS UNIDADES E INDICADORES DE TME E TMA (STEP 2 & STEP 3) */
+.unit-accessibility-legend {
+  margin-top: 4px;
+  background: var(--bg-shell);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.unit-accessibility-legend .legend-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.unit-accessibility-legend .legend-items-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.unit-accessibility-legend .legend-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--text-body);
+}
+
+.unit-accessibility-legend .legend-icon {
+  font-style: normal;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
 .unit-metrics-box {
   margin-top: 6px;
   background: var(--primary-soft);

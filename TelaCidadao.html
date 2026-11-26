@@ -292,11 +292,26 @@
           <div class="field">
             <label for="select-unidade">Unidade SANEPAR em Curitiba</label>
             <select id="select-unidade">
-              <option value="Central Rebouças — R. Engenheiros Rebouças, 1376">Central Rebouças — R. Engenheiros Rebouças, 1376 (Centro)</option>
-              <option value="Rua da Cidadania Pinheirinho — Av. Winston Churchill, 2033">Rua da Cidadania Pinheirinho — Av. Winston Churchill, 2033</option>
-              <option value="Rua da Cidadania Boa Vista — Av. Paraná, 3600">Rua da Cidadania Boa Vista — Av. Paraná, 3600</option>
-              <option value="Rua da Cidadania Fazendinha — R. Carlos Klemtz, 1700">Rua da Cidadania Fazendinha — R. Carlos Klemtz, 1700</option>
+              <option value="Central Rebouças — R. Engenheiros Rebouças, 1376">♿ 🧩 Central Rebouças — R. Engenheiros Rebouças, 1376 (Centro)</option>
+              <option value="Rua da Cidadania Pinheirinho — Av. Winston Churchill, 2033">♿ 🧩 Rua da Cidadania Pinheirinho — Av. Winston Churchill, 2033</option>
+              <option value="Rua da Cidadania Boa Vista — Av. Paraná, 3600">♿ 🧩 Rua da Cidadania Boa Vista — Av. Paraná, 3600</option>
+              <option value="Rua da Cidadania Fazendinha — R. Carlos Klemtz, 1700">♿ Rua da Cidadania Fazendinha — R. Carlos Klemtz, 1700</option>
             </select>
+
+            <!-- Legenda dos Ícones de Acessibilidade das Unidades -->
+            <div class="unit-accessibility-legend" aria-label="Legenda de acessibilidade das unidades">
+              <span class="legend-title">Legenda de Acessibilidade:</span>
+              <div class="legend-items-row">
+                <span class="legend-pill">
+                  <i class="legend-icon" aria-hidden="true">♿</i>
+                  <span>Acessível para Deficientes Físicos</span>
+                </span>
+                <span class="legend-pill">
+                  <i class="legend-icon" aria-hidden="true">🧩</i>
+                  <span>Acessível para Neurodivergentes (TEA)</span>
+                </span>
+              </div>
+            </div>
 
             <!-- Indicadores de Tempo Médio de Espera e de Atendimento da Unidade Selecionada -->
             <div id="step2-unit-metrics-box" class="unit-metrics-box" aria-live="polite">
